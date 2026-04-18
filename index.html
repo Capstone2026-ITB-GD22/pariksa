@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pariksa | Disaster Risk Mapping Bandung</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Variabel Warna --- */
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --bg-white: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: transparent; 
+            z-index: 1000;
+            transition: all 0.4s ease;
+            padding: 1rem 0;
+        }
+
+        nav.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- Logo Styling --- */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            transition: color 0.4s ease;
+        }
+
+        .logo-img {
+            height: 40px; /* Sesuaikan ukuran logo di sini */
+            width: auto;
+        }
+
+        nav.scrolled .logo-wrapper { color: var(--text-primary); }
+        .logo-wrapper span { color: var(--primary-red); }
+
+        /* --- Nav Links --- */
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #fff; transition: color 0.3s ease; }
+        
+        nav.scrolled .nav-links a { color: var(--text-primary); }
+        .nav-links a:hover { color: var(--primary-red) !important; }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 100vh; 
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
+            
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('homebackground.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; 
+            color: #FFFFFF; 
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 60px; 
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        /* --- Buttons --- */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px; 
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary { background-color: var(--primary-red); color: var(--bg-white); }
+        .btn-primary:hover { background-color: var(--dark-red); transform: translateY(-2px); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+            .nav-links { display: none; }
+            .btn-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo-wrapper">
+                <img src="LOGO.png" alt="Logo Pariksa" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#maps">Maps</a></li>
+                <li><a href="#team">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="container hero-content">
+            <h1>Peta Bencana Presisi Tinggi — Pelacak Bahaya Kota Bandung</h1>
+            <p>Pantau banjir, longsor, dan kerentanan infrastruktur di Bandung secara real-time. Tinjau riwayat kejadian berdasarkan kecamatan. Akses skor risiko spesifik per lokasi. Sistem ini didukung oleh analisis geospasial dan WebGIS presisi tinggi dari Tim Pariksa.</p>
+            
+            <div class="btn-group">
+                <a href="#maps" class="btn btn-primary">Buka Peta Interaktif &rarr;</a>
+            </div>
+        </div>
+    </header>
+
+    <div style="height: 1000px;"></div> 
+
+    <script>
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
