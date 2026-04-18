@@ -40,9 +40,12 @@
         .page-header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
         .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.1rem; }
 
+        /* --- Simple Red Divider --- */
+        .aesthetic-divider { height: 80px; display: flex; align-items: center; justify-content: center; background-color: var(--bg-white); position: relative; }
+        .divider-bar { width: 80px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
+
         /* --- Education Sections --- */
-        .edu-section { padding: 6rem 0; border-bottom: 1px solid var(--border-color); }
-        .edu-section:last-of-type { border-bottom: none; }
+        .edu-section { padding: 4rem 0; } /* Padding disesuaikan karena ada divider */
         
         .section-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
         .section-title h2 { font-size: 2rem; font-weight: 700; }
@@ -113,7 +116,7 @@
     <header class="page-header">
         <div class="container">
             <h1>Resource Center</h1>
-            <p>Explore our curated collection of news, research papers, and videos to deepen your understanding of disaster risk management.</p>
+            <p>Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
         </div>
     </header>
 
@@ -157,6 +160,10 @@
         </div>
     </section>
 
+    <div class="aesthetic-divider">
+        <div class="divider-bar"></div>
+    </div>
+
     <section class="edu-section">
         <div class="container">
             <div class="section-top">
@@ -191,6 +198,10 @@
             </div>
         </div>
     </section>
+
+    <div class="aesthetic-divider">
+        <div class="divider-bar"></div>
+    </div>
 
     <section class="edu-section">
         <div class="container">
@@ -242,22 +253,24 @@
         function slide(section, direction) {
             const track = document.getElementById(`${section}-track`);
             const cards = track.children;
+            
+            if (cards.length === 0) return; 
+
             const cardWidth = cards[0].offsetWidth + 32; // width + gap (2rem)
             
-            // Calculate max index based on visibility
             const visibleCards = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
-            const maxIndex = cards.length - visibleCards;
+            
+            let maxIndex = cards.length - visibleCards;
+            if (maxIndex < 0) maxIndex = 0;
 
             positions[section] += direction;
 
-            // Boundaries
             if (positions[section] < 0) positions[section] = 0;
             if (positions[section] > maxIndex) positions[section] = maxIndex;
 
             track.style.transform = `translateX(-${positions[section] * cardWidth}px)`;
         }
 
-        // Adjust slider on window resize
         window.addEventListener('resize', () => {
             slide('news', 0);
             slide('journal', 0);
