@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Variabel Warna --- */
+        /* --- Color Variables --- */
         :root {
             --primary-red: #E53935;
             --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
+            --bg-section: #F7F7F7;
+            --border-color: #E0E0E0;
             --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
             --font-main: 'Inter', sans-serif;
         }
 
@@ -81,12 +84,40 @@
         nav.scrolled .logo-wrapper { color: var(--text-primary); }
         .logo-wrapper span { color: var(--primary-red); }
 
-        /* --- Nav Links --- */
+        /* --- Nav Right Section --- */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: #fff; transition: color 0.3s ease; }
         
         nav.scrolled .nav-links a { color: var(--text-primary); }
         .nav-links a:hover { color: var(--primary-red) !important; }
+
+        /* --- Language Switch --- */
+        .lang-switch {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            transition: color 0.3s ease;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        nav.scrolled .lang-switch { color: var(--text-primary); }
+
+        .lang-switch span {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .lang-switch span.active { opacity: 1; color: var(--primary-red); }
+        .lang-switch span:hover { opacity: 1; }
 
         /* --- Hero Section --- */
         .hero {
@@ -97,7 +128,7 @@
             justify-content: center; 
             text-align: center;
             
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('homebackground.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('homebackground.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed; 
@@ -105,7 +136,7 @@
         }
 
         .hero-content {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             padding-top: 60px; 
         }
@@ -119,18 +150,17 @@
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             margin-bottom: 2.5rem;
             color: rgba(255, 255, 255, 0.9);
             line-height: 1.8;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* --- Buttons --- */
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
+        .btn-group { display: flex; gap: 1rem; justify-content: center; }
 
         .btn {
             display: inline-block;
@@ -146,12 +176,73 @@
         .btn-primary { background-color: var(--primary-red); color: var(--bg-white); }
         .btn-primary:hover { background-color: var(--dark-red); transform: translateY(-2px); }
 
+        /* --- Content Sections --- */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .bg-light {
+            background-color: var(--bg-section);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-red);
+            margin: 0 auto 2rem auto;
+        }
+
+        .text-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- Map Placeholder --- */
+        .map-box {
+            width: 100%;
+            height: 500px;
+            background-color: #e9ecef;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 600;
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            background-color: var(--bg-white);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .hero p { font-size: 1rem; }
+            .nav-right { gap: 1rem; }
             .nav-links { display: none; }
             .btn-group { flex-direction: column; }
+            .section-header h2 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -160,40 +251,125 @@
     <nav id="navbar">
         <div class="container nav-container">
             <a href="#" class="logo-wrapper">
-                <img src="LOGO.png" alt="Logo Pariksa" class="logo-img" onerror="this.style.display='none'"> 
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
                 Pariksa
             </a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#maps">Maps</a></li>
-                <li><a href="#education">Education</a></li> <li><a href="#team">Team</a></li>
-            </ul>
+            
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#guide">Guide</a></li>
+                    <li><a href="#maps">Maps</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#team">Team</a></li>
+                </ul>
+                
+                <div class="lang-switch">
+                    <span class="active">EN</span> | <span>ID</span>
+                </div>
+            </div>
         </div>
     </nav>
 
     <header id="home" class="hero">
         <div class="container hero-content">
-            <h1>Peta Risiko Bencana Presisi Tinggi — Kota Bandung</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h1>High-Precision Disaster Map — Bandung City Hazard Tracker</h1>
+            <p>Track floods, landslides, and infrastructure vulnerabilities in Bandung in real-time. Survey historical events by district. View location-specific risk scores. All powered by high-precision geospatial intelligence and WebGIS from Team Pariksa.</p>
             
             <div class="btn-group">
-                <a href="maps.html" class="btn btn-primary">Buka Peta Interaktif &rarr;</a>
+                <a href="#maps" class="btn btn-primary">Open WebGIS &rarr;</a>
             </div>
         </div>
     </header>
 
-    <div style="height: 1000px;"></div> 
+    <section id="guide" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Platform Guide</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="text-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <br>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="maps" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Interactive WebGIS</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="map-box">
+                [ WebGIS Map Interface Will Be Rendered Here ]
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Education & Resources</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="text-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="team" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Team Pariksa</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="text-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        </div>
+    </footer>
 
     <script>
+        // 1. Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
-
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
+        });
+
+        // 2. Smooth Scrolling for Navigation Links
+        document.querySelectorAll('.nav-links a, .btn').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Pastikan href adalah sebuah ID (dimulai dengan #)
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // Offset 80px agar konten tidak tertutup navbar yang sticky
+                        const offsetTop = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
         });
     </script>
 </body>
