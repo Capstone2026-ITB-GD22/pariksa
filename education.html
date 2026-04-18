@@ -40,12 +40,21 @@
         .page-header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
         .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.1rem; }
 
+        /* --- Header Long Red Divider --- */
+        .header-divider {
+            width: 300px;
+            height: 4px;
+            background-color: var(--primary-red);
+            border-radius: 2px;
+            margin: 3rem auto 0 auto;
+        }
+
         /* --- Simple Red Divider --- */
         .aesthetic-divider { height: 80px; display: flex; align-items: center; justify-content: center; background-color: var(--bg-white); position: relative; }
         .divider-bar { width: 80px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
 
         /* --- Education Sections --- */
-        .edu-section { padding: 4rem 0; } /* Padding disesuaikan karena ada divider */
+        .edu-section { padding: 4rem 0; } 
         
         .section-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
         .section-title h2 { font-size: 2rem; font-weight: 700; }
@@ -92,6 +101,7 @@
             .edu-card { min-width: 100%; } 
             .page-header h1 { font-size: 2.2rem; }
             .nav-links { display: none; }
+            .header-divider { width: 200px; }
         }
     </style>
 </head>
@@ -117,6 +127,7 @@
         <div class="container">
             <h1>Resource Center</h1>
             <p>Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
+            <div class="header-divider"></div>
         </div>
     </header>
 
@@ -243,7 +254,6 @@
     </footer>
 
     <script>
-        // Slider State
         const positions = {
             news: 0,
             journal: 0,
@@ -256,7 +266,7 @@
             
             if (cards.length === 0) return; 
 
-            const cardWidth = cards[0].offsetWidth + 32; // width + gap (2rem)
+            const cardWidth = cards[0].offsetWidth + 32; 
             
             const visibleCards = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
             
