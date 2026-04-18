@@ -8,13 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Color Variables --- */
         :root {
             --primary-red: #E53935;
             --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
             --bg-light: #F8F9FA;
-            --bg-dark: #000000; /* Warna gelap untuk section kontak */
+            --bg-dark: #000000; /* Warna hitam pekat sesuai permintaan */
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
             --border-color: #EAEAEA;
@@ -104,7 +103,6 @@
             align-items: center; 
             justify-content: center; 
             text-align: center;
-            
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('homebackground.jpg');
             background-size: cover;
             background-position: center;
@@ -135,9 +133,6 @@
             margin-right: auto;
         }
 
-        /* --- Buttons --- */
-        .btn-group { display: flex; gap: 1rem; justify-content: center; }
-
         .btn {
             display: inline-block;
             padding: 1rem 2.5rem;
@@ -147,12 +142,18 @@
             cursor: pointer;
             border: none;
             font-size: 1rem;
+            background-color: var(--primary-red); 
+            color: var(--bg-white);
         }
 
-        .btn-primary { background-color: var(--primary-red); color: var(--bg-white); }
-        .btn-primary:hover { background-color: var(--dark-red); transform: translateY(-2px); }
+        .btn:hover { background-color: var(--dark-red); transform: translateY(-2px); }
 
-        /* --- Global Section Styles --- */
+        /* --- About Section --- */
+        .about-section {
+            padding: 8rem 0 4rem 0;
+            background-color: var(--bg-white);
+        }
+
         .section-header {
             text-align: center;
             margin-bottom: 4rem;
@@ -183,12 +184,6 @@
             font-size: 1.15rem;
             color: var(--text-secondary);
             line-height: 1.8;
-        }
-
-        /* --- About Section --- */
-        .about-section {
-            padding: 8rem 0 4rem 0;
-            background-color: var(--bg-white);
         }
 
         /* --- Solutions Section --- */
@@ -265,7 +260,7 @@
             line-height: 1.7;
         }
 
-        /* --- Contact / Location Section --- */
+        /* --- Contact Section --- */
         .contact-section {
             background-color: var(--bg-dark);
             padding: 8rem 0;
@@ -279,8 +274,7 @@
             align-items: center;
         }
 
-        /* Left Side Text */
-        .contact-text-content .contact-subtitle {
+        .contact-subtitle {
             color: var(--primary-red);
             font-weight: 700;
             letter-spacing: 2px;
@@ -302,7 +296,6 @@
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 3rem;
             line-height: 1.8;
-            max-width: 90%;
         }
 
         .contact-info-list {
@@ -326,23 +319,13 @@
             align-items: center;
             justify-content: center;
             color: var(--primary-red);
-            flex-shrink: 0;
         }
 
         .contact-icon svg { width: 24px; height: 24px; }
 
-        .contact-details h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.2rem;
-        }
+        .contact-details h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .contact-details span { color: rgba(255, 255, 255, 0.6); }
 
-        .contact-details span {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-        }
-
-        /* Right Side Map Card */
         .map-card {
             background-color: var(--bg-white);
             border-radius: 16px;
@@ -351,12 +334,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .map-card h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
+        .map-card h3 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
 
         .map-info-text {
             font-size: 1.05rem;
@@ -380,13 +358,8 @@
             border: 1px solid var(--border-color);
         }
 
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- Footer --- */
         footer {
             padding: 2rem 0;
             background-color: var(--bg-dark);
@@ -395,22 +368,15 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Responsive */
         @media (max-width: 992px) {
-            .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .contact-grid { grid-template-columns: 1fr; }
             .solutions-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1rem; }
-            .nav-right { gap: 1rem; }
             .nav-links { display: none; }
-            .btn-group { flex-direction: column; }
-            .section-header h2 { font-size: 2.2rem; }
             .solutions-grid { grid-template-columns: 1fr; }
-            .map-card { padding: 2rem; }
-            .contact-text-content h2 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -422,12 +388,10 @@
                 <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
                 Pariksa
             </a>
-            
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="#guide">Guide</a></li>
-                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="guide.html">Guide</a></li> <li><a href="maps.html">Maps</a></li>
                     <li><a href="education.html">Education</a></li>
                     <li><a href="team.html">Team</a></li>
                 </ul>
@@ -439,21 +403,15 @@
         <div class="container hero-content">
             <h1>High-Precision Disaster Map — Bandung City Hazard Tracker</h1>
             <p>Track floods, landslides, and infrastructure vulnerabilities in Bandung in real-time. Survey historical events by district. View location-specific risk scores. All powered by high-precision geospatial intelligence and WebGIS from Team Pariksa.</p>
-            
-            <div class="btn-group">
-                <a href="maps.html" class="btn btn-primary">Open WebGIS &rarr;</a>
-            </div>
+            <a href="maps.html" class="btn">Open WebGIS →</a>
         </div>
     </header>
 
-    <section id="guide" class="about-section">
-        <div class="container">
+    <section id="about" class="about-section"> <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">ABOUT PARIKSA</span>
                 <h2>Bridging the Gap for Urban Resilience</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <br>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
         </div>
     </section>
@@ -472,7 +430,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                     </div>
                     <h3>High-Precision WebGIS</h3>
-                    <p>Advanced interactive mapping interface providing centimeter-level topographic accuracy and multi-layer hazard overlays for detailed spatial analysis.</p>
+                    <p>Advanced interactive mapping interface providing centimeter-level topographic accuracy and multi-layer hazard overlays.</p>
                 </div>
 
                 <div class="solution-card">
@@ -480,7 +438,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                     </div>
                     <h3>Real-Time Hazard Telemetry</h3>
-                    <p>Integrated data feeds to monitor critical variables like water levels, land displacement, and extreme weather patterns in real-time across Bandung.</p>
+                    <p>Integrated data feeds to monitor critical variables like water levels and land displacement in real-time across Bandung.</p>
                 </div>
 
                 <div class="solution-card">
@@ -488,7 +446,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3>Automated Risk Calculator</h3>
-                    <p>Automated algorithms designed to calculate specific infrastructural vulnerability scores and recommend necessary preventative measures.</p>
+                    <p>Automated algorithms designed to calculate specific infrastructural vulnerability scores and recommend preventative measures.</p>
                 </div>
             </div>
         </div>
@@ -496,11 +454,10 @@
 
     <section class="contact-section">
         <div class="container contact-grid">
-            
             <div class="contact-text-content">
                 <span class="contact-subtitle">GET IN TOUCH</span>
                 <h2>Ready to Collaborate?</h2>
-                <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for local governments, researchers, and urban planners.</p>
+                <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
                 
                 <div class="contact-info-list">
                     <div class="contact-info-item">
@@ -509,26 +466,14 @@
                         </div>
                         <div class="contact-details">
                             <h4>Email</h4>
-                            <span>pariksa@gmail.com</span>
-                        </div>
+                            <span>pariksa@gmail.com</span> </div>
                     </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Phone</h4>
-                            <span>+62 811-9999-0000</span>
-                        </div>
-                    </div>
-                    
                     <div class="contact-info-item">
                         <div class="contact-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
                         <div class="contact-details">
-                            <h4>Location</h4>
+                            <h4>Headquarters</h4>
                             <span>Bandung, Indonesia</span>
                         </div>
                     </div>
@@ -538,33 +483,24 @@
             <div class="map-card">
                 <h3>Our Location</h3>
                 <div class="map-info-text">
-                    <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong>
-                    Institut Teknologi Bandung, Labtek IX-C<br>
+                    <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong> Institut Teknologi Bandung, Labtek IX-C<br>
                     Jl. Ganesa No.10, Lebak Siliwangi, Coblong,<br>
                     Bandung City, West Java 40132
                 </div>
-                
                 <div class="map-container">
-                    <iframe 
-                        src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    <iframe src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
-
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
     </footer>
 
     <script>
-        // Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -572,20 +508,6 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
-        });
-
-        // Smooth Scroll for local links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if(target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
         });
     </script>
 </body>
