@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education | Pariksa Disaster Risk Mapping</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --bg-dark: #000000;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --border-color: #EAEAEA;
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-white); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+        /* --- Navbar (Shared) --- */
+        nav { position: fixed; top: 0; width: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); z-index: 1000; padding: 0.8rem 0; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .logo-img { height: 40px; width: auto; }
+        .logo-wrapper span { color: var(--primary-red); }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red); }
+
+        /* --- Page Header --- */
+        .page-header { padding: 10rem 0 5rem 0; background-color: var(--bg-light); text-align: center; }
+        .page-header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+        .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.1rem; }
+
+        /* --- Education Sections --- */
+        .edu-section { padding: 6rem 0; border-bottom: 1px solid var(--border-color); }
+        .edu-section:last-of-type { border-bottom: none; }
+        
+        .section-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
+        .section-title h2 { font-size: 2rem; font-weight: 700; }
+        .section-title span { color: var(--primary-red); text-transform: uppercase; font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; }
+
+        /* --- Slider Controls --- */
+        .slider-controls { display: flex; gap: 1rem; }
+        .control-btn { 
+            width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--border-color); 
+            background: var(--bg-white); cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; color: var(--text-primary);
+        }
+        .control-btn:hover { background: var(--primary-red); color: white; border-color: var(--primary-red); }
+
+        /* --- Carousel Logic --- */
+        .slider-wrapper { overflow: hidden; position: relative; padding: 10px 0; }
+        .slider-track { display: flex; gap: 2rem; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* --- Cards --- */
+        .edu-card { 
+            min-width: calc(33.333% - 1.35rem); 
+            background: var(--bg-white); border: 1px solid var(--border-color); 
+            border-radius: 12px; padding: 2.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column;
+        }
+        .edu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: var(--primary-red); }
+        
+        .edu-card h3 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary); min-height: 3.5rem; }
+        .edu-card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; }
+        
+        .card-link { 
+            display: inline-flex; align-items: center; gap: 8px; color: var(--primary-red); 
+            font-weight: 700; font-size: 0.9rem; transition: gap 0.3s ease; 
+        }
+        .edu-card:hover .card-link { gap: 15px; }
+
+        /* --- Footer --- */
+        footer { padding: 4rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.6); text-align: center; }
+        footer p { font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 1024px) { .edu-card { min-width: calc(50% - 1rem); } }
+        @media (max-width: 768px) { 
+            .edu-card { min-width: 100%; } 
+            .page-header h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="guide.html">Guide</a></li>
+                <li><a href="maps.html">Maps</a></li>
+                <li><a href="education.html" class="active">Education</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Resource Center</h1>
+            <p>Explore our curated collection of news, research papers, and videos to deepen your understanding of disaster risk management.</p>
+        </div>
+    </header>
+
+    <section class="edu-section">
+        <div class="container">
+            <div class="section-top">
+                <div class="section-title">
+                    <span>Updates</span>
+                    <h2>Latest News</h2>
+                </div>
+                <div class="slider-controls">
+                    <button class="control-btn" onclick="slide('news', -1)">&#10094;</button>
+                    <button class="control-btn" onclick="slide('news', 1)">&#10095;</button>
+                </div>
+            </div>
+
+            <div class="slider-wrapper">
+                <div id="news-track" class="slider-track">
+                    <div class="edu-card">
+                        <h3>New LiDAR Survey Completed in North Bandung</h3>
+                        <p>High-resolution aerial data reveals subtle land movement patterns in residential areas near the Lembang fault line.</p>
+                        <a href="#" class="card-link">Read More →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Community Resilience Workshop 2026</h3>
+                        <p>Team Pariksa collaborates with local district leaders to test real-time flood warning integrations.</p>
+                        <a href="#" class="card-link">Read More →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>WebGIS V3.0 Deployment</h3>
+                        <p>Major update featuring multi-hazard overlay capabilities and improved mobile responsiveness for field operations.</p>
+                        <a href="#" class="card-link">Read More →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Collaboration with Regional Agency</h3>
+                        <p>Institutional agreement signed to integrate Pariksa data into provincial disaster response protocols.</p>
+                        <a href="#" class="card-link">Read More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="edu-section">
+        <div class="container">
+            <div class="section-top">
+                <div class="section-title">
+                    <span>Research</span>
+                    <h2>Academic Journals</h2>
+                </div>
+                <div class="slider-controls">
+                    <button class="control-btn" onclick="slide('journal', -1)">&#10094;</button>
+                    <button class="control-btn" onclick="slide('journal', 1)">&#10095;</button>
+                </div>
+            </div>
+
+            <div class="slider-wrapper">
+                <div id="journal-track" class="slider-track">
+                    <div class="edu-card">
+                        <h3>Landslide Susceptibility Mapping in Bandung Basin</h3>
+                        <p>A comparative study of machine learning algorithms for high-precision slope stability analysis.</p>
+                        <a href="#" class="card-link">View Journal →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Real-time GNSS for Urban Displacement</h3>
+                        <p>Technical paper regarding the use of low-cost GNSS sensors for continuous structural health monitoring.</p>
+                        <a href="#" class="card-link">View Journal →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Social Impact of WebGIS Information</h3>
+                        <p>Evaluating public perception and behavior changes following the access to high-precision risk data.</p>
+                        <a href="#" class="card-link">View Journal →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="edu-section">
+        <div class="container">
+            <div class="section-top">
+                <div class="section-title">
+                    <span>Visual Guide</span>
+                    <h2>Videos</h2>
+                </div>
+                <div class="slider-controls">
+                    <button class="control-btn" onclick="slide('video', -1)">&#10094;</button>
+                    <button class="control-btn" onclick="slide('video', 1)">&#10095;</button>
+                </div>
+            </div>
+
+            <div class="slider-wrapper">
+                <div id="video-track" class="slider-track">
+                    <div class="edu-card">
+                        <h3>Getting Started with WebGIS</h3>
+                        <p>A 5-minute overview of how to navigate layers, search locations, and interpret risk scores on our platform.</p>
+                        <a href="#" class="card-link">Watch Video →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Understanding Hazard Scores</h3>
+                        <p>Learn the methodology behind our automated risk calculator and what the color-coded zones represent.</p>
+                        <a href="#" class="card-link">Watch Video →</a>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Contributing Field Data</h3>
+                        <p>Volunteer guide: How to report local incidents and upload geotagged photos through the community portal.</p>
+                        <a href="#" class="card-link">Watch Video →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+    </footer>
+
+    <script>
+        // Slider State
+        const positions = {
+            news: 0,
+            journal: 0,
+            video: 0
+        };
+
+        function slide(section, direction) {
+            const track = document.getElementById(`${section}-track`);
+            const cards = track.children;
+            const cardWidth = cards[0].offsetWidth + 32; // width + gap (2rem)
+            
+            // Calculate max index based on visibility
+            const visibleCards = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
+            const maxIndex = cards.length - visibleCards;
+
+            positions[section] += direction;
+
+            // Boundaries
+            if (positions[section] < 0) positions[section] = 0;
+            if (positions[section] > maxIndex) positions[section] = maxIndex;
+
+            track.style.transform = `translateX(-${positions[section] * cardWidth}px)`;
+        }
+
+        // Adjust slider on window resize
+        window.addEventListener('resize', () => {
+            slide('news', 0);
+            slide('journal', 0);
+            slide('video', 0);
+        });
+    </script>
+</body>
+</html>
