@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Color Variables --- */
         :root {
             --primary-red: #E53935;
             --dark-red: #B71C1C;
@@ -28,8 +27,6 @@
             color: var(--text-primary);
             background-color: var(--bg-white);
             line-height: 1.6;
-            /* Dihapus karena tidak ada konten panjang ke bawah lagi saat ini */
-            /* height: 100vh; overflow: hidden; bisa ditambahkan jika ingin 100% pas layar */
         }
 
         a { text-decoration: none; color: inherit; }
@@ -40,7 +37,6 @@
             margin: 0 auto;
         }
 
-        /* --- Navbar --- */
         nav {
             position: fixed;
             top: 0;
@@ -64,7 +60,6 @@
             align-items: center;
         }
 
-        /* --- Logo Styling --- */
         .logo-wrapper {
             display: flex;
             align-items: center;
@@ -83,7 +78,6 @@
         nav.scrolled .logo-wrapper { color: var(--text-primary); }
         .logo-wrapper span { color: var(--primary-red); }
 
-        /* --- Nav Right Section --- */
         .nav-right {
             display: flex;
             align-items: center;
@@ -96,7 +90,6 @@
         nav.scrolled .nav-links a { color: var(--text-primary); }
         .nav-links a:hover { color: var(--primary-red) !important; }
 
-        /* --- Language Switch --- */
         .lang-switch {
             font-size: 0.9rem;
             font-weight: 600;
@@ -118,15 +111,13 @@
         .lang-switch span.active { opacity: 1; color: var(--primary-red); }
         .lang-switch span:hover { opacity: 1; }
 
-        /* --- Hero Section --- */
         .hero {
             position: relative;
-            height: 100vh; /* Memastikan memenuhi layar 100% */
+            height: 100vh; 
             display: flex;
             align-items: center; 
             justify-content: center; 
             text-align: center;
-            
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('homebackground.jpg');
             background-size: cover;
             background-position: center;
@@ -157,7 +148,6 @@
             margin-right: auto;
         }
 
-        /* --- Buttons --- */
         .btn-group { display: flex; gap: 1rem; justify-content: center; }
 
         .btn {
@@ -174,7 +164,6 @@
         .btn-primary { background-color: var(--primary-red); color: var(--bg-white); }
         .btn-primary:hover { background-color: var(--dark-red); transform: translateY(-2px); }
 
-        /* --- Footer --- */
         footer {
             padding: 2rem 0;
             background-color: var(--bg-white);
@@ -182,7 +171,6 @@
             border-top: 1px solid #E0E0E0;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .hero p { font-size: 1rem; }
@@ -203,15 +191,16 @@
             
             <div class="nav-right">
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="guide.html">Guide</a></li>
-                    <li><a href="maps.html">Maps</a></li>
-                    <li><a href="education.html">Education</a></li>
-                    <li><a href="team.html">Team</a></li>
+                    <li><a href="index.html" id="nav-home">Home</a></li>
+                    <li><a href="guide.html" id="nav-guide">Guide</a></li>
+                    <li><a href="maps.html" id="nav-maps">Maps</a></li>
+                    <li><a href="education.html" id="nav-edu">Education</a></li>
+                    <li><a href="team.html" id="nav-team">Team</a></li>
                 </ul>
                 
                 <div class="lang-switch">
-                    <span class="active">EN</span> | <span>ID</span>
+                    <span id="lang-en" class="active" onclick="setLanguage('en')">EN</span> | 
+                    <span id="lang-id" onclick="setLanguage('id')">ID</span>
                 </div>
             </div>
         </div>
@@ -219,23 +208,22 @@
 
     <header class="hero">
         <div class="container hero-content">
-            <h1>High-Precision Disaster Map — Bandung City Hazard Tracker</h1>
-            <p>Track floods, landslides, and infrastructure vulnerabilities in Bandung in real-time. Survey historical events by district. View location-specific risk scores. All powered by high-precision geospatial intelligence and WebGIS from Team Pariksa.</p>
+            <h1 id="hero-title">High-Precision Disaster Map — Bandung City Hazard Tracker</h1>
+            <p id="hero-desc">Track floods, landslides, and infrastructure vulnerabilities in Bandung in real-time. Survey historical events by district. View location-specific risk scores. All powered by high-precision geospatial intelligence and WebGIS from Team Pariksa.</p>
             
             <div class="btn-group">
-                <a href="maps.html" class="btn btn-primary">Open WebGIS &rarr;</a>
+                <a href="maps.html" class="btn btn-primary" id="btn-webgis">Open WebGIS &rarr;</a>
             </div>
         </div>
     </header>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+            <p id="footer-text">&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
     </footer>
 
     <script>
-        // Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -244,6 +232,49 @@
                 navbar.classList.remove('scrolled');
             }
         });
+
+        const translations = {
+            en: {
+                navHome: "Home",
+                navGuide: "Guide",
+                navMaps: "Maps",
+                navEdu: "Education",
+                navTeam: "Team",
+                heroTitle: "High-Precision Disaster Map — Bandung City Hazard Tracker",
+                heroDesc: "Track floods, landslides, and infrastructure vulnerabilities in Bandung in real-time. Survey historical events by district. View location-specific risk scores. All powered by high-precision geospatial intelligence and WebGIS from Team Pariksa.",
+                btnWebgis: "Open WebGIS &rarr;",
+                footerText: "&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung."
+            },
+            id: {
+                navHome: "Beranda",
+                navGuide: "Panduan",
+                navMaps: "Peta",
+                navEdu: "Edukasi",
+                navTeam: "Tim",
+                heroTitle: "Peta Bencana Presisi Tinggi — Pelacak Bahaya Kota Bandung",
+                heroDesc: "Pantau banjir, longsor, dan kerentanan infrastruktur di Bandung secara real-time. Tinjau riwayat kejadian berdasarkan kecamatan. Akses skor risiko spesifik per lokasi. Sistem ini didukung oleh analisis geospasial dan WebGIS presisi tinggi dari Tim Pariksa.",
+                btnWebgis: "Buka WebGIS &rarr;",
+                footerText: "&copy; 2026 Tim Pariksa. Pemetaan Risiko Bencana Presisi Tinggi Bandung."
+            }
+        };
+
+        function setLanguage(lang) {
+            document.getElementById('nav-home').innerHTML = translations[lang].navHome;
+            document.getElementById('nav-guide').innerHTML = translations[lang].navGuide;
+            document.getElementById('nav-maps').innerHTML = translations[lang].navMaps;
+            document.getElementById('nav-edu').innerHTML = translations[lang].navEdu;
+            document.getElementById('nav-team').innerHTML = translations[lang].navTeam;
+            
+            document.getElementById('hero-title').innerHTML = translations[lang].heroTitle;
+            document.getElementById('hero-desc').innerHTML = translations[lang].heroDesc;
+            document.getElementById('btn-webgis').innerHTML = translations[lang].btnWebgis;
+            document.getElementById('footer-text').innerHTML = translations[lang].footerText;
+
+            document.getElementById('lang-en').classList.remove('active');
+            document.getElementById('lang-id').classList.remove('active');
+            
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
     </script>
 </body>
 </html>
