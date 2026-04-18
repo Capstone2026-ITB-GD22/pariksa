@@ -181,9 +181,9 @@
             background-color: var(--bg-white);
         }
 
-        /* --- Aesthetic Divider --- */
+        /* --- Simple Red Divider --- */
         .aesthetic-divider {
-            height: 100px;
+            height: 80px; /* Reduced height for simplicity */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -191,27 +191,12 @@
             position: relative;
         }
 
-        .divider-line {
-            width: 350px; /* Garis diperpanjang */
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+        .divider-bar {
+            width: 80px; /* Short, solid bar */
+            height: 4px; /* Thick enough to be a solid element */
+            background-color: var(--primary-red); /* Solid red */
             border-radius: 2px;
-            position: relative;
         }
-
-        .divider-line::before, .divider-line::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            background-color: var(--primary-red);
-            border-radius: 50%;
-            opacity: 0.4;
-        }
-        .divider-line::before { left: -30px; }
-        .divider-line::after { right: -30px; }
 
         /* --- Solutions Section --- */
         .solutions-section {
@@ -384,7 +369,6 @@
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
             .solutions-grid { grid-template-columns: 1fr; }
-            .divider-line { width: 200px; } /* Menyesuaikan lebar di layar kecil */
         }
     </style>
 </head>
@@ -427,7 +411,7 @@
     </section>
 
     <div class="aesthetic-divider">
-        <div class="divider-line"></div>
+        <div class="divider-bar"></div>
     </div>
 
     <section class="solutions-section">
