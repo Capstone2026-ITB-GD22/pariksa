@@ -151,7 +151,7 @@
         .btn-primary { background-color: var(--primary-red); color: var(--bg-white); }
         .btn-primary:hover { background-color: var(--dark-red); transform: translateY(-2px); }
 
-        /* --- About Section (Template) --- */
+        /* --- About Section --- */
         .about-section {
             padding: 8rem 0;
             background-color: var(--bg-white);
@@ -192,52 +192,6 @@
             margin-right: auto;
         }
 
-        /* --- Features Grid --- */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background-color: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .feature-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background-color: rgba(229, 57, 53, 0.1);
-            color: var(--primary-red);
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            line-height: 1.4;
-        }
-
         /* --- Footer --- */
         footer {
             padding: 2rem 0;
@@ -247,10 +201,6 @@
         }
 
         /* Responsive */
-        @media (max-width: 900px) {
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .hero p { font-size: 1rem; }
@@ -258,7 +208,6 @@
             .nav-links { display: none; }
             .btn-group { flex-direction: column; }
             .about-header h2 { font-size: 2rem; }
-            .features-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -301,29 +250,6 @@
                 <h2>Bridging the Gap for Urban Resilience</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <h3>Transparent & Anti Double-Counting</h3>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <h3>High Precision MRV Validated Data</h3>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <h3>Instant Impact Funding for Crisis Areas</h3>
-                </div>
             </div>
         </div>
     </section>
