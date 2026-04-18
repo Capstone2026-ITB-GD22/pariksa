@@ -15,10 +15,8 @@
             --bg-white: #FFFFFF;
             --bg-light: #F8F9FA;
             --bg-dark: #000000; 
-            --bg-dark-accent: #0A192F; 
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
-            --text-tertiary: #000000;
             --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
             
@@ -58,7 +56,6 @@
         /* --- WOW Factor: Glassmorphism & Tilt Base --- */
         .tilt-wrapper { perspective: 1000px; transition: transform 0.1s ease; }
         
-        /* Kartu disederhanakan (Minimalis) */
         .team-card {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -74,6 +71,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100%;
         }
 
         .team-card:hover { 
@@ -118,9 +116,9 @@
             margin: 0 auto;
         }
 
-        /* --- PREMIUM Section: Students --- */
+        /* --- PREMIUM Section: Students (Black Background & Symmetric Layout) --- */
         .student-showcase {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-dark); /* Menggunakan warna hitam pekat */
             color: rgba(255, 255, 255, 0.9);
             border-radius: 24px;
             margin-bottom: 4rem;
@@ -130,30 +128,33 @@
         .student-showcase .section-header h2 { color: #FFFFFF; text-shadow: 0 0 15px var(--glow-white); }
         .student-showcase .section-header span { color: #FFFFFF; opacity: 0.7; }
 
+        /* Simetris Flexbox Grid untuk 5 Kartu (3 di atas, 2 di tengah) */
         .grid-students {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 2.5rem;
             max-width: 1100px;
             margin: 0 auto;
-            align-items: start;
         }
 
-        /* Staggered Grid for 5 items */
-        .grid-students .tilt-wrapper:nth-child(2) .team-card { margin-top: 40px; }
-        .grid-students .tilt-wrapper:nth-child(4) .team-card { margin-top: -40px; grid-column: 1; }
-        .grid-students .tilt-wrapper:nth-child(5) .team-card { margin-top: 0px; grid-column: 2; }
+        .grid-students .tilt-wrapper {
+            flex: 0 0 calc(33.333% - 1.67rem);
+            max-width: calc(33.333% - 1.67rem);
+        }
 
         .student-showcase .team-card {
-            background-color: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.8);
         }
+        
         .student-showcase .team-card:hover {
-            background-color: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(229, 57, 53, 0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
+        
         .student-showcase .avatar img { border-color: rgba(255, 255, 255, 0.1); }
         .student-showcase .team-card h3 { color: #FFFFFF; }
         .student-showcase .team-id { color: var(--primary-red); }
@@ -166,16 +167,15 @@
 
         footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.4); text-align: center; font-size: 0.9rem; }
 
-        /* Responsive */
+        /* Responsive Adjustments */
         @media (max-width: 992px) {
             .grid-lecturers { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .grid-students { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .grid-students .tilt-wrapper:nth-child(n) .team-card { margin-top: 0 !important; grid-column: auto !important; }
+            .grid-students .tilt-wrapper { flex: 0 0 calc(50% - 1.25rem); max-width: calc(50% - 1.25rem); }
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .grid-lecturers { grid-template-columns: 1fr; max-width: 450px; }
-            .grid-students { grid-template-columns: 1fr; max-width: 450px; }
+            .grid-students .tilt-wrapper { flex: 0 0 100%; max-width: 450px; }
             .page-header h1 { font-size: 2.8rem; }
             .section-header h2 { font-size: 2.2rem; }
         }
@@ -242,43 +242,44 @@
     <section class="team-section student-showcase">
         <div class="container">
             <div class="section-header">
-                <span>Students</span> <h2>Capstone Project Team</h2>
+                <span>Students</span> 
+                <h2>Capstone Project Team</h2>
             </div>
 
             <div class="grid-students js-animate-group">
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
                         <div class="avatar"><img src="placeholder-student1.jpg" alt="" onerror="this.style.display='none'"></div>
-                        <h3>Luthfi Aulia Hakim</h3>
-                        <span class="team-id">NIM. 15122119</span>
-                    </div>
-                </div>
-                <div class="tilt-wrapper">
-                    <div class="team-card js-animate-card">
-                        <div class="avatar"><img src="placeholder-student2.jpg" alt="" onerror="this.style.display='none'"></div>
                         <h3>Syalala Loovy</h3>
                         <span class="team-id">NIM. 15122008</span>
                     </div>
                 </div>
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar"><img src="placeholder-student3.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <div class="avatar"><img src="placeholder-student2.jpg" alt="" onerror="this.style.display='none'"></div>
                         <h3>Raihan Hady Permana</h3>
                         <span class="team-id">NIM. 15122060</span>
                     </div>
                 </div>
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar"><img src="placeholder-student4.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <div class="avatar"><img src="placeholder-student3.jpg" alt="" onerror="this.style.display='none'"></div>
                         <h3>Varina Erawati Martina</h3>
                         <span class="team-id">NIM. 15122087</span>
                     </div>
                 </div>
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar"><img src="placeholder-student5.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <div class="avatar"><img src="placeholder-student4.jpg" alt="" onerror="this.style.display='none'"></div>
                         <h3>Aura Nisa Arianti</h3>
                         <span class="team-id">NIM. 15122111</span>
+                    </div>
+                </div>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student5.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Luthfi Aulia Hakim</h3>
+                        <span class="team-id">NIM. 15122119</span>
                     </div>
                 </div>
             </div>
