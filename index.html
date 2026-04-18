@@ -192,7 +192,7 @@
         }
 
         .divider-line {
-            width: 150px;
+            width: 350px; /* Garis diperpanjang */
             height: 4px;
             background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
             border-radius: 2px;
@@ -210,8 +210,8 @@
             border-radius: 50%;
             opacity: 0.4;
         }
-        .divider-line::before { left: -25px; }
-        .divider-line::after { right: -25px; }
+        .divider-line::before { left: -30px; }
+        .divider-line::after { right: -30px; }
 
         /* --- Solutions Section --- */
         .solutions-section {
@@ -384,6 +384,7 @@
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
             .solutions-grid { grid-template-columns: 1fr; }
+            .divider-line { width: 200px; } /* Menyesuaikan lebar di layar kecil */
         }
     </style>
 </head>
