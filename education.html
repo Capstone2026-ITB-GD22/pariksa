@@ -27,7 +27,13 @@
 
         /* --- Navbar (Shared) --- */
         nav { position: fixed; top: 0; width: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); z-index: 1000; padding: 0.8rem 0; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+                .nav-container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            max-width: 95% !important; /* Membuka batas lebar maksimal khusus untuk navbar */
+            width: 100%; 
+        }   
         .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
