@@ -53,56 +53,26 @@
         .section-subtitle { display: block; color: var(--primary-red); font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
         .section-header h2 { font-size: 2.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.3; }
 
-        /* --- About Section --- */
-        .about-section { padding: 8rem 0 4rem 0; background-color: var(--bg-white); }
+        /* --- Vision Section (The New "Selling" Section) --- */
+        .vision-section { padding: 8rem 0; background-color: var(--bg-white); }
+        .vision-content { max-width: 900px; margin: 0 auto; }
+        .vision-text { font-size: 1.2rem; color: var(--text-primary); text-align: justify; line-height: 2; margin-bottom: 2rem; }
+        .vision-highlight { color: var(--primary-red); font-weight: 700; }
 
         /* --- Simple Red Divider --- */
         .aesthetic-divider { height: 80px; display: flex; align-items: center; justify-content: center; background-color: var(--bg-white); position: relative; }
-        .divider-bar { width: 80px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
+        .divider-bar { width: 100px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
 
-        /* --- Solutions Section (Updated to 2x2 Grid) --- */
+        /* --- Solutions Section (2x2 Grid) --- */
         .solutions-section { padding: 6rem 0 8rem 0; background-color: var(--bg-light); }
-        
-        .solutions-grid-2x2 { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 2.5rem; 
-            margin-top: 4rem; 
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .solution-card { 
-            background-color: var(--bg-white); 
-            border: 1px solid var(--border-color); 
-            border-radius: 12px; 
-            padding: 3.5rem 2.5rem; 
-            position: relative; 
-            overflow: hidden; 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
-        }
-        
+        .solutions-grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; margin-top: 4rem; max-width: 1050px; margin-left: auto; margin-right: auto; }
+        .solution-card { background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 12px; padding: 3.5rem 2.5rem; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .solution-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary-red); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
         .solution-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: transparent; }
         .solution-card:hover::before { transform: scaleX(1); }
-        
-        .solution-icon { 
-            display: inline-flex; align-items: center; justify-content: center; 
-            width: 64px; height: 64px; border-radius: 12px; 
-            background-color: rgba(229, 57, 53, 0.08); color: var(--primary-red); 
-            margin-bottom: 2rem; 
-        }
-        
+        .solution-icon { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 12px; background-color: rgba(229, 57, 53, 0.08); color: var(--primary-red); margin-bottom: 2rem; }
         .solution-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
-        
-        /* Menggunakan pengaturan justify yang sudah disimpan */
-        .solution-card p { 
-            color: var(--text-secondary); 
-            font-size: 1.05rem; 
-            line-height: 1.7; 
-            text-align: justify; 
-        }
+        .solution-card p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; text-align: justify; }
 
         /* --- Contact Section --- */
         .contact-section { background-color: var(--bg-dark); padding: 8rem 0; color: #FFFFFF; }
@@ -115,7 +85,6 @@
         .contact-details h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.2rem; }
         .contact-details span { color: rgba(255, 255, 255, 0.6); }
 
-        /* Map Card */
         .map-card { background-color: var(--bg-white); border-radius: 16px; padding: 3rem; color: var(--text-primary); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         .map-card h3 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
         .map-info-text { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6; }
@@ -126,15 +95,8 @@
         /* --- Footer --- */
         footer { padding: 2rem 0; background-color: var(--bg-dark); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); }
 
-        @media (max-width: 992px) {
-            .contact-grid { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
-            .solutions-grid-2x2 { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } .solutions-grid-2x2 { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -160,18 +122,20 @@
     <header class="hero">
         <div class="container hero-content">
             <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
-            <p>Providing parcel-level (1:5,000) multi-hazard risk analysis including earthquakes, floods, and landslides to enhance urban resilience and community preparedness.</p>
+            <p>Providing parcel-level (1:5,000) multi-hazard risk analysis to enhance urban resilience and community preparedness.</p>
             <a href="maps.html" class="btn">Open WebGIS →</a>
         </div>
     </header>
 
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">ABOUT PARIKSA</span>
-                <h2>Bridging the Gap for Urban Resilience</h2>
-                <p>Bandung City faces complex geological and hydrometeorological threats, from the active Lembang Fault to significant land subsidence and extreme weather flooding. Currently, existing disaster risk maps are restricted to a macro scale. Team Pariksa is developing a High-Precision Disaster Risk Map at a 1:5,000 scale to identify these multi-hazard risks down to the specific property (parcel) level, enabling targeted mitigation for the government and society.</p>
+    <section class="vision-section">
+        <div class="container vision-content">
+            <div class="section-header" style="margin-bottom: 3rem;">
+                <span class="section-subtitle">THE PARIKSA VISION</span>
+                <h2>Spatial Intelligence for a Resilient City</h2>
             </div>
+            <p class="vision-text">
+                <span class="vision-highlight">Pariksa</span> adalah platform kecerdasan spasial mutakhir yang dirancang khusus untuk menjembatani celah kritis dalam mitigasi bencana perkotaan[cite: 33, 110]. Di tengah ancaman serius dari aktivitas <span class="vision-highlight">Sesar Lembang</span>, penurunan muka tanah yang masif, serta intensitas hujan ekstrem di Kota Bandung[cite: 61, 74, 100], informasi makro tidak lagi cukup. Pariksa hadir sebagai solusi inovatif yang menyediakan data <span class="vision-highlight">berketelitian tinggi (skala 1:5.000)</span> untuk memetakan risiko hingga tingkat <span class="vision-highlight">persil bangunan Anda</span>[cite: 113, 182, 199]. Kami tidak hanya menyajikan peta; kami memberikan kepastian data bagi pemerintah, perencana kota, dan setiap warga untuk bertindak tepat sasaran, melindungi aset berharga, dan menyelamatkan jiwa melalui analisis risiko berbasis sains yang terintegrasi dalam satu sistem WebGIS interaktif[cite: 117, 123, 175, 231].
+            </p>
         </div>
     </section>
 
@@ -184,7 +148,7 @@
             <div class="section-header">
                 <span class="section-subtitle">WHY CHOOSE PARIKSA?</span>
                 <h2>Redefining Disaster Preparedness</h2>
-                <p>We transform complex geographical data into actionable spatial intelligence. Discover the core advantages of our platform designed specifically for Bandung City.</p>
+                <p>Kami mengubah data geospasial yang kompleks menjadi wawasan strategis yang dapat langsung diterapkan untuk perlindungan warga.</p>
             </div>
 
             <div class="solutions-grid-2x2">
@@ -193,31 +157,31 @@
                         <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                     </div>
                     <h3>Parcel-Level Precision</h3>
-                    <p>Existing risk maps cover broad administrative zones. Pariksa changes this paradigm. We map disaster risks down to individual land parcels at a 1:5,000 scale. You identify the exact threat level for specific buildings and local assets.</p>
+                    <p>Berbeda dengan peta umum, Pariksa mampu mengidentifikasi potensi bahaya hingga unit terkecil yaitu persil tanah[cite: 108, 167]. Skala 1:5.000 memungkinkan Anda melihat detail risiko spesifik pada lokasi bangunan atau infrastruktur vital tertentu dengan akurasi maksimal[cite: 184, 199].</p>
                 </div>
 
                 <div class="solution-card">
                     <div class="solution-icon">
                         <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     </div>
-                    <h3>Integrated Multi-Hazard Tracking</h3>
-                    <p>Bandung faces complex, interconnected threats. Our platform combines high-resolution data on Lembang Fault earthquakes, historical flood zones, and landslide vulnerabilities into one seamless interactive WebGIS interface.</p>
+                    <h3>Integrated Multi-Hazard</h3>
+                    <p>Kami menyatukan berbagai lapisan ancaman mulai dari gempa bumi, banjir, hingga tanah longsor ke dalam satu antarmuka tunggal[cite: 107, 113, 197]. Integrasi ini memungkinkan evaluasi risiko komprehensif yang mustahil dilakukan oleh sistem pemetaan konvensional[cite: 202, 203].</p>
                 </div>
 
                 <div class="solution-card">
                     <div class="solution-icon">
                         <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     </div>
-                    <h3>Data-Driven Mitigation</h3>
-                    <p>We calculate risks using a robust methodology that integrates hazard potential, physical vulnerability, and regional capacity. This formula provides local governments with reliable data to structure better urban planning protocols.</p>
+                    <h3>Scientific Risk Algorithm</h3>
+                    <p>Setiap skor risiko dihitung menggunakan formula R = H x (V/C) sesuai standar nasional[cite: 218, 219]. Kami menggabungkan faktor Bahaya, Kerentanan Fisik-Sosial, dan Kapasitas daerah untuk memberikan rekomendasi mitigasi yang berbasis bukti (evidence-based)[cite: 114, 221, 224].</p>
                 </div>
 
                 <div class="solution-card">
                     <div class="solution-icon">
                         <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h3>Economic & Social Resilience</h3>
-                    <p>Proactive mitigation saves lives and assets. Our system educates communities for household emergencies. It delivers a proven high return on investment by significantly reducing potential long-term infrastructure damages.</p>
+                    <h3>Proven Economic Benefit</h3>
+                    <p>Analisis finansial kami membuktikan bahwa proyek ini sangat layak secara ekonomi, di mana setiap Rp1 investasi dalam mitigasi presisi Pariksa berpotensi menghemat dampak bencana senilai lebih dari <span class="vision-highlight">Rp18.000</span>[cite: 116, 303, 321].</p>
                 </div>
             </div>
         </div>
@@ -228,7 +192,7 @@
             <div class="contact-text-content">
                 <span class="contact-subtitle">GET IN TOUCH</span>
                 <h2>Ready to Collaborate?</h2>
-                <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
+                <p>Kami terbuka untuk kolaborasi dengan pemerintah dan akademisi guna meningkatkan ketahanan Kota Bandung.</p>
                 
                 <div class="contact-info-list">
                     <div class="contact-info-item">
