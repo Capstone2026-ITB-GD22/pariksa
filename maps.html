@@ -269,7 +269,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Inisialisasi Peta Leaflet (Fokus di Kota Bandung)
+        // Initialize Leaflet Map (Centered on Bandung City)
         const map = L.map('map', {
             zoomControl: false 
         }).setView([-6.9147, 107.6098], 13);
@@ -286,8 +286,8 @@
         // Variabel untuk menyimpan Layer WMS yang sedang aktif
         let currentWmsLayer = null;
 
-        // URL GeoServer Anda
-        const geoserverUrl = 'http://localhost:8080/geoserver/webgiscobacoba/wms';
+        // URL GeoServer disesuaikan dengan workspace "pariksa"
+        const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
         // Fungsi untuk mengambil layer WMS
         function addWmsLayer(layerName) {
@@ -298,7 +298,7 @@
 
             // Tambahkan layer WMS baru dari GeoServer
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
-                layers: `webgiscobacoba:${layerName}`, // Format: workspace:layer_name
+                layers: `pariksa:${layerName}`, // Format Workspace:LayerName (misal: pariksa:bahayalongsor)
                 format: 'image/png',
                 transparent: true,
                 version: '1.1.0',
@@ -317,18 +317,13 @@
             
             // Ambil nama tampilan untuk legenda dan notifikasi
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
-            const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0]; // Ambil kata pertama saja (Risk, Hazard, dll)
+            const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
             const classification = document.querySelector('input[name="classification"]:checked').value;
 
             // --- LOGIKA PENAMAAN LAYER GEOSERVER ---
-            // Di sini kita membuat nama layer berdasarkan pilihan pengguna.
-            // Contoh yang Anda berikan: "bahayalongsorcoba"
-            // Kita asumsikan format penamaan Anda adalah: [parameter][hazard]coba
-            
-            let layerName = `${parameter}${hazard}coba`; 
-            
-            // CONTOH: Jika user milih Landslide (value="longsor") dan Hazard (value="bahaya")
-            // Maka layerName = "bahayalongsorcoba"
+            // Format: parameter + hazard (tanpa "coba")
+            // Contoh: parameter="bahaya" + hazard="longsor" menjadi "bahayalongsor"
+            let layerName = `${parameter}${hazard}`; 
 
             // Panggil fungsi untuk menambahkan layer WMS ke peta
             addWmsLayer(layerName);
@@ -337,7 +332,7 @@
             const legendTitle = document.getElementById('legend-title');
             legendTitle.textContent = `${hazardText} ${parameterText} Map`;
 
-            showNotification(`Requesting layer '${layerName}' from GeoServer...`);
+            showNotification(`Requesting layer 'pariksa:${layerName}' from GeoServer...`);
         }
 
         // Fungsi Notifikasi
@@ -350,9 +345,6 @@
                 toast.classList.remove('show');
             }, 3000);
         }
-
-        // Coba muat layer default saat pertama kali halaman dibuka (Opsional)
-        // addWmsLayer('risikogempacoba'); // Ganti dengan layer default yang Anda inginkan
     </script>
 </body>
 </html>
