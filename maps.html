@@ -192,9 +192,9 @@
             <div class="form-group">
                 <label class="form-label">1. Hazard Type</label>
                 <select id="hazard-select" class="custom-select">
-                    <option value="Earthquake">Earthquake</option>
-                    <option value="Flood">Flood</option>
-                    <option value="Landslide">Landslide</option>
+                    <option value="gempa">Earthquake</option>
+                    <option value="banjir">Flood</option>
+                    <option value="longsor">Landslide</option>
                 </select>
             </div>
 
@@ -202,19 +202,19 @@
                 <label class="form-label">2. Analysis Parameter</label>
                 <div class="radio-grid">
                     <label>
-                        <input type="radio" name="parameter" value="Risk" class="radio-input" checked>
+                        <input type="radio" name="parameter" value="risiko" class="radio-input" checked>
                         <div class="radio-label">Risk (R)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="Hazard" class="radio-input">
+                        <input type="radio" name="parameter" value="bahaya" class="radio-input">
                         <div class="radio-label">Hazard (H)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="Vulnerability" class="radio-input">
+                        <input type="radio" name="parameter" value="kerentanan" class="radio-input">
                         <div class="radio-label">Vulnerability (V)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="Capacity" class="radio-input">
+                        <input type="radio" name="parameter" value="kapasitas" class="radio-input">
                         <div class="radio-label">Capacity (C)</div>
                     </label>
                 </div>
@@ -269,37 +269,78 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Initialize Leaflet Map (Centered on Bandung City)
+        // Inisialisasi Peta Leaflet (Fokus di Kota Bandung)
         const map = L.map('map', {
             zoomControl: false 
         }).setView([-6.9147, 107.6098], 13);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+        // Basemap
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20 
         }).addTo(map);
 
-        // Filter Logic
-        function applyFilter() {
-            const hazard = document.getElementById('hazard-select').value;
-            const parameter = document.querySelector('input[name="parameter"]:checked').value;
-            const classification = document.querySelector('input[name="classification"]:checked').value;
+        // Variabel untuk menyimpan Layer WMS yang sedang aktif
+        let currentWmsLayer = null;
 
-            const legendTitle = document.getElementById('legend-title');
-            legendTitle.textContent = `${hazard} ${parameter} Map`;
+        // URL GeoServer Anda
+        const geoserverUrl = 'http://localhost:8080/geoserver/webgiscobacoba/wms';
 
-            showNotification(`Loading ${hazard} ${parameter} layer - Class: ${classification}...`);
+        // Fungsi untuk mengambil layer WMS
+        function addWmsLayer(layerName) {
+            // Hapus layer lama jika ada
+            if (currentWmsLayer) {
+                map.removeLayer(currentWmsLayer);
+            }
+
+            // Tambahkan layer WMS baru dari GeoServer
+            currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
+                layers: `webgiscobacoba:${layerName}`, // Format: workspace:layer_name
+                format: 'image/png',
+                transparent: true,
+                version: '1.1.0',
+                attribution: "Team Pariksa"
+            });
             
-            map.setZoom(12);
-            setTimeout(() => {
-                map.flyTo([-6.9147, 107.6098], 14, { duration: 1.5 });
-            }, 500);
+            // Tambahkan ke peta
+            currentWmsLayer.addTo(map);
         }
 
-        // Notification Function
+        // Fungsi yang dijalankan saat tombol "Render Map" ditekan
+        function applyFilter() {
+            // Ambil nilai dari input pengguna
+            const hazard = document.getElementById('hazard-select').value; 
+            const parameter = document.querySelector('input[name="parameter"]:checked').value; 
+            
+            // Ambil nama tampilan untuk legenda dan notifikasi
+            const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
+            const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0]; // Ambil kata pertama saja (Risk, Hazard, dll)
+            const classification = document.querySelector('input[name="classification"]:checked').value;
+
+            // --- LOGIKA PENAMAAN LAYER GEOSERVER ---
+            // Di sini kita membuat nama layer berdasarkan pilihan pengguna.
+            // Contoh yang Anda berikan: "bahayalongsorcoba"
+            // Kita asumsikan format penamaan Anda adalah: [parameter][hazard]coba
+            
+            let layerName = `${parameter}${hazard}coba`; 
+            
+            // CONTOH: Jika user milih Landslide (value="longsor") dan Hazard (value="bahaya")
+            // Maka layerName = "bahayalongsorcoba"
+
+            // Panggil fungsi untuk menambahkan layer WMS ke peta
+            addWmsLayer(layerName);
+
+            // Update UI (Legenda & Notifikasi)
+            const legendTitle = document.getElementById('legend-title');
+            legendTitle.textContent = `${hazardText} ${parameterText} Map`;
+
+            showNotification(`Requesting layer '${layerName}' from GeoServer...`);
+        }
+
+        // Fungsi Notifikasi
         function showNotification(message) {
             const toast = document.getElementById('toastNotif');
             toast.textContent = message;
@@ -309,6 +350,9 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // Coba muat layer default saat pertama kali halaman dibuka (Opsional)
+        // addWmsLayer('risikogempacoba'); // Ganti dengan layer default yang Anda inginkan
     </script>
 </body>
 </html>
