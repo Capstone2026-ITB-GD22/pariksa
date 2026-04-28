@@ -267,7 +267,7 @@
         </main>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Initialize Leaflet Map (Centered on Bandung City)
         const map = L.map('map', {
@@ -283,59 +283,70 @@
             maxZoom: 20 
         }).addTo(map);
 
-        // Variabel untuk menyimpan Layer WMS yang sedang aktif
         let currentWmsLayer = null;
-
-        // URL GeoServer disesuaikan dengan workspace "pariksa"
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
-        // Fungsi untuk mengambil layer WMS
+        // --- KAMUS NAMA LAYER GEOSERVER ---
+        // Ganti teks di sebelah kanan sesuai nama layer yang dipublish
+        const layerDictionary = {
+            // LONGSOR
+            "bahaya_longsor": "bahayalongsor",
+            "risiko_longsor": "RisikoLongsorPersil",
+            "kerentanan_longsor": "nama_layer_kerentanan_longsor_disini",
+            "kapasitas_longsor": "nama_layer_kapasitas_longsor_disini",
+            
+            // GEMPA
+            "bahaya_gempa": "nama_layer_bahaya_gempa_disini",
+            "risiko_gempa": "nama_layer_risiko_gempa_disini",
+            "kerentanan_gempa": "nama_layer_kerentanan_gempa_disini",
+            "kapasitas_gempa": "nama_layer_kapasitas_gempa_disini",
+
+            // BANJIR
+            "bahaya_banjir": "nama_layer_bahaya_banjir_disini",
+            "risiko_banjir": "nama_layer_risiko_banjir_disini",
+            "kerentanan_banjir": "nama_layer_kerentanan_banjir_disini",
+            "kapasitas_banjir": "nama_layer_kapasitas_banjir_disini"
+        };
+
         function addWmsLayer(layerName) {
-            // Hapus layer lama jika ada
             if (currentWmsLayer) {
                 map.removeLayer(currentWmsLayer);
             }
 
-            // Tambahkan layer WMS baru dari GeoServer
+            // Memaksa WMS menggunakan style bawaan GeoServer (styles: '')
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
-                layers: `pariksa:${layerName}`, // Format Workspace:LayerName (misal: pariksa:bahayalongsor)
+                layers: `pariksa:${layerName}`, 
                 format: 'image/png',
                 transparent: true,
                 version: '1.1.0',
+                styles: '', 
                 attribution: "Team Pariksa"
             });
             
-            // Tambahkan ke peta
             currentWmsLayer.addTo(map);
         }
 
-        // Fungsi yang dijalankan saat tombol "Render Map" ditekan
         function applyFilter() {
-            // Ambil nilai dari input pengguna
             const hazard = document.getElementById('hazard-select').value; 
             const parameter = document.querySelector('input[name="parameter"]:checked').value; 
             
-            // Ambil nama tampilan untuk legenda dan notifikasi
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
-            const classification = document.querySelector('input[name="classification"]:checked').value;
 
-            // --- LOGIKA PENAMAAN LAYER GEOSERVER ---
-            // Format: parameter + hazard (tanpa "coba")
-            // Contoh: parameter="bahaya" + hazard="longsor" menjadi "bahayalongsor"
-            let layerName = `${parameter}${hazard}`; 
+            // Menyatukan input menjadi kunci pencarian (contoh: "bahaya_longsor")
+            const mapKey = `${parameter}_${hazard}`;
 
-            // Panggil fungsi untuk menambahkan layer WMS ke peta
+            // Mencari nama di kamus. Jika belum diatur, gunakan format bawaan parameter+hazard
+            const layerName = layerDictionary[mapKey] || `${parameter}${hazard}`; 
+
             addWmsLayer(layerName);
 
-            // Update UI (Legenda & Notifikasi)
             const legendTitle = document.getElementById('legend-title');
             legendTitle.textContent = `${hazardText} ${parameterText} Map`;
 
-            //showNotification(`Requesting layer 'pariksa:${layerName}' from GeoServer...`);
+            // showNotification(`Memuat layer: pariksa:${layerName}`);
         }
 
-        // Fungsi Notifikasi
         function showNotification(message) {
             const toast = document.getElementById('toastNotif');
             toast.textContent = message;
@@ -344,6 +355,8 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
+        }
+    </script>
         }
     </script>
 </body>
