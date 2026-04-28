@@ -160,6 +160,36 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="form-label">3. Area Classification</label>
+                <div class="class-grid">
+                    <label>
+                        <input type="radio" name="classification" value="All Classes" class="class-input" checked>
+                        <div class="class-label">
+                            <span class="color-dot dot-all"></span> Display All Classes
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="classification" value="High" class="class-input">
+                        <div class="class-label">
+                            <span class="color-dot dot-high"></span> High Level
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="classification" value="Moderate" class="class-input">
+                        <div class="class-label">
+                            <span class="color-dot dot-moderate"></span> Moderate Level
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="classification" value="Low" class="class-input">
+                        <div class="class-label">
+                            <span class="color-dot dot-low"></span> Low Level
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <button class="btn-apply" onclick="applyFilter()">Render Map</button>
         </aside>
 
@@ -186,11 +216,13 @@
         let currentWmsLayer = null;
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
-        function addWmsLayer(layerName) {
+        // Fungsi WMS dengan parameter style
+        function addWmsLayer(layerName, styleName) {
             if (currentWmsLayer) map.removeLayer(currentWmsLayer);
             
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
                 layers: `pariksa:${layerName}`, 
+                styles: styleName, // Menyertakan SLD
                 format: 'image/png',
                 transparent: true,
                 version: '1.1.0'
@@ -202,12 +234,13 @@
         function applyFilter() {
             const hazard = document.getElementById('hazard-select').value; 
             const parameter = document.querySelector('input[name="parameter"]:checked').value; 
+            const classification = document.querySelector('input[name="classification"]:checked').value;
             
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
 
+            // 1. Logika Pemilihan Layer
             let layerName = "";
-
             if (parameter === "bahaya" && hazard === "longsor") {
                 layerName = "bahayalongsor";
             } else if (parameter === "risiko" && hazard === "longsor") {
@@ -216,7 +249,22 @@
                 layerName = parameter + hazard; 
             }
 
-            addWmsLayer(layerName);
+            // 2. Logika Pemilihan SLD
+            let namaSldGeoServer = "";
+            if (classification === "All Classes") {
+                namaSldGeoServer = "style_semua";
+            } else if (classification === "High") {
+                namaSldGeoServer = "style_tinggi";
+            } else if (classification === "Moderate") {
+                namaSldGeoServer = "style_sedang";
+            } else if (classification === "Low") {
+                namaSldGeoServer = "style_rendah";
+            }
+
+            // Eksekusi Peta
+            addWmsLayer(layerName, namaSldGeoServer);
+            
+            // Perbarui UI Legenda
             document.getElementById('legend-title').textContent = `${hazardText} ${parameterText} Map`;
         }
     </script>
