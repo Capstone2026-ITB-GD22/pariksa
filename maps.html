@@ -11,8 +11,10 @@
     <style>
         :root {
             --primary-red: #E53935;
+            --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
             --bg-sidebar: #F8F9FA;
+            --bg-dark: #0A192F;
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
             --border-color: #EAEAEA;
@@ -24,73 +26,65 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-main); color: var(--text-primary); overflow: hidden; }
-        a { text-decoration: none; color: inherit; }
-
+        
         nav { 
             position: fixed; top: 0; width: 100%; height: 60px;
-            background-color: var(--bg-white); 
-            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-white); border-bottom: 1px solid var(--border-color);
             z-index: 2000; display: flex; align-items: center; padding: 0 2rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
-        .logo-wrapper { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-        .logo-img { height: 30px; width: auto; }
-        
+        .logo-wrapper { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; }
         .nav-links { display: flex; list-style: none; gap: 2rem; margin-left: auto; }
-        .nav-links a { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); transition: color 0.3s ease; }
+        .nav-links a { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; }
         .nav-links a.active { color: var(--primary-red); }
 
         .webgis-container { display: flex; height: 100vh; padding-top: 60px; }
 
         .sidebar {
-            width: 350px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            width: 350px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+            padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;
         }
 
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
-
+        .panel-title { font-size: 1.1rem; font-weight: 700; border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
         .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
 
         .custom-select {
-            width: 100%; padding: 0.8rem; border-radius: 8px;
-            border: 1px solid var(--border-color); font-family: var(--font-main);
-            font-size: 0.95rem; background-color: var(--bg-white);
+            width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color);
+            font-family: var(--font-main); background-color: var(--bg-white);
         }
 
         .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
         .radio-label {
-            display: flex; align-items: center; justify-content: center;
-            padding: 0.6rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--bg-white);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            display: flex; align-items: center; justify-content: center; padding: 0.6rem;
+            border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-white);
+            cursor: pointer; font-size: 0.9rem; transition: 0.2s;
         }
         .radio-input { display: none; }
         .radio-input:checked + .radio-label {
-            background-color: rgba(229, 57, 53, 0.1);
-            border-color: var(--primary-red);
-            color: var(--primary-red);
-            font-weight: 700;
+            background-color: rgba(229, 57, 53, 0.1); border-color: var(--primary-red); color: var(--primary-red); font-weight: 700;
         }
 
+        /* Classification Style */
+        .class-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+        .class-label {
+            display: flex; align-items: center; gap: 10px; padding: 0.6rem 1rem;
+            border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-white);
+            cursor: pointer; font-size: 0.9rem;
+        }
+        .color-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-high { background-color: var(--color-high); }
+        .dot-moderate { background-color: var(--color-moderate); }
+        .dot-low { background-color: var(--color-low); }
+        .dot-all { background: linear-gradient(135deg, var(--color-high) 33%, var(--color-moderate) 33%, var(--color-moderate) 66%, var(--color-low) 66%); }
+        
+        .class-input { display: none; }
+        .class-input:checked + .class-label { background-color: #eee; border-color: var(--text-primary); font-weight: 700; }
+
         .btn-apply {
-            margin-top: 1rem; width: 100%; padding: 1rem;
-            background-color: var(--primary-red); color: white;
-            border: none; border-radius: 8px; font-weight: 700;
-            cursor: pointer; transition: background-color 0.3s ease;
+            margin-top: 1rem; width: 100%; padding: 1rem; background-color: var(--primary-red);
+            color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
         }
 
         .map-area { flex-grow: 1; position: relative; }
@@ -98,18 +92,15 @@
 
         .map-legend {
             position: absolute; bottom: 30px; left: 20px; z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);
-            min-width: 200px;
+            background-color: rgba(255, 255, 255, 0.95); padding: 1rem; border-radius: 8px;
+            border: 1px solid var(--border-color); min-width: 200px;
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html" class="logo-wrapper">
-            <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> Pariksa
-        </a>
+        <div class="logo-wrapper">Pariksa <span>Mapping</span></div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="webgis.html" class="active">WebGIS</a></li>
@@ -125,19 +116,30 @@
                 <select id="hazard-select" class="custom-select">
                     <option value="longsor">Landslide</option>
                     <option value="gempa">Earthquake</option>
+                    <option value="banjir">Flood</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label class="form-label">2. Analysis Parameter</label>
                 <div class="radio-grid">
+                    <label><input type="radio" name="parameter" value="bahaya" class="radio-input" checked><div class="radio-label">Hazard</div></label>
+                    <label><input type="radio" name="parameter" value="risiko" class="radio-input"><div class="radio-label">Risk</div></label>
+                    <label><input type="radio" name="parameter" value="kerentanan" class="radio-input"><div class="radio-label">Vulnerability</div></label>
+                    <label><input type="radio" name="parameter" value="kapasitas" class="radio-input"><div class="radio-label">Capacity</div></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">3. Area Classification</label>
+                <div class="class-grid">
                     <label>
-                        <input type="radio" name="parameter" value="bahaya" class="radio-input" checked>
-                        <div class="radio-label">Hazard (H)</div>
+                        <input type="radio" name="classification" value="All" class="class-input" checked>
+                        <div class="class-label"><span class="color-dot dot-all"></span> Display All</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="risiko" class="radio-input">
-                        <div class="radio-label">Risk (R)</div>
+                        <input type="radio" name="classification" value="High" class="class-input">
+                        <div class="class-label"><span class="color-dot dot-high"></span> High Level</div>
                     </label>
                 </div>
             </div>
@@ -149,7 +151,7 @@
             <div id="map"></div>
             <div class="map-legend">
                 <div id="legend-title" style="font-weight:700; margin-bottom:5px;">Map Legend</div>
-                <div style="font-size:0.8rem; color:var(--text-secondary);">Source: GeoServer Local</div>
+                <div style="font-size:0.8rem; color:var(--text-secondary);">Layer: <span id="active-layer">-</span></div>
             </div>
         </main>
     </div>
@@ -163,15 +165,14 @@
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
         function addWmsLayer(namaLayerAsli) {
-            if (currentWmsLayer) {
-                map.removeLayer(currentWmsLayer);
-            }
+            if (currentWmsLayer) map.removeLayer(currentWmsLayer);
 
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
                 layers: `pariksa:${namaLayerAsli}`,
                 format: 'image/png',
                 transparent: true,
-                version: '1.1.0'
+                version: '1.1.0',
+                styles: '' // Biarkan kosong agar menggunakan default style GeoServer
             });
             currentWmsLayer.addTo(map);
         }
@@ -180,26 +181,24 @@
             const hazard = document.getElementById('hazard-select').value;
             const parameter = document.querySelector('input[name="parameter"]:checked').value;
 
-            let namaLayerGeoServer = "";
+            let layerToCall = "";
 
-            // LOGIKA PENERJEMAH NAMA LAYER
+            // LOGIKA PENERJEMAH (Akomodasi Raster & Shapefile)
             if (hazard === "longsor" && parameter === "bahaya") {
-                namaLayerGeoServer = "bahayalongsor";
+                layerToCall = "bahayalongsor";
             } 
-            else if (hazard === "banjir" && parameter === "kapasitas") {
-                namaLayerGeoServer = "kapasitasbanjir";
+            else if (hazard === "longsor" && parameter === "risiko") {
+                layerToCall = "RisikoLongsorPersil";
             } 
             else {
-                // Untuk kombinasi lain yang belum ada layernya
-                namaLayerGeoServer = parameter + hazard;
+                layerToCall = parameter + hazard;
             }
 
-            // Panggil fungsi untuk menampilkan ke peta
-            addWmsLayer(namaLayerGeoServer);
+            addWmsLayer(layerToCall);
 
-            // Update Judul Legenda
-            document.getElementById('legend-title').textContent = 
-                hazard.toUpperCase() + " " + parameter.toUpperCase();
+            // Update UI
+            document.getElementById('legend-title').textContent = hazard.toUpperCase() + " " + parameter.toUpperCase();
+            document.getElementById('active-layer').textContent = layerToCall;
         }
     </script>
 </body>
