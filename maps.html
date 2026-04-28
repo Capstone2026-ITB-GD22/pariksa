@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGIS | Pariksa Disaster Risk Mapping</title>
+    <title>Maps | Pariksa Disaster Risk Mapping</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -45,6 +45,12 @@
         .logo-img { height: 30px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
         
+        /* Modifikasi max-width navbar sesuai permintaan sebelumnya */
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; 
+        }
+
         .nav-links { display: flex; list-style: none; gap: 2rem; margin-left: auto; }
         .nav-links a { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); transition: color 0.3s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red); }
@@ -171,17 +177,19 @@
 <body>
 
     <nav>
-        <a href="index.html" class="logo-wrapper">
-            <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
-            Pariksa
-        </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="guide.html">Guide</a></li>
-            <li><a href="maps.html" class="active">Maps</a></li>
-            <li><a href="education.html">Education</a></li>
-            <li><a href="team.html">Team</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="guide.html">Guide</a></li>
+                <li><a href="maps.html" class="active">Maps</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </div>
     </nav>
 
     <div class="webgis-container">
@@ -192,9 +200,9 @@
             <div class="form-group">
                 <label class="form-label">1. Hazard Type</label>
                 <select id="hazard-select" class="custom-select">
-                    <option value="gempa">Earthquake</option>
-                    <option value="banjir">Flood</option>
-                    <option value="longsor">Landslide</option>
+                    <option value="Gempa">Earthquake</option>
+                    <option value="Banjir">Flood</option>
+                    <option value="Longsor" selected>Landslide</option>
                 </select>
             </div>
 
@@ -202,19 +210,19 @@
                 <label class="form-label">2. Analysis Parameter</label>
                 <div class="radio-grid">
                     <label>
-                        <input type="radio" name="parameter" value="risiko" class="radio-input" checked>
+                        <input type="radio" name="parameter" value="Risiko" class="radio-input" checked>
                         <div class="radio-label">Risk (R)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="bahaya" class="radio-input">
+                        <input type="radio" name="parameter" value="Bahaya" class="radio-input">
                         <div class="radio-label">Hazard (H)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="kerentanan" class="radio-input">
+                        <input type="radio" name="parameter" value="Kerentanan" class="radio-input">
                         <div class="radio-label">Vulnerability (V)</div>
                     </label>
                     <label>
-                        <input type="radio" name="parameter" value="kapasitas" class="radio-input">
+                        <input type="radio" name="parameter" value="Kapasitas" class="radio-input">
                         <div class="radio-label">Capacity (C)</div>
                     </label>
                 </div>
@@ -259,7 +267,7 @@
             <div id="toastNotif" class="toast">Loading spatial data...</div>
 
             <div class="map-legend">
-                <div class="legend-title" id="legend-title">Earthquake Risk Map</div>
+                <div class="legend-title" id="legend-title">Landslide Risk Map</div>
                 <div class="legend-item"><span class="color-dot dot-high"></span> High (Red)</div>
                 <div class="legend-item"><span class="color-dot dot-moderate"></span> Moderate (Yellow)</div>
                 <div class="legend-item"><span class="color-dot dot-low"></span> Low (Green)</div>
@@ -269,81 +277,81 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Initialize Leaflet Map (Centered on Bandung City)
+        // Inisialisasi Peta Leaflet
         const map = L.map('map', {
             zoomControl: false 
         }).setView([-6.9147, 107.6098], 13);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // Basemap
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20 
         }).addTo(map);
 
-        // Variabel untuk menyimpan Layer WMS yang sedang aktif
         let currentWmsLayer = null;
-
-        // URL GeoServer disesuaikan dengan workspace "pariksa"
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
-        // Fungsi untuk mengambil layer WMS
-        function addWmsLayer(layerName) {
-            // Hapus layer lama jika ada
+        // Fungsi WMS Layer dengan parameter style
+        function addWmsLayer(layerName, styleName) {
             if (currentWmsLayer) {
                 map.removeLayer(currentWmsLayer);
             }
 
-            // Tambahkan layer WMS baru dari GeoServer
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
-                layers: `pariksa:${layerName}`, // Format Workspace:LayerName (misal: pariksa:bahayalongsor)
+                layers: `pariksa:${layerName}`, 
+                styles: styleName, 
                 format: 'image/png',
                 transparent: true,
                 version: '1.1.0',
                 attribution: "Team Pariksa"
             });
             
-            // Tambahkan ke peta
             currentWmsLayer.addTo(map);
         }
 
-        // Fungsi yang dijalankan saat tombol "Render Map" ditekan
+        // Fungsi Utama Filter
         function applyFilter() {
-            // Ambil nilai dari input pengguna
             const hazard = document.getElementById('hazard-select').value; 
             const parameter = document.querySelector('input[name="parameter"]:checked').value; 
+            const classification = document.querySelector('input[name="classification"]:checked').value;
             
-            // Ambil nama tampilan untuk legenda dan notifikasi
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
-            const classification = document.querySelector('input[name="classification"]:checked').value;
 
-            // --- LOGIKA PENAMAAN LAYER GEOSERVER ---
-            // Format: parameter + hazard (tanpa "coba")
-            // Contoh: parameter="bahaya" + hazard="longsor" menjadi "bahayalongsor"
-            let layerName = `${parameter}${hazard}`; 
+            // 1. Susun nama layer: Parameter + Hazard + Persil (Contoh: RisikoLongsorPersil)
+            let layerName = `${parameter}${hazard}Persil`; 
 
-            // Panggil fungsi untuk menambahkan layer WMS ke peta
-            addWmsLayer(layerName);
+            // 2. Pemilihan SLD GeoServer
+            let namaSldGeoServer = "";
+            if (classification === "All Classes") {
+                namaSldGeoServer = "style_semua";
+            } else if (classification === "High") {
+                namaSldGeoServer = "style_tinggi";
+            } else if (classification === "Moderate") {
+                namaSldGeoServer = "style_sedang";
+            } else if (classification === "Low") {
+                namaSldGeoServer = "style_rendah";
+            }
 
-            // Update UI (Legenda & Notifikasi)
+            // Eksekusi penambahan layer WMS
+            addWmsLayer(layerName, namaSldGeoServer);
+
+            // Perbarui Legenda
             const legendTitle = document.getElementById('legend-title');
             legendTitle.textContent = `${hazardText} ${parameterText} Map`;
 
-            // showNotification(`Requesting layer 'pariksa:${layerName}' from GeoServer...`);
+            // Notifikasi dinonaktifkan (di-comment) agar tidak muncul sesuai permintaan
+            // showNotification(`Requesting layer 'pariksa:${layerName}' with style '${namaSldGeoServer}'...`);
         }
 
-        // Fungsi Notifikasi
+        // Fungsi Notifikasi (tersedia jika ingin digunakan kembali)
         function showNotification(message) {
             const toast = document.getElementById('toastNotif');
             toast.textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
     </script>
 </body>
