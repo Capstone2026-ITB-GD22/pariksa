@@ -262,14 +262,19 @@
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
 
-            // Penentuan nama layer secara spesifik
             let layerName = "";
-            if (parameter === "Risiko" && hazard === "Longsor") {
-                layerName = "RisikoLongsorPersil";
-            } else if (parameter === "Bahaya" && hazard === "Longsor") {
-                layerName = "bahayalongsor";
+
+            // LOGIKA SPESIFIK UNTUK LONGSOR
+            if (hazard === "Longsor") {
+                if (parameter === "Bahaya") {
+                    layerName = "bahayalongsor"; // Menggunakan huruf kecil sesuai input user
+                } else if (parameter === "Risiko") {
+                    layerName = "RisikoLongsorPersil"; // Menggunakan PascalCase sesuai input user
+                } else {
+                    layerName = parameter + hazard; 
+                }
             } else {
-                layerName = `${parameter}${hazard}`; 
+                layerName = parameter + hazard;
             }
 
             let namaSldGeoServer = "";
