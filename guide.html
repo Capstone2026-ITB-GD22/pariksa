@@ -35,8 +35,9 @@
             display: flex; justify-content: space-between; align-items: center; 
             max-width: 95% !important; width: 100%; margin: 0 auto;
         }
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); transition: color 0.4s ease; }
         .logo-img { height: 40px; width: auto; }
+        .logo-wrapper span { color: var(--primary-red); }
         
         .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
@@ -114,6 +115,17 @@
         .box-yellow { background-color: #fbc02d; }
         .box-red { background-color: #d32f2f; }
 
+        /* --- Swup Transition Styles --- */
+        .transition-fade {
+            transition: 0.4s ease-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        html.is-animating .transition-fade {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
         @media (max-width: 900px) {
             .main-content { flex-direction: column; }
             .guide-sidebar { width: 100%; position: relative; top: 0; }
@@ -142,7 +154,7 @@
         </div>
     </nav>
 
-    <main class="main-content container">
+    <main id="swup" class="main-content container transition-fade">
         
         <aside class="guide-sidebar">
             <ul class="guide-nav-list">
@@ -287,7 +299,6 @@
 
         </div>
     </main>
-
     <script>
         // Skrip untuk merubah warna menu sidebar saat di-scroll atau diklik
         const sections = document.querySelectorAll("section");
@@ -309,6 +320,11 @@
                 }
             });
         });
+    </script>
+
+    <script src="https://unpkg.com/swup@4"></script>
+    <script>
+        const swup = new Swup();
     </script>
 </body>
 </html>
