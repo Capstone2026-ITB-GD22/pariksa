@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pariksa | Disaster Risk Mapping Bandung</title>
     
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -33,7 +35,7 @@
                 display: flex; 
                 justify-content: space-between; 
                 align-items: center; 
-                max-width: 95% !important; /* Membuka batas lebar maksimal khusus untuk navbar */
+                max-width: 95% !important; 
                 width: 100%; 
             }
         .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #fff; transition: color 0.4s ease; }
@@ -109,20 +111,10 @@
 
         @media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } .solutions-grid-2x2 { grid-template-columns: 1fr; } }
-
-        /* --- Swup Transition Styles --- */
-        .transition-fade {
-            transition: 0.4s ease-out;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        html.is-animating .transition-fade {
-            opacity: 0;
-            transform: translateY(15px);
-        }
     </style>
 </head>
-<body>
+
+<body hx-boost="true">
 
     <nav id="navbar">
         <div class="container nav-container">
@@ -142,7 +134,7 @@
         </div>
     </nav>
 
-    <main id="swup" class="transition-fade">
+    <main>
         <header class="hero">
             <div class="container hero-content">
                 <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
@@ -255,6 +247,7 @@
             </div>
         </section>
     </main>
+
     <footer>
         <div class="container">
             <p>© 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
@@ -270,11 +263,6 @@
                 navbar.classList.remove('scrolled');
             }
         });
-    </script>
-    
-    <script src="https://unpkg.com/swup@4"></script>
-    <script>
-        const swup = new Swup();
     </script>
 </body>
 </html>
