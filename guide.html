@@ -19,6 +19,13 @@
             --text-secondary: #6B6B6B;
             --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
+            
+            /* Legend Colors */
+            --color-very-low: #2E7D32;  /* Dark Green */
+            --color-low: #66BB6A;       /* Light Green */
+            --color-moderate: #FBC02D;  /* Yellow */
+            --color-high: #F57C00;      /* Orange */
+            --color-very-high: #D32F2F; /* Red */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,46 +72,54 @@
         /* Main Content area */
         .guide-main { flex-grow: 1; }
 
-        /* Step Cards */
-        .step-card {
-            background-color: var(--bg-white);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            transition: transform 0.3s ease;
-        }
-        .step-card:hover { transform: translateY(-3px); border-color: rgba(229, 57, 53, 0.2); }
-
-        .step-number {
-            width: 45px; height: 45px; flex-shrink: 0;
-            background-color: var(--primary-red); color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: 700; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
-        }
-
-        .step-content { flex-grow: 1; }
-        .step-content h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); }
-        .step-content p { color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 1rem; line-height: 1.7; }
+        .main-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); letter-spacing: -0.5px; }
         
-        .step-image {
-            width: 250px; height: 180px; flex-shrink: 0;
-            background-color: var(--bg-light); border-radius: 12px;
-            border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden;
+        /* Legend Boxes */
+        .legend-box {
+            display: flex;
+            align-items: center;
+            padding: 1.8rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            color: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease;
         }
-        .step-image img { width: 100%; height: 100%; object-fit: cover; }
+        .legend-box:hover {
+            transform: translateX(10px);
+        }
+        
+        .legend-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            width: 200px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .legend-desc {
+            font-size: 1.05rem;
+            font-weight: 500;
+            border-left: 2px solid rgba(255, 255, 255, 0.3);
+            padding-left: 1.8rem;
+            line-height: 1.5;
+        }
 
-        /* Tip Box */
-        .tip-box {
-            background-color: rgba(229, 57, 53, 0.05);
-            border-left: 4px solid var(--primary-red);
-            padding: 1rem 1.5rem; border-radius: 0 8px 8px 0; margin-top: 1.5rem;
+        /* Specific Colors for Boxes */
+        .box-very-low { background-color: var(--color-very-low); }
+        .box-low { background-color: var(--color-low); }
+        .box-high { background-color: var(--color-high); }
+        .box-very-high { background-color: var(--color-very-high); }
+        
+        /* Yellow Box needs dark text for better contrast */
+        .box-moderate { 
+            background-color: var(--color-moderate); 
+            color: var(--text-primary); 
         }
-        .tip-box strong { display: flex; align-items: center; gap: 8px; color: var(--primary-red); font-size: 0.9rem; margin-bottom: 0.3rem; }
-        .tip-box p { margin: 0; font-size: 0.9rem; color: var(--text-primary); }
+        .box-moderate .legend-desc { 
+            border-left-color: rgba(0, 0, 0, 0.15); 
+        }
 
         /* Footer */
         footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.5); text-align: center; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.1); }
@@ -117,8 +132,10 @@
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .step-card { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
-            .step-image { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .legend-box { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.5rem; }
+            .legend-title { width: 100%; }
+            .legend-desc { border-left: none; border-top: 2px solid rgba(255,255,255,0.3); padding-left: 0; padding-top: 1rem; }
+            .box-moderate .legend-desc { border-top-color: rgba(0,0,0,0.15); }
         }
     </style>
 </head>
@@ -145,8 +162,8 @@
 
     <header class="guide-header">
         <div class="container">
-            <h1>How to Use Pariksa</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <h1>How to Read the Map</h1>
+            <p>Understand the color-coded indicators used to display varying levels of vulnerability and risk across the region.</p>
         </div>
     </header>
 
@@ -155,8 +172,8 @@
         <aside class="guide-sidebar">
             <div class="sidebar-title">Guidebook</div>
             <ul class="sidebar-nav">
-                <li><a href="#" class="active">How to Use</a></li>
-                <li><a href="#">How to Read the Map</a></li>
+                <li><a href="#">How to Use</a></li>
+                <li><a href="#" class="active">How to Read the Map</a></li>
                 <li><a href="#">Layer and Data</a></li>
                 <li><a href="#">Basic Concepts of Disaster</a></li>
                 <li><a href="#">Disaster Indices</a></li>
@@ -166,69 +183,31 @@
 
         <main class="guide-main">
             
-            <div class="step-card">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>Lorem Ipsum Dolor Sit Amet</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <div class="tip-box">
-                        <strong>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            Pro Tip
-                        </strong>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                </div>
-                <div class="step-image">
-                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Placeholder">
-                </div>
+            <h2 class="main-title">Risk Level Indicators</h2>
+
+            <div class="legend-box box-very-low">
+                <div class="legend-title">Very Low</div>
+                <div class="legend-desc">Indicates the most minimal condition level.</div>
             </div>
 
-            <div class="step-card">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>Consectetur Adipiscing Elit</h3>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
-                    <div class="tip-box">
-                        <strong>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            Note
-                        </strong>
-                        <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </div>
-                </div>
-                <div class="step-image">
-                    <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Placeholder">
-                </div>
+            <div class="legend-box box-low">
+                <div class="legend-title">Low</div>
+                <div class="legend-desc">Indicates a low condition level.</div>
             </div>
 
-            <div class="step-card">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>Sed Do Eiusmod Tempor</h3>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                </div>
-                <div class="step-image">
-                    <img src="https://images.unsplash.com/photo-1611095973763-414019e72400?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Placeholder">
-                </div>
+            <div class="legend-box box-moderate">
+                <div class="legend-title">Moderate</div>
+                <div class="legend-desc">Indicates a moderate condition level.</div>
             </div>
 
-            <div class="step-card">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h3>Incididunt Ut Labore Et Dolore</h3>
-                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</p>
-                    <div class="tip-box">
-                        <strong>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            Important
-                        </strong>
-                        <p>Consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                    </div>
-                </div>
-                <div class="step-image">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Placeholder">
-                </div>
+            <div class="legend-box box-high">
+                <div class="legend-title">High</div>
+                <div class="legend-desc">Indicates a high condition level.</div>
+            </div>
+
+            <div class="legend-box box-very-high">
+                <div class="legend-title">Very High</div>
+                <div class="legend-desc">Indicates the highest condition level.</div>
             </div>
 
         </main>
