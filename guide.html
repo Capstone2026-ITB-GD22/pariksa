@@ -20,12 +20,20 @@
             --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
             
-            /* Legend Colors */
+            /* Legend & Concept Colors */
             --color-very-low: #2E7D32;
             --color-low: #66BB6A;
             --color-moderate: #FBC02D;
             --color-high: #F57C00;
             --color-very-high: #D32F2F;
+
+            --c-risk: #FF3B30;
+            --c-hazard: #FF9500;
+            --c-vuln: #AF52DE;
+            --c-cap: #34C759;
+            --c-flood: #007AFF;
+            --c-landslide: #8E8E93;
+            --c-earthquake: #800000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -71,40 +79,24 @@
 
         /* Main Content area */
         .guide-main { flex-grow: 1; }
-        .content-section { display: none; }
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
         .content-section.active { display: block; }
+        .main-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); letter-spacing: -0.5px; }
 
-        /* Step Cards (How to Use) */
-        .step-card {
-            background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 16px;
-            padding: 2.5rem; margin-bottom: 2rem; display: flex; gap: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s ease;
-        }
-        .step-number {
-            width: 45px; height: 45px; flex-shrink: 0; background-color: var(--primary-red); color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: 700;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Step Cards (How to Use) --- */
+        .step-card { background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s ease; }
+        .step-number { width: 45px; height: 45px; flex-shrink: 0; background-color: var(--primary-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; }
         .step-content { flex-grow: 1; }
         .step-content h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
-        
-        /* Image Box */
-        .step-image { 
-            width: 250px; height: 180px; flex-shrink: 0;
-            background-color: #F0F0F0; border-radius: 12px; 
-            border: 2px dashed #CCCCCC; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .step-image { width: 250px; height: 180px; flex-shrink: 0; background-color: #F0F0F0; border-radius: 12px; border: 2px dashed #CCCCCC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .step-image img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Legend Boxes (How to Read Map) */
-        .legend-box {
-            display: flex; align-items: center; padding: 1.8rem 2rem; border-radius: 12px;
-            margin-bottom: 1.2rem; color: #FFFFFF; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
+        /* --- Legend Boxes (How to Read Map) --- */
+        .legend-box { display: flex; align-items: center; padding: 1.8rem 2rem; border-radius: 12px; margin-bottom: 1.2rem; color: #FFFFFF; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
         .legend-title { font-size: 1.2rem; font-weight: 700; width: 180px; flex-shrink: 0; text-transform: uppercase; }
         .legend-desc { font-size: 1rem; border-left: 2px solid rgba(255, 255, 255, 0.3); padding-left: 1.8rem; }
-        
         .box-very-low { background-color: var(--color-very-low); }
         .box-low { background-color: var(--color-low); }
         .box-moderate { background-color: var(--color-moderate); color: var(--text-primary); }
@@ -112,16 +104,66 @@
         .box-high { background-color: var(--color-high); }
         .box-very-high { background-color: var(--color-very-high); }
 
+        /* --- Basic Concepts of Disaster (NEW DESIGN) --- */
+        .concepts-layout { display: flex; align-items: center; gap: 3rem; margin-bottom: 5rem; }
+        
+        .concepts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        
+        .concept-card {
+            background-color: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 2rem 1rem; width: 160px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.04); transition: transform 0.3s ease;
+        }
+        .concept-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        
+        /* Wadah Gambar Ikon */
+        .icon-container { width: 64px; height: 64px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; }
+        .icon-container img { width: 100%; height: 100%; object-fit: contain; }
+
+        .concept-name { font-size: 1.1rem; font-weight: 700; }
+
+        .vertical-divider { width: 2px; height: 300px; background-color: var(--primary-red); border-radius: 2px; }
+
+        .disasters-layout { display: flex; gap: 1.5rem; align-items: center; }
+        .disasters-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        /* --- Relationship Formula Section --- */
+        .relationship-section h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; color: var(--text-primary); }
+        .formula-container { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        
+        .formula-equals { font-size: 4rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
+        .formula-multiply { font-size: 3rem; font-weight: 700; color: var(--text-primary); margin: 0 1rem; line-height: 1; }
+        
+        .formula-fraction { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        .formula-numerator { display: flex; align-items: center; border-bottom: 6px solid var(--text-primary); padding-bottom: 1.5rem; width: 100%; justify-content: center; }
+        .formula-denominator { padding-top: 0.5rem; }
+
+        /* Formula Items (Smaller Cards) */
+        .formula-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .formula-item .icon-container { width: 50px; height: 50px; margin-bottom: 0; }
+        .formula-item .concept-name { font-size: 1rem; }
+
         footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.5); text-align: center; font-size: 0.9rem; }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .guide-layout { flex-direction: column; }
             .guide-sidebar { width: 100%; position: static; display: flex; overflow-x: auto; padding-bottom: 1rem; }
             .sidebar-nav { flex-direction: row; }
+            .concepts-layout { flex-direction: column; }
+            .vertical-divider { width: 100%; height: 2px; }
+            .disasters-layout { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .formula-container { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
             .step-card { flex-direction: column; }
             .step-image { width: 100%; height: auto; aspect-ratio: 16/9; }
             .legend-box { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .legend-desc { border-left: none; border-top: 1px solid rgba(255,255,255,0.2); padding: 1rem 0 0 0; }
+            .concept-card { width: 140px; }
+            .formula-numerator { flex-direction: column; border-bottom-width: 4px; gap: 0.5rem; }
+            .formula-multiply { margin: 0.5rem 0; transform: rotate(45deg); font-size: 2rem; } /* Change 'X' to '+' visually if stacked, or keep 'X' */
         }
     </style>
 </head>
@@ -160,7 +202,6 @@
             <ul class="sidebar-nav">
                 <li><a onclick="showSection('how-to-use', this)" class="active">How to Use</a></li>
                 <li><a onclick="showSection('read-map', this)">How to Read the Map</a></li>
-                <li><a onclick="showSection('layer-data', this)">Layer and Data</a></li>
                 <li><a onclick="showSection('concepts', this)">Basic Concepts of Disaster</a></li>
                 <li><a onclick="showSection('indices', this)">Disaster Indices</a></li>
                 <li><a onclick="showSection('faq', this)">FAQ</a></li>
@@ -170,7 +211,6 @@
         <main class="guide-main">
             
             <section id="how-to-use" class="content-section active">
-                
                 <div class="step-card">
                     <div class="step-number">1</div>
                     <div class="step-content">
@@ -203,21 +243,10 @@
                         <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+3" alt="Step 3">
                     </div>
                 </div>
-                
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Incididunt Ut Labore Et</h3>
-                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </div>
-                    <div class="step-image">
-                        <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+4" alt="Step 4">
-                    </div>
-                </div>
-
             </section>
 
             <section id="read-map" class="content-section">
+                <h2 class="main-title">Risk Level Indicators</h2>
                 <div class="legend-box box-very-low">
                     <div class="legend-title">Very Low</div>
                     <div class="legend-desc">Indicates the most minimal condition level.</div>
@@ -240,8 +269,112 @@
                 </div>
             </section>
 
-            <section id="layer-data" class="content-section"><h2>Layer and Data</h2><p>Content coming soon...</p></section>
-            <section id="concepts" class="content-section"><h2>Basic Concepts</h2><p>Content coming soon...</p></section>
+            <section id="concepts" class="content-section">
+                
+                <div class="concepts-layout">
+                    
+                    <div class="concepts-grid">
+                        <div class="concept-card">
+                            <div class="icon-container">
+                                <img src="https://img.icons8.com/color/96/000000/high-risk.png" alt="Risk">
+                            </div>
+                            <span class="concept-name" style="color: var(--c-risk);">Risk</span>
+                        </div>
+                        <div class="concept-card">
+                            <div class="icon-container">
+                                <img src="https://img.icons8.com/color/96/000000/warning-shield.png" alt="Hazard">
+                            </div>
+                            <span class="concept-name" style="color: var(--c-hazard);">Hazard</span>
+                        </div>
+                        <div class="concept-card">
+                            <div class="icon-container">
+                                <img src="https://img.icons8.com/color/96/000000/broken-link.png" alt="Vulnerability">
+                            </div>
+                            <span class="concept-name" style="color: var(--c-vuln);">Vulnerability</span>
+                        </div>
+                        <div class="concept-card">
+                            <div class="icon-container">
+                                <img src="https://img.icons8.com/color/96/000000/flex-biceps.png" alt="Capacity">
+                            </div>
+                            <span class="concept-name" style="color: var(--c-cap);">Capacity</span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-divider"></div>
+
+                    <div class="disasters-layout">
+                        <div class="disasters-col">
+                            <div class="concept-card">
+                                <div class="icon-container">
+                                    <img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood">
+                                </div>
+                                <span class="concept-name" style="color: var(--c-flood);">Flood</span>
+                            </div>
+                            <div class="concept-card">
+                                <div class="icon-container">
+                                    <img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="Earthquake">
+                                </div>
+                                <span class="concept-name" style="color: var(--c-earthquake);">Earthquake</span>
+                            </div>
+                        </div>
+                        
+                        <div class="disasters-col">
+                            <div class="concept-card">
+                                <div class="icon-container">
+                                    <img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide">
+                                </div>
+                                <span class="concept-name" style="color: var(--c-landslide);">Landslide</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relationship-section">
+                    <h3>Relationships Between Concepts</h3>
+                    
+                    <div class="formula-container">
+                        <div class="formula-item">
+                            <div class="icon-container">
+                                <img src="https://img.icons8.com/color/96/000000/high-risk.png" alt="Risk">
+                            </div>
+                            <span class="concept-name" style="color: var(--c-risk);">Risk</span>
+                        </div>
+                        
+                        <div class="formula-equals">=</div>
+                        
+                        <div class="formula-fraction">
+                            <div class="formula-numerator">
+                                <div class="formula-item">
+                                    <div class="icon-container">
+                                        <img src="https://img.icons8.com/color/96/000000/warning-shield.png" alt="Hazard">
+                                    </div>
+                                    <span class="concept-name" style="color: var(--c-hazard);">Hazard</span>
+                                </div>
+                                
+                                <div class="formula-multiply">×</div>
+                                
+                                <div class="formula-item">
+                                    <div class="icon-container">
+                                        <img src="https://img.icons8.com/color/96/000000/broken-link.png" alt="Vulnerability">
+                                    </div>
+                                    <span class="concept-name" style="color: var(--c-vuln);">Vulnerability</span>
+                                </div>
+                            </div>
+                            
+                            <div class="formula-denominator">
+                                <div class="formula-item">
+                                    <div class="icon-container">
+                                        <img src="https://img.icons8.com/color/96/000000/flex-biceps.png" alt="Capacity">
+                                    </div>
+                                    <span class="concept-name" style="color: var(--c-cap);">Capacity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+
             <section id="indices" class="content-section"><h2>Disaster Indices</h2><p>Content coming soon...</p></section>
             <section id="faq" class="content-section"><h2>FAQ</h2><p>Content coming soon...</p></section>
 
@@ -274,6 +407,9 @@
             } else if(sectionId === 'read-map') {
                 headerTitle.innerText = "How to Read the Map";
                 headerDesc.innerText = "Understanding color-coded indicators for vulnerability and risk.";
+            } else if(sectionId === 'concepts') {
+                headerTitle.innerText = "Basic Concepts of Disaster";
+                headerDesc.innerText = "Learn the core components that shape disaster risk calculation.";
             } else {
                 headerTitle.innerText = element.innerText;
                 headerDesc.innerText = "Learn more about " + element.innerText + ".";
