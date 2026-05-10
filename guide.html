@@ -25,12 +25,11 @@
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- Navbar Simple (Fixed Black 80%) --- */
+        /* --- Navbar Simple (Fixed Black 90% Transparency) --- */
         nav { 
             position: fixed; top: 0; width: 100%; z-index: 2000;
-            background-color: rgba(0, 0, 0, 0.8); /* Hitam Transparansi 80% */
+            background-color: rgba(0, 0, 0, 0.9); /* Hitam Transparansi 90% */
             padding: 0.8rem 0;
-            transition: none; /* Menghapus efek aneh */
         }
         .nav-container { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -42,18 +41,17 @@
         
         .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.3s ease; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* --- Swup Transition Styles --- */
+        /* --- Swup Transition Styles (Langsung & Smooth) --- */
         .transition-fade {
-            transition: 0.4s ease-out;
+            transition: opacity 0.15s ease; /* Sangat cepat dan halus */
             opacity: 1;
-            transform: translateY(0);
         }
         html.is-animating .transition-fade {
             opacity: 0;
-            transform: translateY(10px);
+            /* Perintah transform dihapus agar tidak ada efek naik-turun yang aneh */
         }
 
         /* --- Guide Layout --- */
@@ -143,10 +141,10 @@
                 <h1>Panduan Penggunaan Pariksa</h1>
                 <h2>Tentang Pariksa</h2>
                 <ul class="bullet-list">
-                    <li><strong>Platform WebGIS:</strong> Digunakan untuk pemetaan tingkat kerentanan banjir dan longsor[cite: 129].</li>
-                    <li><strong>Berbasis SIG:</strong> Menggabungkan berbagai parameter spasial secara sistematis[cite: 130].</li>
-                    <li><strong>Detail Skala Persil:</strong> Mengidentifikasi risiko hingga tingkat bangunan individu[cite: 78].</li>
-                    <li><strong>Mendukung Mitigasi:</strong> Informasi akurat untuk membantu pengambilan keputusan kebencanaan[cite: 133].</li>
+                    <li><strong>Platform WebGIS:</strong> Digunakan untuk pemetaan tingkat kerentanan banjir dan longsor.</li>
+                    <li><strong>Berbasis SIG:</strong> Menggabungkan berbagai parameter spasial secara sistematis.</li>
+                    <li><strong>Detail Skala Persil:</strong> Mengidentifikasi risiko hingga tingkat bangunan individu.</li>
+                    <li><strong>Mendukung Mitigasi:</strong> Informasi akurat untuk membantu pengambilan keputusan kebencanaan.</li>
                 </ul>
             </section>
 
@@ -156,15 +154,15 @@
                     <div class="concept-card">
                         <h4>Hazard (Bahaya)</h4>
                         <ul class="bullet-list">
-                            <li>Potensi fenomena alam yang dapat merugikan[cite: 253].</li>
-                            <li><strong>Contoh:</strong> Curah hujan tinggi dan lereng curam[cite: 254, 257].</li>
+                            <li>Potensi fenomena alam yang dapat merugikan.</li>
+                            <li><strong>Contoh:</strong> Curah hujan tinggi dan lereng curam.</li>
                         </ul>
                     </div>
                     <div class="concept-card">
                         <h4>Vulnerability (Kerentanan)</h4>
                         <ul class="bullet-list">
-                            <li>Kondisi wilayah yang mudah terdampak bencana[cite: 294].</li>
-                            <li><strong>Contoh:</strong> Permukiman padat dan drainase buruk[cite: 296, 297].</li>
+                            <li>Kondisi wilayah yang mudah terdampak bencana.</li>
+                            <li><strong>Contoh:</strong> Permukiman padat dan drainase buruk.</li>
                         </ul>
                     </div>
                 </div>
@@ -175,15 +173,15 @@
                 <div class="legend-grid">
                     <div class="legend-item">
                         <div class="color-box box-green"></div>
-                        <div><strong>Rendah (Hijau)</strong>: Bangunan memiliki risiko kecil[cite: 104].</div>
+                        <div><strong>Rendah (Hijau)</strong>: Bangunan memiliki risiko kecil.</div>
                     </div>
                     <div class="legend-item">
                         <div class="color-box box-yellow"></div>
-                        <div><strong>Sedang (Kuning)</strong>: Perlu diperhatikan mitigasi preventif[cite: 105].</div>
+                        <div><strong>Sedang (Kuning)</strong>: Perlu diperhatikan mitigasi preventif.</div>
                     </div>
                     <div class="legend-item">
                         <div class="color-box box-red"></div>
-                        <div><strong>Tinggi (Merah)</strong>: Prioritas utama tindakan mitigasi[cite: 106].</div>
+                        <div><strong>Tinggi (Merah)</strong>: Prioritas utama tindakan mitigasi.</div>
                     </div>
                 </div>
             </section>
@@ -194,14 +192,14 @@
                     <div class="step-number">1</div>
                     <div class="step-text">
                         <h4>Aktifkan Layer</h4>
-                        <p>Buka menu kontrol kiri dan pilih layer informasi (misal: Flood Vulnerability)[cite: 331, 334].</p>
+                        <p>Buka menu kontrol kiri dan pilih layer informasi (misal: Flood Vulnerability).</p>
                     </div>
                 </div>
                 <div class="step-item">
                     <div class="step-number">2</div>
                     <div class="step-text">
                         <h4>Klik Area Peta</h4>
-                        <p>Klik pada area persil untuk melihat informasi tingkat kerentanan spesifik[cite: 351, 353].</p>
+                        <p>Klik pada area persil untuk melihat informasi tingkat kerentanan spesifik.</p>
                     </div>
                 </div>
             </section>
@@ -211,7 +209,9 @@
     <script src="https://unpkg.com/swup@4"></script>
     <script src="https://unpkg.com/@swup/head-plugin@2"></script>
     <script src="https://unpkg.com/@swup/scripts-plugin@2"></script>
+    
     <script>
+        // Inisialisasi Swup dengan plugin
         const swup = new Swup({
             plugins: [
                 new SwupHeadPlugin(),
@@ -235,6 +235,7 @@
             });
         }
 
+        // Panggil fungsi saat pertama kali dan setiap ganti halaman
         initGuideNav();
         swup.hooks.on('page:view', initGuideNav);
     </script>
