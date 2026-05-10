@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guide | Pariksa Disaster Risk Mapping</title>
     
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -13,7 +15,8 @@
             --primary-red: #E53935;
             --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
-            --bg-light: #F8F9FA;
+            --bg-cream: #FCF9F2; /* Warna beige/cream sesuai gambar */
+            --bg-dark: #1F1F1F;  /* Warna abu gelap untuk header */
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
             --border-color: #EAEAEA;
@@ -21,14 +24,14 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-light); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-cream); line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- Navbar Simple (Fixed Black 90% Transparency) --- */
+        /* --- Navbar Konsisten --- */
         nav { 
             position: fixed; top: 0; width: 100%; z-index: 2000;
-            background-color: rgba(0, 0, 0, 0.95); /* Hitam Transparansi 90% */
+            background-color: rgba(0, 0, 0, 0.95);
             padding: 0.8rem 0;
         }
         .nav-container { 
@@ -44,67 +47,109 @@
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* --- Swup Transition Styles (Langsung & Smooth) --- */
-        .transition-fade {
-            transition: opacity 0.15s ease; /* Sangat cepat dan halus */
-            opacity: 1;
+        /* --- Guide Header --- */
+        .guide-header {
+            background-color: var(--bg-dark);
+            color: #FFFFFF;
+            padding: 140px 0 80px 0;
+            text-align: center;
         }
-        html.is-animating .transition-fade {
-            opacity: 0;
-            /* Perintah transform dihapus agar tidak ada efek naik-turun yang aneh */
+        .guide-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .guide-header p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        /* --- Guide Layout --- */
-        .main-content {
-            padding-top: 100px;
-            min-height: 100vh;
+        /* --- Accordion Section --- */
+        .guide-content {
+            padding: 4rem 0 8rem 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            background-color: var(--bg-white);
+            border: 1px solid #D1D1D1;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .accordion-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .accordion-header {
             display: flex;
-            gap: 2rem;
-            padding-bottom: 4rem;
+            align-items: center;
+            padding: 1.5rem;
+            cursor: pointer;
+            user-select: none;
         }
 
-        /* Sidebar Navigation */
-        .guide-sidebar {
-            width: 260px; flex-shrink: 0; background-color: var(--bg-white); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 1.5rem; position: sticky; top: 100px; height: max-content;
+        .accordion-icon {
+            width: 45px;
+            height: 45px;
+            border: 1.5px solid var(--primary-red);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1.5rem;
+            flex-shrink: 0;
         }
-        .guide-nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-        .guide-nav-list a { display: block; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); transition: 0.2s; }
-        .guide-nav-list a:hover, .guide-nav-list a.active { background-color: rgba(229, 57, 53, 0.08); color: var(--primary-red); }
 
-        /* Content Area */
-        .guide-body { flex-grow: 1; background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 12px; padding: 3rem; }
+        .accordion-title {
+            flex-grow: 1;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
 
-        section { margin-bottom: 3.5rem; scroll-margin-top: 120px; }
-        h1 { font-size: 2.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
-        h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary-red); border-bottom: 2px solid var(--bg-light); padding-bottom: 0.5rem; margin-bottom: 1.5rem; margin-top: 1rem; }
-        
-        ul.bullet-list { list-style: none; margin-bottom: 1.5rem; }
-        ul.bullet-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.8rem; color: var(--text-secondary); }
+        .accordion-chevron {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 0 1.5rem 1.8rem 5.8rem; /* Padding kiri menyesuaikan ikon */
+            color: var(--text-secondary);
+        }
+
+        /* Active State */
+        .accordion-item.active .accordion-content {
+            display: block;
+        }
+        .accordion-item.active .accordion-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* List Styles */
+        ul.bullet-list { list-style: none; }
+        ul.bullet-list li { position: relative; padding-left: 1.2rem; margin-bottom: 0.8rem; }
         ul.bullet-list li::before { content: "•"; color: var(--primary-red); font-weight: bold; position: absolute; left: 0; font-size: 1.2rem; top: -2px; }
 
-        .concept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
-        .concept-card { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 10px; background-color: var(--bg-light); }
-        .concept-card h4 { color: var(--primary-red); font-size: 1.1rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;}
+        footer { padding: 2rem 0; background-color: var(--bg-dark); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; }
 
-        .step-item { display: flex; gap: 1.2rem; margin-bottom: 1.5rem; align-items: flex-start; }
-        .step-number { width: 32px; height: 32px; background-color: var(--primary-red); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0; }
-
-        .legend-grid { display: flex; flex-direction: column; gap: 1rem; }
-        .legend-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; }
-        .color-box { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; }
-        .box-green { background-color: #388e3c; }
-        .box-yellow { background-color: #fbc02d; }
-        .box-red { background-color: #d32f2f; }
-
-        @media (max-width: 900px) {
-            .main-content { flex-direction: column; }
-            .guide-sidebar { width: 100%; position: relative; top: 0; }
-            .concept-grid { grid-template-columns: 1fr; }
+        @media (max-width: 768px) { 
+            .nav-links { display: none; } 
+            .accordion-content { padding-left: 1.5rem; }
+            .accordion-icon { margin-right: 1rem; width: 35px; height: 35px; }
         }
     </style>
 </head>
-<body>
+
+<body hx-boost="true">
 
     <nav id="navbar">
         <div class="container nav-container">
@@ -124,120 +169,102 @@
         </div>
     </nav>
 
-    <main id="swup" class="transition-fade container main-content">
-        
-        <aside class="guide-sidebar">
-            <ul class="guide-nav-list">
-                <li><a href="#tentang" class="active">1. Tentang Pariksa</a></li>
-                <li><a href="#konsep">2. Konsep Dasar</a></li>
-                <li><a href="#membaca">3. Simbologi Peta</a></li>
-                <li><a href="#penggunaan">4. Cara Penggunaan</a></li>
-                <li><a href="#interpretasi">5. Interpretasi Risiko</a></li>
-            </ul>
-        </aside>
+    <main>
+        <header class="guide-header">
+            <div class="container">
+                <h1>User Guide</h1>
+                <p>How to use the Pariksa high-precision disaster risk mapping system</p>
+            </div>
+        </header>
 
-        <div class="guide-body">
-            <section id="tentang">
-                <h1>Panduan Penggunaan Pariksa</h1>
-                <h2>Tentang Pariksa</h2>
-                <ul class="bullet-list">
-                    <li><strong>Platform WebGIS:</strong> Digunakan untuk pemetaan tingkat kerentanan banjir dan longsor.</li>
-                    <li><strong>Berbasis SIG:</strong> Menggabungkan berbagai parameter spasial secara sistematis.</li>
-                    <li><strong>Detail Skala Persil:</strong> Mengidentifikasi risiko hingga tingkat bangunan individu.</li>
-                    <li><strong>Mendukung Mitigasi:</strong> Informasi akurat untuk membantu pengambilan keputusan kebencanaan.</li>
-                </ul>
-            </section>
+        <section class="guide-content container">
+            
+            <div class="accordion-item active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-icon">logo</div>
+                    <div class="accordion-title">Navigating the WebGIS</div>
+                    <svg class="accordion-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <ul class="bullet-list">
+                        <li>Gunakan menu kontrol di kiri untuk memilih jenis parameter bencana.</li>
+                        <li>Pilih parameter analisis: <strong>Hazard</strong>, <strong>Vulnerability</strong>, <strong>Capacity</strong>, atau <strong>Risk</strong>.</li>
+                        <li>Gunakan <strong>Zoom In</strong> untuk melihat detail tingkat persil (bangunan) dengan skala 1:5.000.</li>
+                        <li>Klik langsung pada area persil di peta untuk menampilkan pop-up skor dan klasifikasi risiko spesifik.</li>
+                    </ul>
+                </div>
+            </div>
 
-            <section id="konsep">
-                <h2>Konsep Dasar Kebencanaan</h2>
-                <div class="concept-grid">
-                    <div class="concept-card">
-                        <h4>Hazard (Bahaya)</h4>
-                        <ul class="bullet-list">
-                            <li>Potensi fenomena alam yang dapat merugikan.</li>
-                            <li><strong>Contoh:</strong> Curah hujan tinggi dan lereng curam.</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card">
-                        <h4>Vulnerability (Kerentanan)</h4>
-                        <ul class="bullet-list">
-                            <li>Kondisi wilayah yang mudah terdampak bencana.</li>
-                            <li><strong>Contoh:</strong> Permukiman padat dan drainase buruk.</li>
-                        </ul>
-                    </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-icon">logo</div>
+                    <div class="accordion-title">How to Read the Map</div>
+                    <svg class="accordion-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-            </section>
+                <div class="accordion-content">
+                    <ul class="bullet-list">
+                        <li><strong>Warna Merah (Tinggi):</strong> Prioritas utama mitigasi struktural. Elevasi tanah rendah atau lereng curam.</li>
+                        <li><strong>Warna Kuning (Sedang):</strong> Area transisi. Membutuhkan kesiapsiagaan mandiri secara rutin.</li>
+                        <li><strong>Warna Hijau (Rendah):</strong> Kondisi topografi stabil. Risiko dampak bencana sangat minimal.</li>
+                    </ul>
+                </div>
+            </div>
 
-            <section id="membaca">
-                <h2>Cara Membaca Peta</h2>
-                <div class="legend-grid">
-                    <div class="legend-item">
-                        <div class="color-box box-green"></div>
-                        <div><strong>Rendah (Hijau)</strong>: Bangunan memiliki risiko kecil.</div>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box box-yellow"></div>
-                        <div><strong>Sedang (Kuning)</strong>: Perlu diperhatikan mitigasi preventif.</div>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box box-red"></div>
-                        <div><strong>Tinggi (Merah)</strong>: Prioritas utama tindakan mitigasi.</div>
-                    </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-icon">logo</div>
+                    <div class="accordion-title">Basic Concepts of Disaster</div>
+                    <svg class="accordion-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-            </section>
+                <div class="accordion-content">
+                    <ul class="bullet-list">
+                        <li><strong>Hazard (H):</strong> Potensi fenomena alam merusak (contoh: intensitas hujan, patahan Lembang).</li>
+                        <li><strong>Vulnerability (V):</strong> Kondisi kerentanan fisik dan kepadatan penduduk.</li>
+                        <li><strong>Capacity (C):</strong> Kemampuan wilayah merespons darurat (contoh: jarak ke fasilitas kesehatan).</li>
+                        <li><strong>Risk (R):</strong> Hasil interaksi H, V, dan C.</li>
+                    </ul>
+                </div>
+            </div>
 
-            <section id="penggunaan">
-                <h2>Langkah Penggunaan WebGIS</h2>
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-text">
-                        <h4>Aktifkan Layer</h4>
-                        <p>Buka menu kontrol kiri dan pilih layer informasi (misal: Flood Vulnerability).</p>
-                    </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-icon">logo</div>
+                    <div class="accordion-title">Indices</div>
+                    <svg class="accordion-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-text">
-                        <h4>Klik Area Peta</h4>
-                        <p>Klik pada area persil untuk melihat informasi tingkat kerentanan spesifik.</p>
-                    </div>
+                <div class="accordion-content">
+                    <ul class="bullet-list">
+                        <li>Perhitungan menggunakan standarisasi formula: <strong>R = H × (V / C)</strong>.</li>
+                        <li>Pembobotan dilakukan melalui metode AHP (Analytical Hierarchy Process).</li>
+                        <li>Nilai indeks dibobot menjadi skor berskala untuk memudahkan klasifikasi visual.</li>
+                    </ul>
                 </div>
-            </section>
-        </div>
+            </div>
+
+        </section>
     </main>
 
-    <script src="https://unpkg.com/swup@4"></script>
-    <script src="https://unpkg.com/@swup/head-plugin@2"></script>
-    <script src="https://unpkg.com/@swup/scripts-plugin@2"></script>
-    
+    <footer>
+        <div class="container">
+            <p>© 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        </div>
+    </footer>
+
     <script>
-        // Inisialisasi Swup dengan plugin
-        const swup = new Swup({
-            plugins: [
-                new SwupHeadPlugin(),
-                new SwupScriptsPlugin()
-            ]
-        });
-
-        // Script Sidebar Aktif
-        function initGuideNav() {
-            const sections = document.querySelectorAll("section");
-            const navLinks = document.querySelectorAll(".guide-nav-list a");
-            window.addEventListener("scroll", () => {
-                let current = "";
-                sections.forEach(s => {
-                    if (scrollY >= s.offsetTop - 150) current = s.getAttribute("id");
-                });
-                navLinks.forEach(l => {
-                    l.classList.remove("active");
-                    if (l.getAttribute("href").includes(current)) l.classList.add("active");
-                });
+        function toggleAccordion(element) {
+            const currentItem = element.parentElement;
+            
+            // Opsional: Tutup accordion lain jika satu dibuka
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                if(item !== currentItem) {
+                    item.classList.remove('active');
+                }
             });
-        }
 
-        // Panggil fungsi saat pertama kali dan setiap ganti halaman
-        initGuideNav();
-        swup.hooks.on('page:view', initGuideNav);
+            // Toggle accordion yang diklik
+            currentItem.classList.toggle('active');
+        }
     </script>
 </body>
 </html>
