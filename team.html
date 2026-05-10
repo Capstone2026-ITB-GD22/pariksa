@@ -31,21 +31,24 @@
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- Navbar (Shared) --- */
-        nav { position: fixed; top: 0; width: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); z-index: 1000; padding: 0.8rem 0; }
+        /* --- Navbar Konsisten --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; z-index: 2000;
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 0;
+        }
         .nav-container { 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center; 
-                max-width: 95% !important; /* Membuka batas lebar maksimal khusus untuk navbar */
-                width: 100%; 
-            }
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; margin: 0 auto;
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
+        
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { font-weight: 600; font-size: 0.95rem; color: white; transition: color 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary-red); }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
         /* --- Page Header --- */
         .page-header { padding: 12rem 0 6rem 0; background-color: var(--bg-light); text-align: center; position: relative; }
@@ -189,19 +192,21 @@
 </head>
 <body>
 
-    <nav>
+    <nav id="navbar">
         <div class="container nav-container">
             <a href="index.html" class="logo-wrapper">
                 <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
                 Pariksa
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="guide.html">Guide</a></li>
-                <li><a href="maps.html">Maps</a></li>
-                <li><a href="education.html">Education</a></li>
-                <li><a href="team.html" class="active">Team</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html" class="active">Team</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
