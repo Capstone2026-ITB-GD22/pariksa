@@ -78,7 +78,7 @@
         /* --- Solutions Section (2x2 Grid) --- */
         .solutions-section { padding: 6rem 0 8rem 0; background-color: var(--bg-light); }
         .solutions-grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; margin-top: 4rem; max-width: 1050px; margin-left: auto; margin-right: auto; }
-        .solution-card { background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 12px; padding: 3.5rem 2.5rem; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .solution-card { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 3.5rem 2.5rem; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .solution-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary-red); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
         .solution-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: transparent; }
         .solution-card:hover::before { transform: scaleX(1); }
