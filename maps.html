@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style id="page-style">
-        /* Color Variables */
         :root {
             --primary-red: #E53935;
             --dark-red: #B71C1C;
@@ -21,7 +20,6 @@
             --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
 
-            /* Classification Colors */
             --color-high: #d32f2f;
             --color-moderate: #fbc02d;
             --color-low: #388e3c;
@@ -31,24 +29,26 @@
         body { font-family: var(--font-main); color: var(--text-primary); overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* Minimalist Navbar */
+        /* --- Navbar Konsisten 95% Hitam --- */
         nav { 
-            position: fixed; top: 0; width: 100%; height: 60px;
-            background-color: var(--bg-white); 
-            border-bottom: 1px solid var(--border-color);
-            z-index: 2000; display: flex; align-items: center; padding: 0 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed; top: 0; width: 100%; z-index: 2000;
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 0;
         }
-        
-        .logo-wrapper { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-        .logo-img { height: 30px; width: auto; }
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; margin: 0 auto;
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
+        .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
         
-        .nav-links { display: flex; list-style: none; gap: 2rem; margin-left: auto; }
-        .nav-links a { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); transition: color 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary-red); }
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* --- Swup Transition Styles --- */
+        /* --- Transisi Swup --- */
         .transition-fade {
             transition: opacity 0.15s ease;
             opacity: 1;
@@ -57,73 +57,44 @@
             opacity: 0;
         }
 
-        /* Main Layout */
+        /* --- Layout Utama Maps --- */
         .webgis-container {
             display: flex;
             height: 100vh;
-            padding-top: 60px;
+            padding-top: 65px; /* Jarak agar map tidak tertutup navbar */
         }
 
-        /* Sidebar Control Panel */
         .sidebar {
-            width: 350px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem;
-            overflow-y: auto;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.03);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            width: 350px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+            padding: 1.5rem; overflow-y: auto; box-shadow: 2px 0 15px rgba(0,0,0,0.03);
+            z-index: 1000; display: flex; flex-direction: column; gap: 1.5rem;
         }
 
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
-
+        .panel-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 0.5rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
         .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 1. Hazard Selection */
         .custom-select {
-            width: 100%; padding: 0.8rem; border-radius: 8px;
-            border: 1px solid var(--border-color); font-family: var(--font-main);
-            font-size: 0.95rem; color: var(--text-primary); background-color: var(--bg-white);
+            width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color);
+            font-family: var(--font-main); font-size: 0.95rem; color: var(--text-primary); background-color: var(--bg-white);
             cursor: pointer; outline: none; appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
         }
         .custom-select:focus { border-color: var(--primary-red); }
 
-        /* 2. Parameter Radio Buttons */
         .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
         .radio-label {
-            display: flex; align-items: center; justify-content: center;
-            padding: 0.6rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--bg-white);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; padding: 0.6rem; border: 1px solid var(--border-color);
+            border-radius: 8px; background-color: var(--bg-white); cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;
         }
         .radio-input { display: none; }
-        .radio-input:checked + .radio-label {
-            background-color: rgba(229, 57, 53, 0.1);
-            border-color: var(--primary-red);
-            color: var(--primary-red);
-            font-weight: 700;
-        }
+        .radio-input:checked + .radio-label { background-color: rgba(229, 57, 53, 0.1); border-color: var(--primary-red); color: var(--primary-red); font-weight: 700; }
 
-        /* 3. Area Classification */
         .class-grid { display: flex; flex-direction: column; gap: 0.5rem; }
         .class-label {
-            display: flex; align-items: center; gap: 10px;
-            padding: 0.6rem 1rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--bg-white);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 10px; padding: 0.6rem 1rem; border: 1px solid var(--border-color);
+            border-radius: 8px; background-color: var(--bg-white); cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;
         }
         
         .color-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
@@ -135,36 +106,28 @@
         .class-input { display: none; }
         .class-input:checked + .class-label { border-color: var(--text-primary); background-color: #f0f0f0; font-weight: 700; }
 
-        /* Apply Button */
         .btn-apply {
-            margin-top: 1rem; width: 100%; padding: 1rem;
-            background-color: var(--primary-red); color: white;
-            border: none; border-radius: 8px; font-weight: 700; font-size: 1rem;
-            cursor: pointer; transition: background-color 0.3s ease; font-family: var(--font-main);
+            margin-top: 1rem; width: 100%; padding: 1rem; background-color: var(--primary-red); color: white;
+            border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease; font-family: var(--font-main);
         }
         .btn-apply:hover { background-color: var(--dark-red); }
 
-        /* Map Area */
         .map-area { flex-grow: 1; position: relative; }
         #map { width: 100%; height: 100%; background-color: #e5e5e5; }
 
-        /* Map Legend */
         .map-legend {
             position: absolute; bottom: 30px; left: 20px; z-index: 1000;
             background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
-            padding: 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color); min-width: 200px;
+            padding: 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-color); min-width: 200px;
         }
         .legend-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
         .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text-secondary); }
 
-        /* Toast Notification */
         .toast {
             position: absolute; top: 20px; right: 20px; z-index: 1000;
             background-color: var(--bg-dark); color: white;
             padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .toast.show { transform: translateX(0); }
 
@@ -179,20 +142,25 @@
 <body>
 
     <nav id="navbar">
-        <a href="index.html" class="logo-wrapper">
-            <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
-            Pariksa
-        </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="guide.html">Guide</a></li>
-            <li><a href="maps.html" class="active">Maps</a></li>
-            <li><a href="education.html">Education</a></li>
-            <li><a href="team.html">Team</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html" class="active">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html">Team</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
     <main id="swup" class="transition-fade webgis-container">
+        
         <aside class="sidebar">
             <div class="panel-title">Map Layer Controls</div>
 
@@ -208,63 +176,37 @@
             <div class="form-group">
                 <label class="form-label">2. Analysis Parameter</label>
                 <div class="radio-grid">
-                    <label>
-                        <input type="radio" name="parameter" value="risiko" class="radio-input" checked>
-                        <div class="radio-label">Risk (R)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="bahaya" class="radio-input">
-                        <div class="radio-label">Hazard (H)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="kerentanan" class="radio-input">
-                        <div class="radio-label">Vulnerability (V)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="kapasitas" class="radio-input">
-                        <div class="radio-label">Capacity (C)</div>
-                    </label>
+                    <label><input type="radio" name="parameter" value="risiko" class="radio-input" checked><div class="radio-label">Risk (R)</div></label>
+                    <label><input type="radio" name="parameter" value="bahaya" class="radio-input"><div class="radio-label">Hazard (H)</div></label>
+                    <label><input type="radio" name="parameter" value="kerentanan" class="radio-input"><div class="radio-label">Vulnerability (V)</div></label>
+                    <label><input type="radio" name="parameter" value="kapasitas" class="radio-input"><div class="radio-label">Capacity (C)</div></label>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">3. Area Classification</label>
                 <div class="class-grid">
-                    <label>
-                        <input type="radio" name="classification" value="All Classes" class="class-input" checked>
-                        <div class="class-label">
-                            <span class="color-dot dot-all"></span> Display All Classes
-                        </div>
+                    <label><input type="radio" name="classification" value="All Classes" class="class-input" checked>
+                        <div class="class-label"><span class="color-dot dot-all"></span> Display All Classes</div>
                     </label>
-                    <label>
-                        <input type="radio" name="classification" value="High" class="class-input">
-                        <div class="class-label">
-                            <span class="color-dot dot-high"></span> High
-                        </div>
+                    <label><input type="radio" name="classification" value="High" class="class-input">
+                        <div class="class-label"><span class="color-dot dot-high"></span> High</div>
                     </label>
-                    <label>
-                        <input type="radio" name="classification" value="Moderate" class="class-input">
-                        <div class="class-label">
-                            <span class="color-dot dot-moderate"></span> Moderate
-                        </div>
+                    <label><input type="radio" name="classification" value="Moderate" class="class-input">
+                        <div class="class-label"><span class="color-dot dot-moderate"></span> Moderate</div>
                     </label>
-                    <label>
-                        <input type="radio" name="classification" value="Low" class="class-input">
-                        <div class="class-label">
-                            <span class="color-dot dot-low"></span> Low
-                        </div>
+                    <label><input type="radio" name="classification" value="Low" class="class-input">
+                        <div class="class-label"><span class="color-dot dot-low"></span> Low</div>
                     </label>
                 </div>
             </div>
 
-            <button class="btn-apply" onclick="applyFilter()">Render Map</button>
+            <button class="btn-apply" onclick="window.applyFilter()">Render Map</button>
         </aside>
 
         <section class="map-area">
             <div id="map"></div>
-            
             <div id="toastNotif" class="toast">Loading spatial data...</div>
-
             <div class="map-legend">
                 <div class="legend-title" id="legend-title">Earthquake Risk Map</div>
                 <div class="legend-item"><span class="color-dot dot-high"></span> High (Red)</div>
@@ -293,67 +235,44 @@
         };
 
         function initWebGIS() {
-            if (mapInstance !== null) {
-                mapInstance.remove();
-            }
+            if (mapInstance !== null) { mapInstance.remove(); }
 
-            mapInstance = L.map('map', {
-                zoomControl: false 
-            }).setView([-6.9147, 107.6098], 13);
-
+            mapInstance = L.map('map', { zoomControl: false }).setView([-6.9147, 107.6098], 13);
             L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
-
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20 
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd', maxZoom: 20 
             }).addTo(mapInstance);
         }
 
         window.addWmsLayer = function(layerName) {
-            if (currentWmsLayer) {
-                mapInstance.removeLayer(currentWmsLayer);
-            }
-
+            if (currentWmsLayer) { mapInstance.removeLayer(currentWmsLayer); }
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
-                layers: `pariksa:${layerName}`, 
-                format: 'image/png',
-                transparent: true,
-                version: '1.1.0',
-                styles: '', 
-                attribution: "Pariksa"
+                layers: `pariksa:${layerName}`, format: 'image/png', transparent: true, version: '1.1.0', styles: '', attribution: "Pariksa"
             });
-            
             currentWmsLayer.addTo(mapInstance);
         }
 
         window.applyFilter = function() {
             const hazard = document.getElementById('hazard-select').value; 
             const parameter = document.querySelector('input[name="parameter"]:checked').value; 
-            
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
-
             const mapKey = `${parameter}_${hazard}`;
             const layerName = layerDictionary[mapKey] || `${parameter}${hazard}`; 
 
             window.addWmsLayer(layerName);
-
-            const legendTitle = document.getElementById('legend-title');
-            legendTitle.textContent = `${hazardText} ${parameterText} Map`;
+            document.getElementById('legend-title').textContent = `${hazardText} ${parameterText} Map`;
         }
 
         window.showNotification = function(message) {
             const toast = document.getElementById('toastNotif');
             toast.textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // Terapkan penambahan parameter containers
+        // KUNCI PERBAIKAN: Menambahkan elemen #navbar agar ikut ditukar oleh Swup
         const swup = new Swup({
             containers: ['#page-style', '#navbar', '#swup'],
             plugins: [
@@ -363,12 +282,7 @@
         });
 
         initWebGIS();
-
-        swup.hooks.on('page:view', () => {
-            if (document.getElementById('map')) {
-                initWebGIS();
-            }
-        });
+        swup.hooks.on('page:view', () => { if (document.getElementById('map')) { initWebGIS(); } });
     </script>
 </body>
 </html>
