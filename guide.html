@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide | Pariksa Disaster Risk Mapping</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Color Variables --- */
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --border-color: #EAEAEA;
+            --font-main: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-light); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+        /* --- Navbar (Style disesuaikan untuk Sub-halaman) --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 0.5rem 0; 
+        }
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; margin: 0 auto;
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .logo-img { height: 40px; width: auto; }
+        
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding-top: 100px; /* Jarak agar tidak tertutup navbar */
+            min-height: 100vh;
+        }
+        
+        /* Placeholder styling untuk area kerja Anda */
+        .placeholder-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 4rem;
+            text-align: center;
+            color: var(--text-secondary);
+            background-color: var(--bg-white);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) { 
+            .nav-links { display: none; } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html" class="active">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html">Team</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content container">
+        <div class="placeholder-box">
+            <h2>Area Desain Guide Anda</h2>
+            <p>Silakan hapus div ini dan masukkan kode desain konten panduan Anda di sini.</p>
+        </div>
+    </main>
+
+</body>
+</html>
