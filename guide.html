@@ -18,7 +18,7 @@
             --bg-dark: #000000;
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
-            --border-color: #D4D4D4; /* Dipergelap sedikit agar outline lebih jelas */
+            --border-color: #D4D4D4; 
             --font-main: 'Inter', sans-serif;
             
             /* Legend Colors */
@@ -68,16 +68,26 @@
         .guide-header p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
 
         /* --- Layout: Sidebar + Content --- */
-        .guide-layout { display: flex; gap: 4rem; align-items: flex-start; padding-bottom: 8rem; }
+        .guide-layout { display: flex; gap: 3rem; align-items: flex-start; padding-bottom: 8rem; }
         
-        .guide-sidebar { width: 250px; flex-shrink: 0; position: sticky; top: 100px; }
+        /* Sidebar dengan Batas Visual yang Jelas */
+        .guide-sidebar { 
+            width: 260px; 
+            flex-shrink: 0; 
+            position: sticky; 
+            top: 100px;
+            border-right: 2px solid var(--border-color);
+            padding-right: 2rem;
+            min-height: calc(100vh - 140px);
+        }
+        
         .sidebar-title { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
         .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
         .sidebar-nav a { display: block; padding: 0.8rem 1rem; border-radius: 8px; font-weight: 500; color: var(--text-primary); transition: all 0.2s ease; font-size: 0.95rem; cursor: pointer; }
         .sidebar-nav a:hover { background-color: rgba(229, 57, 53, 0.05); color: var(--primary-red); }
         .sidebar-nav a.active { background-color: var(--primary-red); color: white; font-weight: 600; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.2); }
 
-        .guide-main { flex-grow: 1; min-width: 0; }
+        .guide-main { flex-grow: 1; min-width: 0; padding-left: 1rem; }
         .content-section { display: none; animation: fadeIn 0.4s ease; }
         .content-section.active { display: block; }
         .main-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); letter-spacing: -0.5px; text-align: center; }
@@ -104,17 +114,15 @@
         .box-very-high { background-color: var(--color-very-high); }
 
         /* ========================================================
-           NEW PREMIUM DESIGN: SECTIONS WITH CLEAR BOXES
+           BASIC CONCEPTS OF DISASTER
            ======================================================== */
         
-        /* Master Box Container untuk memisahkan bagian */
         .section-box {
-            background-color: transparent;
-            border: 2px solid var(--border-color); /* Outline yang diperjelas */
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 2px solid var(--border-color);
             border-radius: 24px;
             padding: 3rem;
             margin-bottom: 3rem;
-            background-color: rgba(255, 255, 255, 0.4);
         }
 
         .section-subtitle { 
@@ -123,45 +131,53 @@
             padding-left: 1rem; 
         }
         
-        .premium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        /* Grid 2x2 Fixed untuk Core Variables */
+        .grid-2x2 { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 1.5rem; 
+            margin-bottom: 2rem; 
+        }
+
+        /* Grid Fleksibel untuk Bencana */
+        .premium-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 1.5rem; 
+            margin-bottom: 2rem; 
+        }
         
         .p-card {
             background-color: var(--bg-white); border: 2px solid var(--border-color);
             border-radius: 16px; padding: 2rem 1.5rem; position: relative;
             display: flex; flex-direction: column; align-items: flex-start;
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .p-card:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
         
-        /* Vector & Icon Containers */
         .glow-icon {
             width: 60px; height: 60px; border-radius: 16px; margin-bottom: 1.5rem;
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.4s ease;
         }
         
-        /* Vector SVG Styling */
         .vector-icon svg { width: 34px; height: 34px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .p-card:hover .glow-icon { transform: scale(1.1) rotate(5deg); }
         
-        /* Image Grayscale Logic (Khusus untuk Disaster/Bencana) */
         .img-icon img { 
             width: 40px; height: 40px; object-fit: contain;
-            filter: grayscale(100%) opacity(0.7); /* Hitam putih dan sedikit redup secara default */
+            filter: grayscale(100%) opacity(0.7); 
             transition: all 0.4s ease;
         }
         .p-card:hover .img-icon img { 
-            filter: grayscale(0%) opacity(1); /* Berwarna penuh saat di-hover */
+            filter: grayscale(0%) opacity(1); 
             transform: scale(1.1);
         }
 
         .p-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); transition: color 0.3s ease; }
-        .p-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; }
-        
-        .click-hint { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 5px; opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
-        .p-card:hover .click-hint { opacity: 1; transform: translateX(0); }
+        .p-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0; }
 
-        /* Specific Colors applied via currentColor for Vectors */
+        /* Specific Colors */
         .p-risk { color: var(--c-risk); }
         .p-risk h4, .p-risk p { color: var(--text-primary); }
         .p-risk:hover { border-color: var(--c-risk); }
@@ -182,27 +198,26 @@
         .p-cap:hover { border-color: var(--c-cap); }
         .p-cap .glow-icon { background-color: rgba(52, 199, 89, 0.1); }
 
-        /* Bencana / Disasters Hover Tints (Images) */
         .p-flood:hover { border-color: var(--c-flood); }
         .p-flood .glow-icon { background-color: rgba(0, 122, 255, 0.05); border: 1px solid var(--border-color); }
-        .p-flood:hover h4, .p-flood:hover .click-hint { color: var(--c-flood); }
+        .p-flood:hover h4 { color: var(--c-flood); }
 
         .p-eq:hover { border-color: var(--c-earthquake); }
         .p-eq .glow-icon { background-color: rgba(140, 74, 50, 0.05); border: 1px solid var(--border-color); }
-        .p-eq:hover h4, .p-eq:hover .click-hint { color: var(--c-earthquake); }
+        .p-eq:hover h4 { color: var(--c-earthquake); }
 
         .p-landslide:hover { border-color: var(--c-landslide); }
         .p-landslide .glow-icon { background-color: rgba(162, 132, 94, 0.05); border: 1px solid var(--border-color); }
-        .p-landslide:hover h4, .p-landslide:hover .click-hint { color: var(--c-landslide); }
+        .p-landslide:hover h4 { color: var(--c-landslide); }
 
 
-        /* Equation Below Description Boxes */
+        /* Disaster Risk Equation */
         .equation-showcase {
             background-color: var(--bg-white); border: 2px solid var(--border-color);
             border-radius: 16px; padding: 2.5rem; margin-top: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .equation-title { font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; }
+        .equation-title { font-size: 1rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; }
         
         .eq-flex { display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; justify-content: center; }
         .eq-symbol { font-size: 3rem; font-weight: 300; color: #CCCCCC; }
@@ -210,75 +225,30 @@
         .eq-numerator { display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 3px solid var(--text-primary); width: 100%; justify-content: center; }
         .eq-denominator { padding-top: 0.5rem; }
 
-        .eq-btn {
+        .eq-item {
             display: flex; align-items: center; gap: 10px;
             padding: 0.8rem 1.5rem; border-radius: 50px;
-            font-size: 1.2rem; font-weight: 700; cursor: pointer;
-            transition: all 0.3s ease; background: var(--bg-white); border: 2px solid transparent;
+            font-size: 1.2rem; font-weight: 700;
+            background: var(--bg-white); border: 2px solid transparent;
         }
-        .eq-btn svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .eq-item svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
         
-        .btn-risk { color: var(--c-risk); box-shadow: 0 4px 15px rgba(255, 59, 48, 0.15); }
-        .btn-risk:hover { background-color: var(--c-risk); color: white; transform: translateY(-3px); }
-        .btn-hazard { color: var(--c-hazard); box-shadow: 0 4px 15px rgba(255, 149, 0, 0.15); }
-        .btn-hazard:hover { background-color: var(--c-hazard); color: white; transform: translateY(-3px); }
-        .btn-vuln { color: var(--c-vuln); box-shadow: 0 4px 15px rgba(175, 82, 222, 0.15); }
-        .btn-vuln:hover { background-color: var(--c-vuln); color: white; transform: translateY(-3px); }
-        .btn-cap { color: var(--c-cap); box-shadow: 0 4px 15px rgba(52, 199, 89, 0.15); }
-        .btn-cap:hover { background-color: var(--c-cap); color: white; transform: translateY(-3px); }
-
-
-        /* --- Modal (Pop-up) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px);
-            z-index: 3000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.3s ease;
-        }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        
-        .modal-card {
-            background-color: var(--bg-white); width: 90%; max-width: 480px; border-radius: 24px;
-            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            transform: translateY(30px) scale(0.95); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border: 2px solid var(--border-color);
-        }
-        .modal-overlay.active .modal-card { transform: translateY(0) scale(1); }
-
-        .modal-close {
-            position: absolute; top: 18px; right: 22px; width: 36px; height: 36px;
-            background: var(--bg-light); border-radius: 50%; border: none; font-size: 1.2rem;
-            color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; z-index: 10;
-        }
-        .modal-close:hover { background: var(--border-color); color: var(--text-primary); }
-
-        .modal-top { 
-            padding: 3rem 2.5rem 2rem 2.5rem; display: flex; flex-direction: column; align-items: center; 
-            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-white) 100%); 
-            border-bottom: 2px solid var(--border-color); 
-        }
-        .modal-top .icon-container { 
-            width: 80px; height: 80px; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; 
-            border-radius: 20px; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
-        }
-        /* Style untuk injeksi SVG / IMG ke modal */
-        .modal-top .icon-container svg { width: 40px; height: 40px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .modal-top .icon-container img { width: 45px; height: 45px; object-fit: contain; }
-        .modal-top .concept-name { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px;}
-
-        .modal-bottom { padding: 2.5rem; background-color: var(--bg-white); }
-        ul.bullet-list { list-style: none; margin: 0; padding: 0; }
-        ul.bullet-list li { position: relative; padding-left: 1.8rem; margin-bottom: 1.2rem; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; }
-        ul.bullet-list li:last-child { margin-bottom: 0; }
-        ul.bullet-list li::before { content: "•"; position: absolute; left: 0; top: -4px; font-size: 1.8rem; font-weight: bold; color: var(--modal-accent, var(--primary-red)); }
+        .item-risk { color: var(--c-risk); box-shadow: 0 4px 15px rgba(255, 59, 48, 0.15); }
+        .item-hazard { color: var(--c-hazard); box-shadow: 0 4px 15px rgba(255, 149, 0, 0.15); }
+        .item-vuln { color: var(--c-vuln); box-shadow: 0 4px 15px rgba(175, 82, 222, 0.15); }
+        .item-cap { color: var(--c-cap); box-shadow: 0 4px 15px rgba(52, 199, 89, 0.15); }
 
         footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.5); text-align: center; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
-            .guide-layout { flex-direction: column; }
-            .guide-sidebar { width: 100%; position: static; display: flex; overflow-x: auto; padding-bottom: 1rem; }
+            .guide-layout { flex-direction: column; gap: 2rem; }
+            .guide-sidebar { 
+                width: 100%; position: static; display: flex; overflow-x: auto; 
+                padding-bottom: 1rem; border-right: none; padding-right: 0;
+                border-bottom: 2px solid var(--border-color); min-height: auto;
+            }
             .sidebar-nav { flex-direction: row; }
+            .guide-main { padding-left: 0; }
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -291,6 +261,7 @@
             .eq-symbol { transform: rotate(90deg); margin: 1rem 0; }
             .eq-fraction { width: 100%; }
             .eq-numerator { flex-direction: column; border-bottom-width: 2px; }
+            .grid-2x2 { grid-template-columns: 1fr; }
             .premium-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -359,6 +330,16 @@
                         <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+2" alt="Step 2">
                     </div>
                 </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Sed Do Eiusmod Tempor</h3>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </div>
+                    <div class="step-image">
+                        <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+3" alt="Step 3">
+                    </div>
+                </div>
             </section>
 
             <section id="read-map" class="content-section">
@@ -392,63 +373,59 @@
                 <div class="section-box">
                     <h3 class="section-subtitle">Core Variables</h3>
                     
-                    <div class="premium-grid">
-                        <div class="p-card p-risk" onclick="openModal('risk')">
+                    <div class="grid-2x2">
+                        <div class="p-card p-risk">
                             <div class="glow-icon vector-icon">
                                 <svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             </div>
                             <h4>Risk</h4>
-                            <p>The final probability of harmful consequences or expected losses.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>The mathematical probability of harmful consequences or expected losses in a specific area.</p>
                         </div>
-                        <div class="p-card p-hazard" onclick="openModal('hazard')">
+                        <div class="p-card p-hazard">
                             <div class="glow-icon vector-icon">
                                 <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
                             <h4>Hazard</h4>
-                            <p>A dangerous phenomenon, substance, or human activity that may cause loss.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>A threatening natural event or phenomenon capable of causing damage and disruption.</p>
                         </div>
-                        <div class="p-card p-vuln" onclick="openModal('vulnerability')">
+                        <div class="p-card p-vuln">
                             <div class="glow-icon vector-icon">
                                 <svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                             </div>
                             <h4>Vulnerability</h4>
-                            <p>The characteristics and circumstances of a community that make it susceptible.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>Physical, social, economic, or environmental weaknesses that increase susceptibility.</p>
                         </div>
-                        <div class="p-card p-cap" onclick="openModal('capacity')">
+                        <div class="p-card p-cap">
                             <div class="glow-icon vector-icon">
                                 <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                             </div>
                             <h4>Capacity</h4>
-                            <p>The combination of all strengths and resources available within a community.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>Resources and strengths available to anticipate and manage disasters effectively.</p>
                         </div>
                     </div>
 
                     <div class="equation-showcase">
-                        <div class="equation-title">The Pariksa Equation</div>
+                        <div class="equation-title">Disaster Risk Equation</div>
                         <div class="eq-flex">
-                            <div class="eq-btn btn-risk" onclick="openModal('risk')">
+                            <div class="eq-item item-risk">
                                 <svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                 Risk
                             </div>
                             <div class="eq-symbol">=</div>
                             <div class="eq-fraction">
                                 <div class="eq-numerator">
-                                    <div class="eq-btn btn-hazard" onclick="openModal('hazard')">
+                                    <div class="eq-item item-hazard">
                                         <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                         Hazard
                                     </div>
                                     <div class="eq-symbol" style="font-size: 2rem;">×</div>
-                                    <div class="eq-btn btn-vuln" onclick="openModal('vulnerability')">
+                                    <div class="eq-item item-vuln">
                                         <svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                                         Vulnerability
                                     </div>
                                 </div>
                                 <div class="eq-denominator">
-                                    <div class="eq-btn btn-cap" onclick="openModal('capacity')">
+                                    <div class="eq-item item-cap">
                                         <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                         Capacity
                                     </div>
@@ -462,23 +439,20 @@
                     <h3 class="section-subtitle">Analyzed Threats</h3>
                     
                     <div class="premium-grid">
-                        <div class="p-card p-flood" onclick="openModal('flood')">
+                        <div class="p-card p-flood">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood"></div>
                             <h4>Flood Risk</h4>
-                            <p>Hydrometeorological threat analysis based on terrain and drainage.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>Hydrometeorological threat analysis based on terrain and urban drainage models.</p>
                         </div>
-                        <div class="p-card p-eq" onclick="openModal('earthquake')">
+                        <div class="p-card p-eq">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="EQ"></div>
                             <h4>Earthquake</h4>
-                            <p>Seismic vulnerability analysis related to the active Lembang Fault.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>Seismic vulnerability analysis related to the activity of the Lembang Fault.</p>
                         </div>
-                        <div class="p-card p-landslide" onclick="openModal('landslide')">
+                        <div class="p-card p-landslide">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide"></div>
                             <h4>Landslide</h4>
-                            <p>Geological threat analysis focusing on steep slopes and soil stability.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
+                            <p>Geological threat analysis focusing on steep slopes and soil instability conditions.</p>
                         </div>
                     </div>
                 </div>
@@ -489,21 +463,6 @@
             <section id="faq" class="content-section"><h2>FAQ</h2><p>Content coming soon...</p></section>
 
         </main>
-    </div>
-
-    <div id="conceptModal" class="modal-overlay" onclick="closeModalOutside(event)">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal()">&#x2715;</button>
-            <div class="modal-top">
-                <div id="modalIconContainer" class="icon-container" style="color: currentColor;">
-                    </div>
-                <h3 id="modalTitle" class="concept-name">Title</h3>
-            </div>
-            <div class="modal-bottom">
-                <ul id="modalText" class="bullet-list">
-                    </ul>
-            </div>
-        </div>
     </div>
 
     <footer>
@@ -541,85 +500,6 @@
             }
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // SVG Constants for Vectors
-        const svgRisk = `<svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
-        const svgHazard = `<svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`;
-        const svgVuln = `<svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>`;
-        const svgCap = `<svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`;
-        
-        // Image Strings for Disasters
-        const imgFlood = `<img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood">`;
-        const imgEq = `<img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="Earthquake">`;
-        const imgLandslide = `<img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide">`;
-
-        // Modal Data Content
-        const modalData = {
-            risk: {
-                title: "Risk", color: "var(--c-risk)", iconHTML: svgRisk,
-                points: ["Potential loss resulting from the interaction of hazard, vulnerability, and capacity.", "Represents the mathematical probability of damaging impacts in a specific area.", "Calculated using the formula: Risk = Hazard × (Vulnerability / Capacity)."]
-            },
-            hazard: {
-                title: "Hazard", color: "var(--c-hazard)", iconHTML: svgHazard,
-                points: ["A threatening natural event or phenomenon capable of causing damage.", "Includes geological threats like the active Lembang fault.", "Includes hydrometeorological threats like extreme rainfall intensity."]
-            },
-            vulnerability: {
-                title: "Vulnerability", color: "var(--c-vuln)", iconHTML: svgVuln,
-                points: ["Physical, social, economic, or environmental weaknesses of a region.", "Increases susceptibility to the impacts of hazards.", "Examples include dense populations and settlements on steep slopes."]
-            },
-            capacity: {
-                title: "Capacity", color: "var(--c-cap)", iconHTML: svgCap,
-                points: ["Resources and capabilities available to anticipate and manage disasters.", "Strong capacity significantly reduces overall disaster risk.", "Examples include early warning systems and robust infrastructure."]
-            },
-            flood: {
-                title: "Flood", color: "var(--c-flood)", iconHTML: imgFlood,
-                points: ["Triggered by high rainfall intensity and inadequate urban drainage systems.", "Severely impacts areas with low elevation and high soil saturation.", "Requires strict spatial planning to manage water runoff effectively."]
-            },
-            earthquake: {
-                title: "Earthquake", color: "var(--c-earthquake)", iconHTML: imgEq,
-                points: ["Triggered by tectonic plate movements or active fault lines.", "Poses significant structural risks to dense urban environments.", "Requires strict adherence to seismic building codes for mitigation."]
-            },
-            landslide: {
-                title: "Landslide", color: "var(--c-landslide)", iconHTML: imgLandslide,
-                points: ["Triggered by soil instability on steep topographic slopes.", "Exacerbated by low vegetation cover and heavy rainfall.", "Requires mitigation strategies like retaining walls and reforestation."]
-            }
-        };
-
-        const modal = document.getElementById('conceptModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalIconContainer = document.getElementById('modalIconContainer');
-        const modalText = document.getElementById('modalText');
-
-        function openModal(type) {
-            const data = modalData[type];
-            
-            modalTitle.innerText = data.title;
-            modalTitle.style.color = data.color;
-            
-            // Set warna vector SVG modal sesuai kategori (khusus vector, jika image akan tetap tampil aslinya)
-            modalIconContainer.style.color = data.color; 
-            modalIconContainer.innerHTML = data.iconHTML;
-            
-            modalText.innerHTML = "";
-            data.points.forEach(point => {
-                const li = document.createElement('li');
-                li.innerText = point;
-                modalText.appendChild(li);
-            });
-
-            document.documentElement.style.setProperty('--modal-accent', data.color);
-            modal.classList.add('active');
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-        }
-
-        function closeModalOutside(event) {
-            if (event.target === modal) {
-                closeModal();
-            }
         }
     </script>
 </body>
