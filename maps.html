@@ -276,32 +276,39 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Tentukan koordinat default (Tengah Kota Bandung)
+        const defaultCenter = [-6.9147, 107.6098];
+        const defaultZoom = 13;
+
         const map = L.map('map', {
             zoomControl: false 
-        }).setView([-6.9147, 107.6098], 13);
+        }).setView(defaultCenter, defaultZoom);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
+        // Basemap Esri World Imagery
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EBP, and the GIS User Community',
             maxZoom: 20 
         }).addTo(map);
 
         let currentWmsLayer = null;
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
-        // --- KAMUS LAYER GEOSERVER ---
-        // Format: "parameter_hazard": "nama_layer_di_geoserver"
-        const layerDictionary = {
-            "bahaya_longsor": "bahayalongsor",
-            "risiko_longsor": "risikolongsor",
-            "kapasitas_banjir": "kapasitasbanjir", // Layer baru ditambahkan
+        // Format Baru: Menyimpan nama layer, koordinat pusat, dan level zoom
+        const layerData = {
+            "bahaya_longsor": { name: "bahayalongsor" }, // Menggunakan view default
+            "risiko_longsor": { name: "risikolongsor" },
+            "kapasitas_banjir": { name: "kapasitasbanjir" },
+            "bahaya_gempa": { name: "bahayagempa" },
+            "risiko_gempa": { name: "risikogempa" },
             
-            // Tambahkan layer lain di bawah ini jika sudah dipublish:
-            "bahaya_gempa": "bahayagempa",
-            "risiko_gempa": "risikogempa",
-            "risiko_banjir": "risikobanjirmargasari",
+            // Format untuk layer dengan lokasi spesifik (Contoh: Margasari)
+            "risiko_banjir": { 
+                name: "risikobanjirmargasari",
+                center: [-6.9535, 107.6583], // Ganti dengan koordinat presisi Margasari
+                zoom: 16 
+            }
         };
 
         function addWmsLayer(layerName) {
@@ -315,7 +322,7 @@
                 transparent: true,
                 version: '1.1.0',
                 styles: '', 
-                attribution: "Pariksa" // Atribusi diperbarui
+                attribution: "Pariksa"
             });
             
             currentWmsLayer.addTo(map);
@@ -328,13 +335,20 @@
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
 
-            // Membuat kunci pencarian berdasarkan input
             const mapKey = `${parameter}_${hazard}`;
+            const data = layerData[mapKey];
 
-            // Mengambil nama layer dari kamus. Jika tidak ada, gunakan default (parameter+hazard)
-            const layerName = layerDictionary[mapKey] || `${parameter}${hazard}`; 
+            // Mengambil nama layer dari data atau gunakan default
+            const layerName = data ? data.name : `${parameter}${hazard}`; 
 
             addWmsLayer(layerName);
+
+            // Mengeksekusi auto-zoom ke lokasi spesifik
+            if (data && data.center && data.zoom) {
+                map.flyTo(data.center, data.zoom, { animate: true, duration: 1.5 });
+            } else {
+                map.flyTo(defaultCenter, defaultZoom, { animate: true, duration: 1.5 });
+            }
 
             const legendTitle = document.getElementById('legend-title');
             legendTitle.textContent = `${hazardText} ${parameterText} Map`;
