@@ -109,6 +109,17 @@
 
         @media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } .solutions-grid-2x2 { grid-template-columns: 1fr; } }
+
+        /* --- Swup Transition Styles --- */
+        .transition-fade {
+            transition: 0.4s ease-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        html.is-animating .transition-fade {
+            opacity: 0;
+            transform: translateY(15px);
+        }
     </style>
 </head>
 <body>
@@ -131,121 +142,122 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container hero-content">
-            <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
-            <p>Providing parcel-level (1:5,000) multi-hazard risk analysis including earthquakes, floods, and landslides to enhance urban resilience and community preparedness.</p>
-            <a href="maps.html" class="btn">Open WebGIS →</a>
+    <main id="swup" class="transition-fade">
+        <header class="hero">
+            <div class="container hero-content">
+                <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
+                <p>Providing parcel-level (1:5,000) multi-hazard risk analysis including earthquakes, floods, and landslides to enhance urban resilience and community preparedness.</p>
+                <a href="maps.html" class="btn">Open WebGIS →</a>
+            </div>
+        </header>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">ABOUT PARIKSA</span>
+                    <h2>Bridging the Gap for Urban Resilience</h2>
+                </div>
+                <div class="about-content">
+                    <p>Bandung City faces complex geological and hydrometeorological threats, from the active Lembang Fault to significant land subsidence and extreme weather flooding. Currently, existing disaster risk maps are restricted to a macro scale, limiting effective response and situational awareness. Team Pariksa is developing a <span class="highlight-text">High-Precision Disaster Risk Map at a 1:5,000 scale</span> to identify these multi-hazard risks down to the specific property or parcel level. We transform complex geospatial data into actionable spatial intelligence, providing the government, urban planners, and communities with the certainty needed to protect critical assets and save lives.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="aesthetic-divider">
+            <div class="divider-bar"></div>
         </div>
-    </header>
 
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">ABOUT PARIKSA</span>
-                <h2>Bridging the Gap for Urban Resilience</h2>
-            </div>
-            <div class="about-content">
-                <p>Bandung City faces complex geological and hydrometeorological threats, from the active Lembang Fault to significant land subsidence and extreme weather flooding. Currently, existing disaster risk maps are restricted to a macro scale, limiting effective response and situational awareness. Team Pariksa is developing a <span class="highlight-text">High-Precision Disaster Risk Map at a 1:5,000 scale</span> to identify these multi-hazard risks down to the specific property or parcel level. We transform complex geospatial data into actionable spatial intelligence, providing the government, urban planners, and communities with the certainty needed to protect critical assets and save lives.</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="aesthetic-divider">
-        <div class="divider-bar"></div>
-    </div>
-
-    <section class="solutions-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">STRATEGIC CAPABILITIES</span>
-                <h2>Empowering Data-Driven Mitigation</h2>
-                <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.15rem;">We provide robust spatial analysis and comprehensive risk calculations to optimize your disaster preparedness protocols.</p>
-            </div>
-
-            <div class="solutions-grid-2x2">
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                    </div>
-                    <h3>Parcel-Level Precision</h3>
-                    <p>Unlike conventional macro-scale maps, Pariksa identifies potential hazards down to the smallest spatial unit: the land parcel. Our 1:5,000 scale mapping allows stakeholders to evaluate specific vulnerabilities for individual buildings and critical infrastructure with maximum accuracy.</p>
+        <section class="solutions-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">STRATEGIC CAPABILITIES</span>
+                    <h2>Empowering Data-Driven Mitigation</h2>
+                    <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.15rem;">We provide robust spatial analysis and comprehensive risk calculations to optimize your disaster preparedness protocols.</p>
                 </div>
 
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </div>
-                    <h3>Multi-Hazard Integration</h3>
-                    <p>We synthesize overlapping threat layers—including Lembang Fault seismic activity, historical flood zones, and landslide susceptibility—into a single, unified WebGIS interface. This comprehensive approach enables a holistic evaluation of urban risks in Bandung City.</p>
-                </div>
-
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    </div>
-                    <h3>Scientific Risk Algorithm</h3>
-                    <p>Our platform calculates standardized risk scores utilizing the proven R = H × (V/C) methodology. By integrating Hazard potential, socio-physical Vulnerability, and regional Capacity, we deliver evidence-based recommendations for targeted mitigation.</p>
-                </div>
-
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    </div>
-                    <h3>Economic & Social Resilience</h3>
-                    <p>Proactive mitigation is a highly efficient investment. Our financial analysis demonstrates a Benefit-Cost Ratio of 18,161.42, indicating that every single rupiah invested in Pariksa's precision mapping can potentially save thousands in future disaster impacts.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact-section">
-        <div class="container contact-grid">
-            <div class="contact-text-content">
-                <span class="contact-subtitle">GET IN TOUCH</span>
-                <h2>Ready to Collaborate?</h2>
-                <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
-                
-                <div class="contact-info-list">
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <div class="solutions-grid-2x2">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                         </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <span>pariksa@gmail.com</span>
-                        </div>
+                        <h3>Parcel-Level Precision</h3>
+                        <p>Unlike conventional macro-scale maps, Pariksa identifies potential hazards down to the smallest spatial unit: the land parcel. Our 1:5,000 scale mapping allows stakeholders to evaluate specific vulnerabilities for individual buildings and critical infrastructure with maximum accuracy.</p>
                     </div>
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                         </div>
-                        <div class="contact-details">
-                            <h4>Location</h4>
-                            <span>Bandung, Indonesia</span>
+                        <h3>Multi-Hazard Integration</h3>
+                        <p>We synthesize overlapping threat layers—including Lembang Fault seismic activity, historical flood zones, and landslide susceptibility—into a single, unified WebGIS interface. This comprehensive approach enables a holistic evaluation of urban risks in Bandung City.</p>
+                    </div>
+
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h3>Scientific Risk Algorithm</h3>
+                        <p>Our platform calculates standardized risk scores utilizing the proven R = H × (V/C) methodology. By integrating Hazard potential, socio-physical Vulnerability, and regional Capacity, we deliver evidence-based recommendations for targeted mitigation.</p>
+                    </div>
+
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h3>Economic & Social Resilience</h3>
+                        <p>Proactive mitigation is a highly efficient investment. Our financial analysis demonstrates a Benefit-Cost Ratio of 18,161.42, indicating that every single rupiah invested in Pariksa's precision mapping can potentially save thousands in future disaster impacts.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container contact-grid">
+                <div class="contact-text-content">
+                    <span class="contact-subtitle">GET IN TOUCH</span>
+                    <h2>Ready to Collaborate?</h2>
+                    <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
+                    
+                    <div class="contact-info-list">
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <span>pariksa@gmail.com</span>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Location</h4>
+                                <span>Bandung, Indonesia</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="map-card">
-                <h3>Our Location</h3>
-                <div class="map-info-text">
-                    <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong>
-                    Institut Teknologi Bandung, Labtek IX-C<br>
-                    Jl. Ganesa No.10, Lebak Siliwangi, Coblong,<br>
-                    Bandung City, West Java 40132
-                </div>
-                <div class="map-container">
-                    <iframe src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                <div class="map-card">
+                    <h3>Our Location</h3>
+                    <div class="map-info-text">
+                        <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong>
+                        Institut Teknologi Bandung, Labtek IX-C<br>
+                        Jl. Ganesa No.10, Lebak Siliwangi, Coblong,<br>
+                        Bandung City, West Java 40132
+                    </div>
+                    <div class="map-container">
+                        <iframe src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
+        </section>
+    </main>
     <footer>
         <div class="container">
-            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+            <p>© 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
     </footer>
 
@@ -258,6 +270,11 @@
                 navbar.classList.remove('scrolled');
             }
         });
+    </script>
+    
+    <script src="https://unpkg.com/swup@4"></script>
+    <script>
+        const swup = new Swup();
     </script>
 </body>
 </html>
