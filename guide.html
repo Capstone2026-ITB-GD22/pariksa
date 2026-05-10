@@ -14,6 +14,7 @@
             --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
             --bg-cream: #FCF9F2;
+            --bg-light: #F8F9FA;
             --bg-dark: #000000;
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
@@ -104,21 +105,32 @@
         .box-high { background-color: var(--color-high); }
         .box-very-high { background-color: var(--color-very-high); }
 
-        /* --- Basic Concepts of Disaster (NEW DESIGN) --- */
+        /* --- Basic Concepts of Disaster --- */
         .concepts-layout { display: flex; align-items: center; gap: 3rem; margin-bottom: 5rem; }
-        
         .concepts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         
         .concept-card {
-            background-color: var(--bg-white); border: 1px solid var(--border-color);
+            background-color: var(--bg-white); border: 2px solid var(--border-color);
             border-radius: 16px; padding: 2rem 1rem; width: 160px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.04); transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.04); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer; position: relative;
         }
-        .concept-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
         
-        /* Wadah Gambar Ikon */
-        .icon-container { width: 64px; height: 64px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; }
+        /* Make Cards More Noticeable on Hover */
+        .concept-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        
+        /* Specific Hover Borders based on color variables */
+        .card-risk:hover { border-color: var(--c-risk); }
+        .card-hazard:hover { border-color: var(--c-hazard); }
+        .card-vuln:hover { border-color: var(--c-vuln); }
+        .card-cap:hover { border-color: var(--c-cap); }
+        .card-flood:hover { border-color: var(--c-flood); }
+        .card-earthquake:hover { border-color: var(--c-earthquake); }
+        .card-landslide:hover { border-color: var(--c-landslide); }
+
+        .icon-container { width: 64px; height: 64px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
+        .concept-card:hover .icon-container { transform: scale(1.1); }
         .icon-container img { width: 100%; height: 100%; object-fit: contain; }
 
         .concept-name { font-size: 1.1rem; font-weight: 700; }
@@ -128,21 +140,67 @@
         .disasters-layout { display: flex; gap: 1.5rem; align-items: center; }
         .disasters-col { display: flex; flex-direction: column; gap: 1.5rem; }
 
-        /* --- Relationship Formula Section --- */
+        /* Formula Section */
         .relationship-section h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; color: var(--text-primary); }
         .formula-container { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-        
         .formula-equals { font-size: 4rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
         .formula-multiply { font-size: 3rem; font-weight: 700; color: var(--text-primary); margin: 0 1rem; line-height: 1; }
-        
         .formula-fraction { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
         .formula-numerator { display: flex; align-items: center; border-bottom: 6px solid var(--text-primary); padding-bottom: 1.5rem; width: 100%; justify-content: center; }
         .formula-denominator { padding-top: 0.5rem; }
-
-        /* Formula Items (Smaller Cards) */
         .formula-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
         .formula-item .icon-container { width: 50px; height: 50px; margin-bottom: 0; }
         .formula-item .concept-name { font-size: 1rem; }
+
+        /* --- Modal (Pop-up) System --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+            z-index: 3000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-card {
+            background-color: var(--bg-white);
+            width: 90%; max-width: 450px; border-radius: 16px;
+            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            transform: translateY(20px) scale(0.95); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+        .modal-overlay.active .modal-card { transform: translateY(0) scale(1); }
+
+        .modal-close {
+            position: absolute; top: 15px; right: 20px;
+            background: none; border: none; font-size: 1.8rem;
+            color: var(--text-secondary); cursor: pointer; transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--text-primary); }
+
+        /* Modal Top Section (Icon & Title) */
+        .modal-top {
+            padding: 2.5rem 2rem 1.5rem 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            background-color: var(--bg-light); border-bottom: 2px solid var(--border-color);
+        }
+        .modal-top .icon-container { width: 70px; height: 70px; margin-bottom: 1rem; }
+        .modal-top .concept-name { font-size: 1.5rem; font-weight: 700; }
+
+        /* Modal Bottom Section (Text Content) */
+        .modal-bottom { padding: 2rem; background-color: var(--bg-white); }
+        
+        /* Concise Bullet Points Format */
+        ul.bullet-list { list-style: none; margin: 0; padding: 0; }
+        ul.bullet-list li {
+            position: relative; padding-left: 1.5rem;
+            margin-bottom: 1rem; color: var(--text-secondary);
+            font-size: 1rem; line-height: 1.6;
+        }
+        ul.bullet-list li:last-child { margin-bottom: 0; }
+        ul.bullet-list li::before {
+            content: "•"; position: absolute; left: 0; top: -2px;
+            font-size: 1.5rem; font-weight: bold; color: var(--modal-accent, var(--primary-red));
+        }
 
         footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.5); text-align: center; font-size: 0.9rem; }
 
@@ -150,7 +208,7 @@
             .guide-layout { flex-direction: column; }
             .guide-sidebar { width: 100%; position: static; display: flex; overflow-x: auto; padding-bottom: 1rem; }
             .sidebar-nav { flex-direction: row; }
-            .concepts-layout { flex-direction: column; }
+            .concepts-layout { flex-direction: column; gap: 2rem; }
             .vertical-divider { width: 100%; height: 2px; }
             .disasters-layout { flex-direction: row; flex-wrap: wrap; justify-content: center; }
             .formula-container { justify-content: center; }
@@ -161,9 +219,9 @@
             .step-image { width: 100%; height: auto; aspect-ratio: 16/9; }
             .legend-box { flex-direction: column; align-items: flex-start; gap: 1rem; }
             .legend-desc { border-left: none; border-top: 1px solid rgba(255,255,255,0.2); padding: 1rem 0 0 0; }
-            .concept-card { width: 140px; }
+            .concept-card { width: 140px; padding: 1.5rem 1rem; }
             .formula-numerator { flex-direction: column; border-bottom-width: 4px; gap: 0.5rem; }
-            .formula-multiply { margin: 0.5rem 0; transform: rotate(45deg); font-size: 2rem; } /* Change 'X' to '+' visually if stacked, or keep 'X' */
+            .formula-multiply { margin: 0.5rem 0; transform: rotate(45deg); font-size: 2rem; }
         }
     </style>
 </head>
@@ -221,7 +279,6 @@
                         <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+1" alt="Step 1">
                     </div>
                 </div>
-                
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <div class="step-content">
@@ -232,7 +289,6 @@
                         <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+2" alt="Step 2">
                     </div>
                 </div>
-                
                 <div class="step-card">
                     <div class="step-number">3</div>
                     <div class="step-content">
@@ -271,28 +327,30 @@
 
             <section id="concepts" class="content-section">
                 
+                <h2 class="main-title">Click the cards to learn more</h2>
+
                 <div class="concepts-layout">
                     
                     <div class="concepts-grid">
-                        <div class="concept-card">
+                        <div class="concept-card card-risk" onclick="openModal('risk')">
                             <div class="icon-container">
                                 <img src="https://img.icons8.com/color/96/000000/high-risk.png" alt="Risk">
                             </div>
                             <span class="concept-name" style="color: var(--c-risk);">Risk</span>
                         </div>
-                        <div class="concept-card">
+                        <div class="concept-card card-hazard" onclick="openModal('hazard')">
                             <div class="icon-container">
                                 <img src="https://img.icons8.com/color/96/000000/warning-shield.png" alt="Hazard">
                             </div>
                             <span class="concept-name" style="color: var(--c-hazard);">Hazard</span>
                         </div>
-                        <div class="concept-card">
+                        <div class="concept-card card-vuln" onclick="openModal('vulnerability')">
                             <div class="icon-container">
                                 <img src="https://img.icons8.com/color/96/000000/broken-link.png" alt="Vulnerability">
                             </div>
                             <span class="concept-name" style="color: var(--c-vuln);">Vulnerability</span>
                         </div>
-                        <div class="concept-card">
+                        <div class="concept-card card-cap" onclick="openModal('capacity')">
                             <div class="icon-container">
                                 <img src="https://img.icons8.com/color/96/000000/flex-biceps.png" alt="Capacity">
                             </div>
@@ -304,13 +362,13 @@
 
                     <div class="disasters-layout">
                         <div class="disasters-col">
-                            <div class="concept-card">
+                            <div class="concept-card card-flood" onclick="openModal('flood')">
                                 <div class="icon-container">
                                     <img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood">
                                 </div>
                                 <span class="concept-name" style="color: var(--c-flood);">Flood</span>
                             </div>
-                            <div class="concept-card">
+                            <div class="concept-card card-earthquake" onclick="openModal('earthquake')">
                                 <div class="icon-container">
                                     <img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="Earthquake">
                                 </div>
@@ -319,7 +377,7 @@
                         </div>
                         
                         <div class="disasters-col">
-                            <div class="concept-card">
+                            <div class="concept-card card-landslide" onclick="openModal('landslide')">
                                 <div class="icon-container">
                                     <img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide">
                                 </div>
@@ -334,9 +392,7 @@
                     
                     <div class="formula-container">
                         <div class="formula-item">
-                            <div class="icon-container">
-                                <img src="https://img.icons8.com/color/96/000000/high-risk.png" alt="Risk">
-                            </div>
+                            <div class="icon-container"><img src="https://img.icons8.com/color/96/000000/high-risk.png" alt="Risk"></div>
                             <span class="concept-name" style="color: var(--c-risk);">Risk</span>
                         </div>
                         
@@ -345,27 +401,19 @@
                         <div class="formula-fraction">
                             <div class="formula-numerator">
                                 <div class="formula-item">
-                                    <div class="icon-container">
-                                        <img src="https://img.icons8.com/color/96/000000/warning-shield.png" alt="Hazard">
-                                    </div>
+                                    <div class="icon-container"><img src="https://img.icons8.com/color/96/000000/warning-shield.png" alt="Hazard"></div>
                                     <span class="concept-name" style="color: var(--c-hazard);">Hazard</span>
                                 </div>
-                                
                                 <div class="formula-multiply">×</div>
-                                
                                 <div class="formula-item">
-                                    <div class="icon-container">
-                                        <img src="https://img.icons8.com/color/96/000000/broken-link.png" alt="Vulnerability">
-                                    </div>
+                                    <div class="icon-container"><img src="https://img.icons8.com/color/96/000000/broken-link.png" alt="Vulnerability"></div>
                                     <span class="concept-name" style="color: var(--c-vuln);">Vulnerability</span>
                                 </div>
                             </div>
                             
                             <div class="formula-denominator">
                                 <div class="formula-item">
-                                    <div class="icon-container">
-                                        <img src="https://img.icons8.com/color/96/000000/flex-biceps.png" alt="Capacity">
-                                    </div>
+                                    <div class="icon-container"><img src="https://img.icons8.com/color/96/000000/flex-biceps.png" alt="Capacity"></div>
                                     <span class="concept-name" style="color: var(--c-cap);">Capacity</span>
                                 </div>
                             </div>
@@ -381,6 +429,22 @@
         </main>
     </div>
 
+    <div id="conceptModal" class="modal-overlay" onclick="closeModalOutside(event)">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-top">
+                <div class="icon-container">
+                    <img id="modalIcon" src="" alt="Icon">
+                </div>
+                <h3 id="modalTitle" class="concept-name">Title</h3>
+            </div>
+            <div class="modal-bottom">
+                <ul id="modalText" class="bullet-list">
+                    </ul>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
@@ -388,6 +452,7 @@
     </footer>
 
     <script>
+        // Tab Navigation Logic
         function showSection(sectionId, element) {
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(s => s.classList.remove('active'));
@@ -416,6 +481,119 @@
             }
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Modal Data Content (Point-based format)
+        const modalData = {
+            risk: {
+                title: "Risk",
+                color: "var(--c-risk)",
+                icon: "https://img.icons8.com/color/96/000000/high-risk.png",
+                points: [
+                    "Potential loss resulting from the interaction of hazard, vulnerability, and capacity.",
+                    "Represents the mathematical probability of damaging impacts in a specific area.",
+                    "Calculated using the formula: Risk = Hazard × (Vulnerability / Capacity)."
+                ]
+            },
+            hazard: {
+                title: "Hazard",
+                color: "var(--c-hazard)",
+                icon: "https://img.icons8.com/color/96/000000/warning-shield.png",
+                points: [
+                    "A threatening natural event or phenomenon capable of causing damage.",
+                    "Includes geological threats like the active Lembang fault.",
+                    "Includes hydrometeorological threats like extreme rainfall intensity."
+                ]
+            },
+            vulnerability: {
+                title: "Vulnerability",
+                color: "var(--c-vuln)",
+                icon: "https://img.icons8.com/color/96/000000/broken-link.png",
+                points: [
+                    "Physical, social, economic, or environmental weaknesses of a region.",
+                    "Increases susceptibility to the impacts of hazards.",
+                    "Examples include dense populations and settlements on steep slopes."
+                ]
+            },
+            capacity: {
+                title: "Capacity",
+                color: "var(--c-cap)",
+                icon: "https://img.icons8.com/color/96/000000/flex-biceps.png",
+                points: [
+                    "Resources and capabilities available to anticipate and manage disasters.",
+                    "Strong capacity reduces overall disaster risk.",
+                    "Examples include early warning systems and robust infrastructure."
+                ]
+            },
+            flood: {
+                title: "Flood",
+                color: "var(--c-flood)",
+                icon: "https://img.icons8.com/color/96/000000/tsunami.png",
+                points: [
+                    "Triggered by high rainfall intensity and inadequate drainage systems.",
+                    "Severely impacts areas with low elevation and high soil saturation.",
+                    "Requires strict spatial planning to manage water runoff."
+                ]
+            },
+            earthquake: {
+                title: "Earthquake",
+                color: "var(--c-earthquake)",
+                icon: "https://img.icons8.com/color/96/000000/earthquakes.png",
+                points: [
+                    "Triggered by tectonic plate movements or active fault lines.",
+                    "Poses significant structural risks to dense urban environments.",
+                    "Requires strict adherence to seismic building codes."
+                ]
+            },
+            landslide: {
+                title: "Landslide",
+                color: "var(--c-landslide)",
+                icon: "https://img.icons8.com/color/96/000000/landslide.png",
+                points: [
+                    "Triggered by soil instability on steep topographic slopes.",
+                    "Exacerbated by low vegetation cover and heavy rainfall.",
+                    "Requires mitigation strategies like retaining walls and reforestation."
+                ]
+            }
+        };
+
+        // Modal Functions
+        const modal = document.getElementById('conceptModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalText = document.getElementById('modalText');
+
+        function openModal(type) {
+            const data = modalData[type];
+            
+            // Set dynamic content
+            modalTitle.innerText = data.title;
+            modalTitle.style.color = data.color;
+            modalIcon.src = data.icon;
+            
+            // Inject bullet points
+            modalText.innerHTML = "";
+            data.points.forEach(point => {
+                const li = document.createElement('li');
+                li.innerText = point;
+                modalText.appendChild(li);
+            });
+
+            // Set bullet color dynamically based on concept color
+            document.documentElement.style.setProperty('--modal-accent', data.color);
+
+            // Show Modal
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        function closeModalOutside(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
         }
     </script>
 </body>
