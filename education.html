@@ -16,7 +16,7 @@
             --bg-dark: #000000;
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
-            --border-color: #EAEAEA;
+            --border-color: #D4D4D4;
             --font-main: 'Inter', sans-serif;
         }
 
@@ -79,7 +79,7 @@
         /* Slider Controls */
         .slider-controls { display: flex; gap: 1rem; }
         .control-btn { 
-            width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--border-color); 
+            width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--border-color); 
             background: var(--bg-white); cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: all 0.3s ease; color: var(--text-primary);
         }
@@ -92,8 +92,8 @@
         /* Cards */
         .edu-card { 
             min-width: calc(33.333% - 1.35rem); 
-            background: var(--bg-white); border: 1px solid var(--border-color); 
-            border-radius: 12px; padding: 2.5rem; transition: all 0.3s ease;
+            background: var(--bg-white); border: 2px solid var(--border-color); 
+            border-radius: 16px; padding: 2.5rem; transition: all 0.3s ease;
             display: flex; flex-direction: column;
         }
         .edu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: var(--primary-red); }
