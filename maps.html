@@ -6,7 +6,6 @@
     <title>WebGIS | Pariksa Disaster Risk Mapping</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
@@ -32,28 +31,39 @@
         body { font-family: var(--font-main); color: var(--text-primary); overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* Minimalist Navbar */
+        /* --- Navbar Simple (Fixed Black 95% Transparency) --- */
         nav { 
-            position: fixed; top: 0; width: 100%; height: 60px;
-            background-color: var(--bg-white); 
-            border-bottom: 1px solid var(--border-color);
-            z-index: 2000; display: flex; align-items: center; padding: 0 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed; top: 0; width: 100%; z-index: 2000;
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 0;
         }
-        
-        .logo-wrapper { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-        .logo-img { height: 30px; width: auto; }
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; margin: 0 auto;
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
+        .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
         
-        .nav-links { display: flex; list-style: none; gap: 2rem; margin-left: auto; }
-        .nav-links a { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); transition: color 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary-red); }
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
+
+        /* --- Swup Transition Styles --- */
+        .transition-fade {
+            transition: opacity 0.15s ease;
+            opacity: 1;
+        }
+        html.is-animating .transition-fade {
+            opacity: 0;
+        }
 
         /* Main Layout */
         .webgis-container {
             display: flex;
             height: 100vh;
-            padding-top: 60px;
+            padding-top: 65px; /* Disesuaikan dengan tinggi navbar baru */
         }
 
         /* Sidebar Control Panel */
@@ -170,21 +180,25 @@
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="logo-wrapper">
-            <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
-            Pariksa
-        </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="guide.html">Guide</a></li>
-            <li><a href="maps.html" class="active">Maps</a></li>
-            <li><a href="education.html">Education</a></li>
-            <li><a href="team.html">Team</a></li>
-        </ul>
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html" class="active">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html">Team</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <div class="webgis-container">
+    <main id="swup" class="transition-fade webgis-container">
         
         <aside class="sidebar">
             <div class="panel-title">Map Layer Controls</div>
@@ -250,10 +264,10 @@
                 </div>
             </div>
 
-            <button class="btn-apply" onclick="applyFilter()">Render Map</button>
+            <button class="btn-apply" onclick="window.applyFilter()">Render Map</button>
         </aside>
 
-        <main class="map-area">
+        <section class="map-area">
             <div id="map"></div>
             
             <div id="toastNotif" class="toast">Loading spatial data...</div>
@@ -264,41 +278,50 @@
                 <div class="legend-item"><span class="color-dot dot-moderate"></span> Moderate (Yellow)</div>
                 <div class="legend-item"><span class="color-dot dot-low"></span> Low (Green)</div>
             </div>
-        </main>
-    </div>
+        </section>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/@swup/head-plugin@2"></script>
+    <script src="https://unpkg.com/@swup/scripts-plugin@2"></script>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map', {
-            zoomControl: false 
-        }).setView([-6.9147, 107.6098], 13);
-
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20 
-        }).addTo(map);
-
+        let mapInstance = null;
         let currentWmsLayer = null;
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
 
-        // --- KAMUS LAYER GEOSERVER ---
-        // Format: "parameter_hazard": "nama_layer_di_geoserver"
         const layerDictionary = {
             "bahaya_longsor": "bahayalongsor",
             "risiko_longsor": "risikolongsor",
-            "kapasitas_banjir": "kapasitasbanjir", // Layer baru ditambahkan
-            
-            // Tambahkan layer lain di bawah ini jika sudah dipublish:
+            "kapasitas_banjir": "kapasitasbanjir", 
             "bahaya_gempa": "bahayagempa",
             "risiko_gempa": "risikogempa"
         };
 
-        function addWmsLayer(layerName) {
+        // Fungsi Pembungkus Map agar aman saat Swup berpindah halaman
+        function initWebGIS() {
+            // Hancurkan map lama jika ada agar tidak bentrok
+            if (mapInstance !== null) {
+                mapInstance.remove();
+            }
+
+            mapInstance = L.map('map', {
+                zoomControl: false 
+            }).setView([-6.9147, 107.6098], 13);
+
+            L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20 
+            }).addTo(mapInstance);
+        }
+
+        window.addWmsLayer = function(layerName) {
             if (currentWmsLayer) {
-                map.removeLayer(currentWmsLayer);
+                mapInstance.removeLayer(currentWmsLayer);
             }
 
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
@@ -307,32 +330,29 @@
                 transparent: true,
                 version: '1.1.0',
                 styles: '', 
-                attribution: "Pariksa" // Atribusi diperbarui
+                attribution: "Pariksa"
             });
             
-            currentWmsLayer.addTo(map);
+            currentWmsLayer.addTo(mapInstance);
         }
 
-        function applyFilter() {
+        window.applyFilter = function() {
             const hazard = document.getElementById('hazard-select').value; 
             const parameter = document.querySelector('input[name="parameter"]:checked').value; 
             
             const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
             const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText.split(' ')[0];
 
-            // Membuat kunci pencarian berdasarkan input
             const mapKey = `${parameter}_${hazard}`;
-
-            // Mengambil nama layer dari kamus. Jika tidak ada, gunakan default (parameter+hazard)
             const layerName = layerDictionary[mapKey] || `${parameter}${hazard}`; 
 
-            addWmsLayer(layerName);
+            window.addWmsLayer(layerName);
 
             const legendTitle = document.getElementById('legend-title');
             legendTitle.textContent = `${hazardText} ${parameterText} Map`;
         }
 
-        function showNotification(message) {
+        window.showNotification = function(message) {
             const toast = document.getElementById('toastNotif');
             toast.textContent = message;
             toast.classList.add('show');
@@ -341,6 +361,24 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // Inisialisasi Swup
+        const swup = new Swup({
+            plugins: [
+                new SwupHeadPlugin(),
+                new SwupScriptsPlugin()
+            ]
+        });
+
+        // Jalankan map saat pertama kali load
+        initWebGIS();
+
+        // Jalankan ulang map setiap kali Swup selesai memuat halaman WebGIS
+        swup.hooks.on('page:view', () => {
+            if (document.getElementById('map')) {
+                initWebGIS();
+            }
+        });
     </script>
 </body>
 </html>
