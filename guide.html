@@ -21,11 +21,11 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-light); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-light); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* --- Navbar (Style disesuaikan untuk Sub-halaman) --- */
+        /* --- Navbar --- */
         nav { 
             position: fixed; top: 0; width: 100%; z-index: 1000;
             background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); 
@@ -43,26 +43,83 @@
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); transition: color 0.3s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* --- Main Content Area --- */
+        /* --- Guide Layout --- */
         .main-content {
-            padding-top: 100px; /* Jarak agar tidak tertutup navbar */
+            padding-top: 100px;
             min-height: 100vh;
-        }
-        
-        /* Placeholder styling untuk area kerja Anda */
-        .placeholder-box {
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 4rem;
-            text-align: center;
-            color: var(--text-secondary);
-            background-color: var(--bg-white);
-            margin-top: 2rem;
+            display: flex;
+            gap: 2rem;
+            padding-bottom: 4rem;
         }
 
-        @media (max-width: 768px) { 
-            .nav-links { display: none; } 
+        /* Sidebar Navigation */
+        .guide-sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+            height: max-content;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
+        .guide-nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .guide-nav-list a {
+            display: block; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+            color: var(--text-secondary); transition: all 0.2s;
+        }
+        .guide-nav-list a:hover, .guide-nav-list a.active {
+            background-color: rgba(229, 57, 53, 0.08); color: var(--primary-red);
+        }
+
+        /* Content Area */
+        .guide-body {
+            flex-grow: 1;
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        /* Typography & Components */
+        section { margin-bottom: 3.5rem; scroll-margin-top: 120px; }
+        h1 { font-size: 2.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary-red); border-bottom: 2px solid var(--bg-light); padding-bottom: 0.5rem; margin-bottom: 1.5rem; margin-top: 1rem; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); }
+        
+        ul.bullet-list { list-style: none; margin-bottom: 1.5rem; }
+        ul.bullet-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+        ul.bullet-list li::before { content: "•"; color: var(--primary-red); font-weight: bold; position: absolute; left: 0; font-size: 1.2rem; top: -2px; }
+        strong { color: var(--text-primary); }
+
+        /* Grid Cards */
+        .concept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+        .concept-card { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 10px; background-color: var(--bg-light); }
+        .concept-card h4 { color: var(--primary-red); font-size: 1.1rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;}
+
+        /* Steps */
+        .step-item { display: flex; gap: 1.2rem; margin-bottom: 1.5rem; align-items: flex-start; }
+        .step-number { width: 32px; height: 32px; background-color: var(--primary-red); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; flex-shrink: 0; }
+        .step-text h4 { font-size: 1.1rem; margin-bottom: 0.3rem; color: var(--text-primary); }
+        .step-text p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Legend Colors */
+        .legend-grid { display: flex; flex-direction: column; gap: 1rem; }
+        .legend-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .color-box { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; }
+        .box-green { background-color: #388e3c; }
+        .box-yellow { background-color: #fbc02d; }
+        .box-red { background-color: #d32f2f; }
+
+        @media (max-width: 900px) {
+            .main-content { flex-direction: column; }
+            .guide-sidebar { width: 100%; position: relative; top: 0; }
+            .concept-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) { .nav-links { display: none; } .guide-body { padding: 1.5rem; } }
     </style>
 </head>
 <body>
@@ -86,11 +143,172 @@
     </nav>
 
     <main class="main-content container">
-        <div class="placeholder-box">
-            <h2>Area Desain Guide Anda</h2>
-            <p>Silakan hapus div ini dan masukkan kode desain konten panduan Anda di sini.</p>
+        
+        <aside class="guide-sidebar">
+            <ul class="guide-nav-list">
+                <li><a href="#tentang" class="nav-item active">1. Tentang Pariksa</a></li>
+                <li><a href="#konsep" class="nav-item">2. Konsep Dasar</a></li>
+                <li><a href="#membaca" class="nav-item">3. Simbologi Peta</a></li>
+                <li><a href="#penggunaan" class="nav-item">4. Cara Penggunaan</a></li>
+                <li><a href="#interpretasi" class="nav-item">5. Interpretasi Risiko</a></li>
+            </ul>
+        </aside>
+
+        <div class="guide-body">
+            
+            <section id="tentang">
+                <h1>Panduan Penggunaan Pariksa</h1>
+                <h2>Tentang Pariksa</h2>
+                <ul class="bullet-list">
+                    <li><strong>Platform WebGIS:</strong> Digunakan untuk pemetaan tingkat kerentanan banjir dan longsor[cite: 129].</li>
+                    <li><strong>Berbasis SIG:</strong> Menggabungkan berbagai parameter spasial secara sistematis[cite: 130].</li>
+                    <li><strong>Multi Parameter:</strong> Memanfaatkan data topografi, hidrologi, penggunaan lahan, dan parameter lainnya[cite: 132].</li>
+                    <li><strong>Mendukung Mitigasi:</strong> Memberikan informasi akurat untuk membantu pengambilan keputusan terkait mitigasi bencana[cite: 133].</li>
+                </ul>
+            </section>
+
+            <section id="konsep">
+                <h2>Konsep Dasar Kebencanaan</h2>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>Hazard (Bahaya)</h4>
+                        <ul class="bullet-list">
+                            <li>Potensi terjadinya fenomena alam yang dapat menimbulkan kerugian[cite: 253].</li>
+                            <li><strong>Contoh:</strong> Curah hujan tinggi, topografi curam, dan kondisi tanah labil[cite: 254, 257, 261].</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Vulnerability (Kerentanan)</h4>
+                        <ul class="bullet-list">
+                            <li>Kondisi fisik, sosial, ekonomi yang membuat wilayah lebih mudah terdampak bencana[cite: 294].</li>
+                            <li><strong>Contoh:</strong> Permukiman di lereng curam, drainase tidak memadai, dan kepadatan penduduk tinggi[cite: 295, 296, 297].</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Capacity (Kapasitas)</h4>
+                        <ul class="bullet-list">
+                            <li>Kemampuan sistem atau masyarakat dalam mengantisipasi dan mengurangi dampak bencana[cite: 267].</li>
+                            <li><strong>Contoh:</strong> Sistem peringatan dini dan infrastruktur penanggulangan[cite: 270, 274].</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Risk (Risiko)</h4>
+                        <ul class="bullet-list">
+                            <li>Potensi kerugian akibat interaksi antara Hazard dan Vulnerability terhadap elemen yang terpapar[cite: 284].</li>
+                            <li><strong>Formula Dasar:</strong> R = H × V × (1-C)[cite: 69].</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="membaca">
+                <h2>Cara Membaca Peta</h2>
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">Warna pada peta menunjukkan tingkat kerentanan suatu wilayah[cite: 143]:</p>
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <div class="color-box box-green"></div>
+                        <div>
+                            <strong>Rendah (Hijau)</strong>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Bangunan atau persil memiliki tingkat kerentanan rendah terhadap potensi bencana[cite: 104].</div>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box box-yellow"></div>
+                        <div>
+                            <strong>Sedang (Kuning)</strong>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Bangunan atau persil memiliki tingkat kerentanan menengah dan perlu diperhatikan[cite: 105].</div>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box box-red"></div>
+                        <div>
+                            <strong>Tinggi (Merah)</strong>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Wilayah sangat rentan, menjadi prioritas utama untuk tindakan mitigasi struktural[cite: 106].</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="penggunaan">
+                <h2>Langkah Penggunaan WebGIS</h2>
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        <h4>Aktifkan Layer</h4>
+                        <p>Buka menu kontrol di sisi kiri peta dan pilih layer informasi yang ingin ditampilkan (misal: Flood Vulnerability atau Landslide Vulnerability)[cite: 182, 184].</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        <h4>Klik Area pada Peta</h4>
+                        <p>Arahkan kursor dan klik pada area persil spesifik untuk mengetahui detail informasi kerentanannya[cite: 186, 187].</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        <h4>Lihat Informasi</h4>
+                        <p>Informasi tingkat kerentanan, skor, dan deskripsi wilayah akan muncul pada pop-up secara otomatis[cite: 358].</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-text">
+                        <h4>Zoom & Eksplorasi</h4>
+                        <p>Gunakan tombol navigasi zoom (+/-) atau scroll mouse untuk melihat detail persil yang lebih presisi[cite: 370, 372].</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interpretasi">
+                <h2>Interpretasi Karakteristik Wilayah</h2>
+                <div class="concept-grid">
+                    <div class="concept-card" style="border-left: 4px solid var(--primary-red);">
+                        <h4 style="border:none; margin-bottom:0;">Kerentanan Banjir Tinggi</h4>
+                        <ul class="bullet-list" style="margin-top: 0.5rem;">
+                            <li>Elevasi tanah rendah[cite: 190].</li>
+                            <li>Berlokasi dekat sungai atau aliran air[cite: 191].</li>
+                            <li>Tingkat kejenuhan tanah tinggi[cite: 192].</li>
+                            <li>Banyak permukaan terbangun kedap air[cite: 193].</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card" style="border-left: 4px solid var(--primary-red);">
+                        <h4 style="border:none; margin-bottom:0;">Kerentanan Longsor Tinggi</h4>
+                        <ul class="bullet-list" style="margin-top: 0.5rem;">
+                            <li>Kemiringan lereng yang curam[cite: 203].</li>
+                            <li>Vegetasi atau penutup lahan sangat rendah[cite: 204].</li>
+                            <li>Kondisi geologi tanah kurang stabil[cite: 205].</li>
+                            <li>Intensitas curah hujan tinggi[cite: 206].</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </main>
 
+    <script>
+        // Skrip untuk merubah warna menu sidebar saat di-scroll atau diklik
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".guide-nav-list a");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
