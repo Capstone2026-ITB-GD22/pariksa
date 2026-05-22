@@ -764,16 +764,20 @@ function renderMap() {
     const kecData = KECAMATAN_DATA.find(k => k.id === selectedKecId);
     map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
 
-    const hazardLabel = { gempa: 'Earthquake', banjir: 'Flood', longsor: 'Landslide' }[hazardId];
+    // Labels — English keys (matching radio values: earthquake/flood/landslide)
+    const hazardLabel = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
     const paramLabel  = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
     const paramType   = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
 
-    document.getElementById('info-title').textContent = `${kecData.name} — ${hazardLabel} ${paramLabel}`;
-    document.getElementById('info-desc').textContent  = `${paramType}  ·  ${GEOSERVER.workspace}:${layerName}`;
-    document.getElementById('map-info-card').classList.add('visible');
-    document.getElementById('overlay-title').textContent = `${hazardLabel} — ${paramLabel}`;
+    // Display format: "{District} {Hazard} {Parameter}"  →  e.g. "Andir Earthquake Risk"
+    const displayLabel = `${kecData.name} ${hazardLabel} ${paramLabel}`;
 
-    toast(`Rendering ${hazardLabel} ${paramLabel} · ${kecData.name}`, 'success');
+    document.getElementById('info-title').textContent = displayLabel;
+    document.getElementById('info-desc').textContent  = paramType;
+    document.getElementById('map-info-card').classList.add('visible');
+    document.getElementById('overlay-title').textContent = `${hazardLabel} ${paramLabel}`;
+
+    toast(`Rendering: ${displayLabel}`, 'success');
 }
 
 
