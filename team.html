@@ -3,809 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGIS Maps | Pariksa — Disaster Risk Mapping Bandung</title>
-    <meta name="description" content="Interactive WebGIS for high-precision disaster risk mapping across 30 districts of Bandung City at 1:5,000 scale.">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    <title>Team | Pariksa Spatial Intelligence</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* ================================================================
-           VARIABLES & BASE
-           ================================================================ */
+        /* --- Color Variables & WOW Factors --- */
         :root {
-            --primary-red:   #E53935;
-            --dark-red:      #B71C1C;
-            --bg-white:      #FFFFFF;
-            --bg-sidebar:    #F9FAFB;
-            --bg-dark:       #111827;
-            --text-primary:  #111827;
-            --text-secondary:#6B7280;
-            --border-color:  #E5E7EB;
-            --font-main:     'Inter', sans-serif;
-
-            /* 5-Level Risk Colors */
-            --c-very-high: #7F1D1D;
-            --c-high:      #DC2626;
-            --c-moderate:  #D97706;
-            --c-low:       #16A34A;
-            --c-very-low:  #15803D;
-
-            --sidebar-w: 365px;
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --bg-dark: #000000; 
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --border-color: #EAEAEA;
+            --font-main: 'Inter', sans-serif;
+            
+            /* WOW Factor: Premium Glows */
+            --glow-red: rgba(229, 57, 53, 0.3);
+            --glow-white: rgba(255, 255, 255, 0.15);
         }
 
+        /* --- Base Reset --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: var(--font-main);
-            color: var(--text-primary);
-            overflow: hidden;
-            background: #0f172a;
-            animation: pageEnter 0.45s ease both;
-        }
-        @keyframes pageEnter {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-white); line-height: 1.6; overflow-x: hidden; animation: pageEnter 0.45s ease both; }
+        @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         a { text-decoration: none; color: inherit; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* ================================================================
-           NAVBAR — matches guide.html / education.html / team.html exactly
-           ================================================================ */
-        nav {
+        /* --- Navbar Konsisten --- */
+        nav { 
             position: fixed; top: 0; width: 100%; z-index: 2000;
             background-color: rgba(0, 0, 0, 0.95);
             padding: 0.8rem 0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
-        .nav-container {
-            display: flex; justify-content: space-between; align-items: center;
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
             max-width: 95% !important; width: 100%; margin: 0 auto;
         }
-        .logo-wrapper {
-            display: flex; align-items: center; gap: 12px;
-            font-size: 1.5rem; font-weight: 700; color: #FFFFFF;
-        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
+        
         .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a {
-            font-weight: 600; font-size: 0.95rem; color: #FFFFFF;
-            transition: color 0.2s ease;
-        }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* ================================================================
-           LAYOUT
-           ================================================================ */
-        .webgis-container {
-            display: flex;
-            height: 100vh;
-            padding-top: 66px; /* matches guide/education/team nav height */
-        }
+        /* --- Page Header --- */
+        .page-header { padding: 12rem 0 6rem 0; background-color: var(--bg-light); text-align: center; position: relative; }
+        .page-header::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: var(--primary-red); box-shadow: 0 0 15px var(--glow-red); }
+        .page-header h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -1px; }
+        .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.2rem; }
 
-        /* ================================================================
-           SIDEBAR
-           ================================================================ */
-        .sidebar {
-            width: var(--sidebar-w);
-            flex-shrink: 0;
-            background: var(--bg-white);
-            border-right: 1px solid var(--border-color);
-            overflow-y: auto;
-            z-index: 900;
+        /* --- Team Section Base --- */
+        .team-section { padding: 8rem 0; position: relative; }
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-header span { display: block; color: var(--primary-red); font-size: 0.95rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .section-header h2 { font-size: 3rem; font-weight: 700; color: var(--text-primary); letter-spacing: -1px; }
+
+        /* --- WOW Factor: Glassmorphism & Tilt Base --- */
+        .tilt-wrapper { perspective: 1000px; transition: transform 0.1s ease; }
+        
+        .team-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(234, 234, 234, 0.5);
+            border-radius: 16px;
+            padding: 3.5rem 2rem; 
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-style: preserve-3d; 
+            will-change: transform;
+            opacity: 0; 
             display: flex;
             flex-direction: column;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.07);
-        }
-        .sidebar::-webkit-scrollbar { width: 4px; }
-        .sidebar::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 2px; }
-
-        /* Sidebar header */
-        .sidebar-header {
-            padding: 1.1rem 1.4rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky; top: 0; z-index: 10;
-            background: var(--bg-white);
-        }
-        .sidebar-header-title {
-            font-size: 0.875rem; font-weight: 700; color: var(--text-primary);
-            display: flex; align-items: center; gap: 7px;
-        }
-        .sidebar-header-title svg { color: var(--primary-red); flex-shrink: 0; }
-
-        /* Panel section */
-        .panel-section {
-            padding: 1.1rem 1.4rem;
-            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: center;
+            height: 100%;
         }
 
-        /* Step label */
-        .step-label {
-            font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 0.85rem;
-            display: flex; align-items: center; gap: 7px;
-        }
-        .step-badge {
-            width: 17px; height: 17px;
-            background: var(--primary-red); color: #fff;
-            border-radius: 50%; font-size: 0.62rem; font-weight: 700;
-            display: inline-flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
+        .team-card:hover { 
+            transform: translateZ(20px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+            border-color: rgba(229, 57, 53, 0.3); 
         }
 
-        /* ── Kecamatan Search ── */
-        .kec-search-wrap { position: relative; margin-bottom: 0.7rem; }
-        .kec-search-wrap svg {
-            position: absolute; left: 9px; top: 50%;
-            transform: translateY(-50%); color: var(--text-secondary);
-            pointer-events: none;
-        }
-        #kecamatan-search {
-            width: 100%;
-            padding: 0.55rem 0.75rem 0.55rem 2.1rem;
-            border: 1px solid var(--border-color); border-radius: 7px;
-            font-family: var(--font-main); font-size: 0.825rem;
-            color: var(--text-primary); background: var(--bg-sidebar);
-            outline: none; transition: border-color 0.2s, background 0.2s;
-        }
-        #kecamatan-search:focus {
-            border-color: var(--primary-red); background: #fff;
-            box-shadow: 0 0 0 3px rgba(229,57,53,0.08);
-        }
-        #kecamatan-search::placeholder { color: #9CA3AF; }
+        .animate-in { animation: fadeSlideUp 0.6s ease forwards; opacity: 1; }
 
-        /* Kecamatan chip grid */
-        .kec-grid {
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            position: relative;
+            transform: translateZ(30px); 
+        }
+
+        .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--bg-white); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        .avatar::before, .avatar::after {
+            content: ''; position: absolute; border-radius: 50%;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 2px solid var(--primary-red); opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .avatar::after { top: -18px; left: -18px; right: -18px; bottom: -18px; border-color: rgba(229, 57, 53, 0.2); }
+        
+        .team-card:hover .avatar::before { opacity: 1; transform: scale(1.05); }
+        .team-card:hover .avatar::after { opacity: 1; transform: scale(1.1); }
+
+        .team-card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; transform: translateZ(25px); }
+        .team-id { color: var(--text-secondary); font-weight: 600; font-size: 1rem; letter-spacing: 1px; transform: translateZ(20px); }
+
+        /* --- Grids --- */
+        .grid-lecturers {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.35rem;
-            max-height: 185px;
-            overflow-y: auto;
-            padding: 1px 1px 2px 1px;
-        }
-        .kec-grid::-webkit-scrollbar { width: 3px; }
-        .kec-grid::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 2px; }
-        .kec-chip {
-            padding: 0.38rem 0.25rem;
-            border: 1.5px solid var(--border-color); border-radius: 6px;
-            background: var(--bg-sidebar); font-size: 0.68rem; font-weight: 500;
-            color: var(--text-primary); cursor: pointer; text-align: center;
-            line-height: 1.35; transition: all 0.15s ease; user-select: none;
-        }
-        .kec-chip:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(229,57,53,0.04); }
-        .kec-chip.selected { background: var(--primary-red); border-color: var(--dark-red); color: #fff; font-weight: 700; }
-        .kec-chip.hidden { display: none; }
-        .kec-status {
-            margin-top: 0.5rem; font-size: 0.72rem; color: var(--text-secondary);
-            text-align: right; min-height: 1em;
-        }
-        .kec-status strong { color: var(--primary-red); }
-
-        /* ── Hazard Cards (text only, no icons) ── */
-        .hazard-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
-        }
-        .hazard-radio { display: none; }
-        .hazard-card-label {
-            display: flex; align-items: center; justify-content: center;
-            padding: 0.75rem 0.4rem;
-            border: 2px solid var(--border-color); border-radius: 10px;
-            background: var(--bg-sidebar); cursor: pointer;
-            transition: all 0.2s ease; text-align: center;
-        }
-        .hazard-name {
-            font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
-            transition: color 0.2s;
-        }
-        .hazard-card-label:hover { border-color: rgba(229,57,53,0.5); }
-        .hazard-radio:checked + .hazard-card-label {
-            border-color: var(--primary-red);
-            background: rgba(229,57,53,0.06);
-        }
-        .hazard-radio:checked + .hazard-card-label .hazard-name {
-            color: var(--primary-red); font-weight: 700;
+            gap: 2.5rem;
+            max-width: 1050px;
+            margin: 0 auto;
         }
 
-        /* ── Parameter Grid ── */
-        .param-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
+        /* --- PREMIUM Section: Students (Black Background & Symmetric Layout) --- */
+        .student-showcase {
+            background-color: var(--bg-dark); /* Menggunakan warna hitam pekat */
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            margin-bottom: 4rem;
+            padding: 7rem 0;
         }
-        .param-radio { display: none; }
-        .param-card-label {
-            display: flex; flex-direction: column; gap: 0.15rem;
-            padding: 0.7rem 0.9rem;
-            border: 1.5px solid var(--border-color); border-radius: 8px;
-            background: var(--bg-sidebar); cursor: pointer; transition: all 0.2s;
-        }
-        .param-tag  { font-size: 0.72rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.3px; }
-        .param-name { font-size: 0.82rem; font-weight: 600; color: var(--text-primary); }
-        .param-type { font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px; }
-        .param-card-label:hover { border-color: rgba(229,57,53,0.4); }
-        .param-radio:checked + .param-card-label { border-color: var(--primary-red); background: rgba(229,57,53,0.06); }
-        .param-radio:checked + .param-card-label .param-tag  { color: var(--primary-red); }
-        .param-radio:checked + .param-card-label .param-name { color: var(--primary-red); }
+        
+        .student-showcase .section-header h2 { color: #FFFFFF; text-shadow: 0 0 15px var(--glow-white); }
+        .student-showcase .section-header span { color: #FFFFFF; opacity: 0.7; }
 
-        .param-note {
-            margin-top: 0.75rem; padding: 0.55rem 0.8rem;
-            background: rgba(229,57,53,0.05); border-left: 3px solid var(--primary-red);
-            border-radius: 0 6px 6px 0; font-size: 0.72rem; color: var(--text-secondary);
-            line-height: 1.55;
+        /* Simetris Flexbox Grid untuk 5 Kartu (3 di atas, 2 di tengah) */
+        .grid-students {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
         }
-        .param-note strong { color: var(--text-primary); }
 
-        /* ── Render Button ── */
-        .sidebar-actions { padding: 1rem 1.4rem; border-bottom: 1px solid var(--border-color); }
-        .btn-render {
-            width: 100%; padding: 0.875rem 1rem;
-            background: var(--primary-red); color: #fff;
-            border: none; border-radius: 9px;
-            font-family: var(--font-main); font-weight: 700; font-size: 0.9rem;
-            cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 7px;
+        .grid-students .tilt-wrapper {
+            flex: 0 0 calc(33.333% - 1.67rem);
+            max-width: calc(33.333% - 1.67rem);
         }
-        .btn-render:hover { background: var(--dark-red); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(229,57,53,0.35); }
-        .btn-render:active { transform: translateY(0); box-shadow: none; }
 
-        /* ── Sidebar Legend ── */
-        .sidebar-legend { padding: 1.1rem 1.4rem; flex-grow: 1; }
-        .legend-heading {
-            font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.85rem;
+        .student-showcase .team-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
         }
-        .legend-list { display: flex; flex-direction: column; gap: 0.5rem; }
-        .legend-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-primary); }
-        .legend-swatch { width: 28px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+        
+        .student-showcase .team-card:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(229, 57, 53, 0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        .student-showcase .avatar img { border-color: rgba(255, 255, 255, 0.1); }
+        .student-showcase .team-card h3 { color: #FFFFFF; }
+        .student-showcase .team-id { color: var(--primary-red); }
 
-        /* ================================================================
-           MAP AREA
-           ================================================================ */
-        .map-area { flex-grow: 1; position: relative; overflow: hidden; }
-        #map { width: 100%; height: 100%; }
+        /* --- Animations & Footer --- */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* ── Loading ── */
-        .map-loading {
-            position: absolute; inset: 0; z-index: 800;
-            background: rgba(255,255,255,0.75); backdrop-filter: blur(3px);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.3s;
-        }
-        .map-loading.active { opacity: 1; visibility: visible; }
-        .spinner-box {
-            display: flex; flex-direction: column; align-items: center; gap: 0.85rem;
-            background: #fff; padding: 1.75rem 2.25rem;
-            border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-        .spinner {
-            width: 36px; height: 36px;
-            border: 3px solid var(--border-color); border-top-color: var(--primary-red);
-            border-radius: 50%; animation: spin 0.75s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spinner-label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+        footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.4); text-align: center; font-size: 0.9rem; }
 
-        /* ── Map Info Card (top-right) ── */
-        .map-info-card {
-            position: absolute; top: 14px; right: 14px; z-index: 700;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color); border-radius: 11px;
-            padding: 0.8rem 1.05rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            max-width: 260px;
-            opacity: 0; transform: translateY(-6px);
-            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-            pointer-events: none;
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .grid-lecturers { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+            .grid-students .tilt-wrapper { flex: 0 0 calc(50% - 1.25rem); max-width: calc(50% - 1.25rem); }
         }
-        .map-info-card.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .info-pulse {
-            display: inline-flex; align-items: center; gap: 5px;
-            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 1px; color: var(--primary-red); margin-bottom: 0.35rem;
-        }
-        .pulse-dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--primary-red); animation: blink 2s ease-in-out infinite;
-        }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .map-info-card h4 { font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem; }
-        .map-info-card p  { font-size: 0.72rem; color: var(--text-secondary); }
-
-        /* ── Map Legend Overlay (bottom-left) ── */
-        .map-legend-overlay {
-            position: absolute; bottom: 38px; left: 14px; z-index: 700;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color); border-radius: 10px;
-            padding: 0.8rem 1rem; box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-            min-width: 165px;
-        }
-        .overlay-legend-title {
-            font-size: 0.68rem; font-weight: 700; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 0.55rem;
-        }
-        .overlay-rows { display: flex; flex-direction: column; gap: 0.32rem; }
-        .overlay-row { display: flex; align-items: center; gap: 7px; font-size: 0.75rem; color: var(--text-primary); }
-        .overlay-swatch { width: 20px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-
-        /* ── Toast ── */
-        .toast {
-            position: absolute; bottom: 38px; right: 14px; z-index: 1100;
-            color: #fff; padding: 0.7rem 1.1rem; border-radius: 9px;
-            font-size: 0.82rem; font-weight: 600;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            opacity: 0; transform: translateY(8px);
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            pointer-events: none; max-width: 270px; background: var(--bg-dark);
-        }
-        .toast.show   { opacity: 1; transform: translateY(0); }
-        .toast.error  { background: #DC2626; }
-        .toast.success{ background: #059669; }
-
-        /* ================================================================
-           RESPONSIVE
-           ================================================================ */
-        @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
-            .webgis-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 55vh; order: 2; border-right: none; border-top: 1px solid var(--border-color); }
-            .map-area { height: 45vh; order: 1; }
             .nav-links { display: none; }
-            .kec-grid { max-height: 120px; }
+            .grid-lecturers { grid-template-columns: 1fr; max-width: 450px; }
+            .grid-students .tilt-wrapper { flex: 0 0 100%; max-width: 450px; }
+            .page-header h1 { font-size: 2.8rem; }
+            .section-header h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-<nav id="navbar">
-    <div class="nav-container">
-        <a href="index.html" class="logo-wrapper">
-            <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'">
-            Pariksa
-        </a>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="guide.html">Guide</a></li>
-                <li><a href="maps.html" class="active">Maps</a></li>
-                <li><a href="education.html">Education</a></li>
-                <li><a href="team.html">Team</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="webgis-container">
-
-    <!-- ══════════════════════════════════════
-         SIDEBAR
-         ══════════════════════════════════════ -->
-    <aside class="sidebar">
-
-        <div class="sidebar-header">
-            <div class="sidebar-header-title">
-                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                </svg>
-                Map Layer Controls
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
+                Pariksa
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html" class="active">Team</a></li>
+                </ul>
             </div>
         </div>
+    </nav>
 
-        <!-- ── STEP 1: District ── -->
-        <div class="panel-section">
-            <div class="step-label">
-                <span class="step-badge">1</span>
-                District (Kecamatan)
-            </div>
-            <div class="kec-search-wrap">
-                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" id="kecamatan-search" placeholder="Search district...">
-            </div>
-            <div class="kec-grid" id="kec-grid"><!-- Populated by JS --></div>
-            <div class="kec-status" id="kec-status">30 districts available</div>
+    <header class="page-header">
+        <div class="container">
+            <h1>Meet the People Behind Pariksa</h1>
+            <p>The advisors and students behind the High-Precision Disaster Risk Mapping project in Bandung.</p>
         </div>
+    </header>
 
-        <!-- ── STEP 2: Hazard Type (text only) ── -->
-        <div class="panel-section">
-            <div class="step-label">
-                <span class="step-badge">2</span>
-                Hazard Type
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Our Advisors</h2>
             </div>
-            <div class="hazard-grid">
-                <label>
-                    <input type="radio" name="hazard" value="earthquake" class="hazard-radio" checked>
-                    <div class="hazard-card-label"><span class="hazard-name">Earthquake</span></div>
-                </label>
-                <label>
-                    <input type="radio" name="hazard" value="flood" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Flood</span></div>
-                </label>
-                <label>
-                    <input type="radio" name="hazard" value="landslide" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Landslide</span></div>
-                </label>
-            </div>
-        </div>
-
-        <!-- ── STEP 3: Analysis Parameter ── -->
-        <div class="panel-section">
-            <div class="step-label">
-                <span class="step-badge">3</span>
-                Analysis Parameter
-            </div>
-            <div class="param-grid">
-                <label>
-                    <input type="radio" name="parameter" value="risk" class="param-radio" checked>
-                    <div class="param-card-label">
-                        <span class="param-tag">R</span>
-                        <span class="param-name">Risk</span>
-                        <span class="param-type">📍 Parcel Vector</span>
+            
+            <div class="grid-lecturers js-animate-group">
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-advisor1.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Heri Andreas, S.T., M.T.</h3>
+                        <span class="team-id">NIP. 19700101 200001 1 001</span>
                     </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="hazard" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">H</span>
-                        <span class="param-name">Hazard</span>
-                        <span class="param-type">🗺️ Raster</span>
+                </div>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-advisor2.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Ir. Dina Sarsito, M.T.</h3>
+                        <span class="team-id">NIP. 19680303 199501 2 003</span>
                     </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="vulnerability" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">V</span>
-                        <span class="param-name">Vulnerability</span>
-                        <span class="param-type">🗺️ Raster</span>
+                </div>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-advisor3.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Madam Taqiyya, S.Si., M.Sc.</h3>
+                        <span class="team-id">NIP. 19750202 200501 2 002</span>
                     </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="capacity" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">C</span>
-                        <span class="param-name">Capacity</span>
-                        <span class="param-type">🗺️ Raster</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section student-showcase">
+        <div class="container">
+            <div class="section-header">
+                <span>Students</span> 
+                <h2>Capstone Project Team</h2>
+            </div>
+
+            <div class="grid-students js-animate-group">
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student1.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Syalala Loovy</h3>
+                        <span class="team-id">NIM. 15122008</span>
                     </div>
-                </label>
-            </div>
-            <div class="param-note">
-                <strong>Risk (R)</strong> renders parcel-level vector data.
-                Hazard, Vulnerability &amp; Capacity are supplementary raster overlays.
-            </div>
-        </div>
-
-        <!-- ── Render Button ── -->
-        <div class="sidebar-actions">
-            <button class="btn-render" onclick="renderMap()">
-                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Render Map
-            </button>
-        </div>
-
-        <!-- ── Sidebar Legend (below Render Map) ── -->
-        <div class="sidebar-legend">
-            <div class="legend-heading">Risk Classification Legend</div>
-            <div class="legend-list">
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-very-high);"></div>
-                    <span>Very High Risk</span>
                 </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-high);"></div>
-                    <span>High Risk</span>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student2.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Raihan Hady Permana</h3>
+                        <span class="team-id">NIM. 15122060</span>
+                    </div>
                 </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-moderate);"></div>
-                    <span>Moderate Risk</span>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student3.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Varina Erawati Martina</h3>
+                        <span class="team-id">NIM. 15122087</span>
+                    </div>
                 </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-low);"></div>
-                    <span>Low Risk</span>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student4.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Aura Nisa Arianti</h3>
+                        <span class="team-id">NIM. 15122111</span>
+                    </div>
                 </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-very-low);"></div>
-                    <span>Very Low Risk</span>
+                <div class="tilt-wrapper">
+                    <div class="team-card js-animate-card">
+                        <div class="avatar"><img src="placeholder-student5.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Luthfi Aulia Hakim</h3>
+                        <span class="team-id">NIM. 15122119</span>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </aside>
-
-    <!-- ══════════════════════════════════════
-         MAP AREA
-         ══════════════════════════════════════ -->
-    <main class="map-area">
-        <div id="map"></div>
-
-        <div class="map-loading" id="map-loading">
-            <div class="spinner-box">
-                <div class="spinner"></div>
-                <div class="spinner-label">Loading spatial data…</div>
-            </div>
+    <footer>
+        <div class="container">
+            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
+    </footer>
 
-        <div class="map-info-card" id="map-info-card">
-            <div class="info-pulse"><span class="pulse-dot"></span>Active Layer</div>
-            <h4 id="info-title">—</h4>
-            <p  id="info-desc">—</p>
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const groups = document.querySelectorAll('.js-animate-group');
+            
+            groups.forEach(group => {
+                const cards = group.querySelectorAll('.js-animate-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 150); 
+                });
+            });
+        });
 
-        <div class="map-legend-overlay">
-            <div class="overlay-legend-title" id="overlay-title">Risk Classification</div>
-            <div class="overlay-rows">
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-very-high);"></div><span>Very High</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-high);"></div><span>High</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-moderate);"></div><span>Moderate</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-low);"></div><span>Low</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-very-low);"></div><span>Very Low</span></div>
-            </div>
-        </div>
+        const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
 
-        <div class="toast" id="toast"></div>
-    </main>
+        tiltWrappers.forEach(wrapper => {
+            wrapper.addEventListener('mousemove', (e) => {
+                const card = wrapper.querySelector('.team-card');
+                const cardRect = card.getBoundingClientRect();
+                
+                const cardCenterX = cardRect.left + cardRect.width / 2;
+                const cardCenterY = cardRect.top + cardRect.height / 2;
+                
+                const mouseX = e.clientX - cardCenterX;
+                const mouseY = e.clientY - cardCenterY;
+                
+                const tiltX = (mouseY / (cardRect.height / 2)) * -10; 
+                const tiltY = (mouseX / (cardRect.width / 2)) * 10;  
+                
+                card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
+            });
 
-</div>
+            wrapper.addEventListener('mouseleave', (e) => {
+                const card = wrapper.querySelector('.team-card');
+                card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0)`;
+            });
+        });
+        // Page transition on exit
+        document.querySelectorAll('a[href]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
+                if (href && href[0] !== '#' && !/^(https?:|mailto:|javascript:)/i.test(href)) {
+                    e.preventDefault();
+                    document.body.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                    document.body.style.opacity = '0';
+                    document.body.style.transform = 'translateY(-8px)';
+                    var dest = href;
+                    setTimeout(function() { window.location.href = dest; }, 260);
+                }
+            });
+        });
+    </script>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-/* ============================================================
-   ⚙️  GEOSERVER CONFIGURATION
-   ============================================================
-   Edit the values below to connect to your GeoServer instance.
-   ------------------------------------------------------------ */
-const GEOSERVER = {
-    // 🔗 WMS endpoint URL
-    //    Development : 'http://localhost:8080/geoserver/pariksa/wms'
-    //    Production  : 'https://your-server.com/geoserver/pariksa/wms'
-    url: 'http://localhost:8080/geoserver/pariksa/wms',
-
-    // 🗂️ GeoServer workspace name
-    workspace: 'pariksa',
-
-    /* ----------------------------------------------------------
-       📐 LAYER NAMING CONVENTION
-       ----------------------------------------------------------
-       Pattern : {parameter}_{kecamatan_id}_{hazard_id}
-
-       Examples:
-         risk_andir_earthquake
-         hazard_andir_earthquake
-         vulnerability_coblong_flood
-         capacity_gedebage_landslide
-
-       Parameters : risk | hazard | vulnerability | capacity
-       Hazard IDs : earthquake | flood | landslide
-       ---------------------------------------------------------- */
-
-    // 🔧 LAYER OVERRIDES
-    //    Format: 'parameter_kecamatan_hazard': 'actual_layer_name'
-    layerOverrides: {
-        // 'risk_gedebage_flood'           : 'flood_risk_gedebage_custom',
-        // 'hazard_andir_earthquake'       : 'eq_hazard_andir_v2',
-    },
-
-    // ⚙️ Standard WMS parameters
-    wmsParams: {
-        format: 'image/png',
-        transparent: true,
-        version: '1.1.0',
-        styles: '',
-    },
-};
-/* ============================================================
-   END GEOSERVER CONFIGURATION
-   ============================================================ */
-
-
-/* ============================================================
-   📍 30 KECAMATAN DATA — Bandung City
-   ============================================================ */
-const KECAMATAN_DATA = [
-    { id: 'andir',            name: 'Andir',            center: [-6.9094, 107.5876], zoom: 15 },
-    { id: 'antapani',         name: 'Antapani',         center: [-6.9181, 107.6445], zoom: 15 },
-    { id: 'arcamanik',        name: 'Arcamanik',        center: [-6.9214, 107.6555], zoom: 15 },
-    { id: 'astana_anyar',      name: 'Astana Anyar',    center: [-6.9261, 107.6022], zoom: 15 },
-    { id: 'babakan_ciparay',  name: 'Babakan Ciparay',  center: [-6.9349, 107.5878], zoom: 15 },
-    { id: 'bandung_kidul',    name: 'Bandung Kidul',    center: [-6.9525, 107.6183], zoom: 15 },
-    { id: 'bandung_kulon',    name: 'Bandung Kulon',    center: [-6.9229, 107.5810], zoom: 15 },
-    { id: 'bandung_wetan',    name: 'Bandung Wetan',    center: [-6.9003, 107.6229], zoom: 15 },
-    { id: 'batununggal',      name: 'Batununggal',      center: [-6.9406, 107.6227], zoom: 15 },
-    { id: 'bojongloa_kaler',  name: 'Bojongloa Kaler',  center: [-6.9263, 107.5956], zoom: 15 },
-    { id: 'bojongloa_kidul',  name: 'Bojongloa Kidul',  center: [-6.9391, 107.5991], zoom: 15 },
-    { id: 'buahbatu',         name: 'Buahbatu',         center: [-6.9546, 107.6407], zoom: 15 },
-    { id: 'cibeunying_kaler', name: 'Cibeunying Kaler', center: [-6.8916, 107.6300], zoom: 15 },
-    { id: 'cibeunying_kidul', name: 'Cibeunying Kidul', center: [-6.9049, 107.6350], zoom: 15 },
-    { id: 'cibiru',           name: 'Cibiru',           center: [-6.9194, 107.7069], zoom: 15 },
-    { id: 'cicendo',          name: 'Cicendo',          center: [-6.9066, 107.5942], zoom: 15 },
-    { id: 'cidadap',          name: 'Cidadap',          center: [-6.8768, 107.5988], zoom: 15 },
-    { id: 'cinambo',          name: 'Cinambo',          center: [-6.9176, 107.6876], zoom: 15 },
-    { id: 'coblong',          name: 'Coblong',          center: [-6.8905, 107.6109], zoom: 15 },
-    { id: 'gedebage',         name: 'Gedebage',         center: [-6.9544, 107.6978], zoom: 15 },
-    { id: 'kiaracondong',     name: 'Kiaracondong',     center: [-6.9296, 107.6454], zoom: 15 },
-    { id: 'lengkong',         name: 'Lengkong',         center: [-6.9263, 107.6259], zoom: 15 },
-    { id: 'mandalajati',      name: 'Mandalajati',      center: [-6.9019, 107.6650], zoom: 15 },
-    { id: 'panyileukan',      name: 'Panyileukan',      center: [-6.9419, 107.7002], zoom: 15 },
-    { id: 'rancasari',        name: 'Rancasari',        center: [-6.9540, 107.6604], zoom: 15 },
-    { id: 'regol',            name: 'Regol',            center: [-6.9337, 107.6115], zoom: 15 },
-    { id: 'sukajadi',         name: 'Sukajadi',         center: [-6.8896, 107.5908], zoom: 15 },
-    { id: 'sukasari',         name: 'Sukasari',         center: [-6.8826, 107.5986], zoom: 15 },
-    { id: 'sumur_bandung',    name: 'Sumur Bandung',    center: [-6.9157, 107.6133], zoom: 15 },
-    { id: 'ujungberung',      name: 'Ujungberung',      center: [-6.9008, 107.7091], zoom: 15 },
-];
-
-
-/* ============================================================
-   🗺️  MAP INITIALIZATION
-   ============================================================ */
-const DEFAULT_CENTER = [-6.9147, 107.6098];
-const DEFAULT_ZOOM   = 12;
-
-const map = L.map('map', { zoomControl: false }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 20,
-}).addTo(map);
-
-
-/* ============================================================
-   🧩  STATE
-   ============================================================ */
-let selectedKecId   = null;
-let currentWmsLayer = null;
-let toastTimer      = null;
-
-
-/* ============================================================
-   🏙️  KECAMATAN CHIPS
-   ============================================================ */
-function buildKecamatanGrid() {
-    const grid = document.getElementById('kec-grid');
-    KECAMATAN_DATA.forEach(kec => {
-        const chip = document.createElement('div');
-        chip.className    = 'kec-chip';
-        chip.dataset.id   = kec.id;
-        chip.dataset.name = kec.name.toLowerCase();
-        chip.textContent  = kec.name;
-        chip.title        = kec.name;
-        chip.addEventListener('click', () => selectKecamatan(kec.id, chip));
-        grid.appendChild(chip);
-    });
-}
-
-function selectKecamatan(id, chipEl) {
-    selectedKecId = id;
-    document.querySelectorAll('.kec-chip').forEach(c => c.classList.remove('selected'));
-    chipEl.classList.add('selected');
-    refreshKecStatus();
-}
-
-function refreshKecStatus() {
-    const visible  = document.querySelectorAll('.kec-chip:not(.hidden)').length;
-    const statusEl = document.getElementById('kec-status');
-    if (selectedKecId) {
-        const name = KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name ?? '';
-        statusEl.innerHTML = `Selected: <strong>${name}</strong>`;
-    } else {
-        statusEl.textContent = `${visible} of 30 district${visible !== 1 ? 's' : ''}`;
-    }
-}
-
-document.getElementById('kecamatan-search').addEventListener('input', function () {
-    const q = this.value.toLowerCase().trim();
-    document.querySelectorAll('.kec-chip').forEach(chip => {
-        chip.classList.toggle('hidden', !chip.dataset.name.includes(q));
-    });
-    refreshKecStatus();
-});
-
-
-/* ============================================================
-   🗺️  LAYER MANAGEMENT
-   ============================================================ */
-function resolveLayerName(kecId, hazardId, paramId) {
-    // Actual GeoServer pattern: {parameter}_{kecamatan}_{hazard}
-    // Example: risk_andir_earthquake
-    const key = `${paramId}_${kecId}_${hazardId}`;
-    return GEOSERVER.layerOverrides[key] ?? key;
-}
-
-function loadWmsLayer(layerName) {
-    if (currentWmsLayer) {
-        map.removeLayer(currentWmsLayer);
-        currentWmsLayer = null;
-    }
-
-    currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
-        ...GEOSERVER.wmsParams,
-        layers: `${GEOSERVER.workspace}:${layerName}`,
-    });
-    currentWmsLayer.addTo(map);
-
-    showLoading(true);
-    currentWmsLayer.on('load',      () => showLoading(false));
-    currentWmsLayer.on('tileerror', () => {
-        showLoading(false);
-        toast('Could not load layer. Check your GeoServer connection.', 'error');
-    });
-}
-
-
-/* ============================================================
-   🎯  RENDER MAP
-   ============================================================ */
-function renderMap() {
-    if (!selectedKecId) {
-        toast('Please select a district (kecamatan) first.', 'error');
-        document.getElementById('kec-grid').closest('.panel-section').scrollIntoView({ behavior: 'smooth' });
-        return;
-    }
-
-    const hazardId  = document.querySelector('input[name="hazard"]:checked').value;
-    const paramId   = document.querySelector('input[name="parameter"]:checked').value;
-    const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
-
-    loadWmsLayer(layerName);
-
-    const kecData = KECAMATAN_DATA.find(k => k.id === selectedKecId);
-    map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
-
-    const hazardLabel = { gempa: 'Earthquake', banjir: 'Flood', longsor: 'Landslide' }[hazardId];
-    const paramLabel  = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
-    const paramType   = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
-
-    document.getElementById('info-title').textContent = `${kecData.name} — ${hazardLabel} ${paramLabel}`;
-    document.getElementById('info-desc').textContent  = `${paramType}  ·  ${GEOSERVER.workspace}:${layerName}`;
-    document.getElementById('map-info-card').classList.add('visible');
-    document.getElementById('overlay-title').textContent = `${hazardLabel} — ${paramLabel}`;
-
-    toast(`Rendering ${hazardLabel} ${paramLabel} · ${kecData.name}`, 'success');
-}
-
-
-/* ============================================================
-   🖼️  UI HELPERS
-   ============================================================ */
-function showLoading(on) {
-    document.getElementById('map-loading').classList.toggle('active', on);
-}
-
-function toast(msg, type = 'info') {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.className   = `toast show${type === 'error' ? ' error' : type === 'success' ? ' success' : ''}`;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
-}
-
-
-/* ============================================================
-   🚀  INIT
-   ============================================================ */
-buildKecamatanGrid();
-
-
-/* ============================================================
-   🎞️  PAGE TRANSITION (exit fade)
-   ============================================================ */
-document.querySelectorAll('a[href]').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-        var href = this.getAttribute('href');
-        if (href && href[0] !== '#' && !/^(https?:|mailto:|javascript:)/i.test(href)) {
-            e.preventDefault();
-            document.body.style.transition = 'opacity 0.25s ease';
-            document.body.style.opacity = '0';
-            var dest = href;
-            setTimeout(function() { window.location.href = dest; }, 260);
-        }
-    });
-});
-</script>
 </body>
 </html>
