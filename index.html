@@ -27,24 +27,44 @@
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
         /* --- Navbar --- */
-        nav { position: fixed; top: 0; width: 100%; background-color: transparent; z-index: 1000; transition: all 0.4s ease; padding: 1rem 0; }
+        nav { position: fixed; top: 0; width: 100%; background-color: transparent; z-index: 2000; transition: all 0.4s ease; padding: 1rem 0; }
         nav.scrolled { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 0.5rem 0; }
         .nav-container { 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center; 
-                max-width: 95% !important; 
-                width: 100%; 
-            }
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #fff; transition: color 0.4s ease; }
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            max-width: 95% !important; 
+            width: 100%; 
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #fff; transition: color 0.4s ease; z-index: 2001; }
         .logo-img { height: 40px; width: auto; }
         nav.scrolled .logo-wrapper { color: var(--text-primary); }
+        nav.mobile-open .logo-wrapper { color: #FFFFFF; } /* Tetap putih saat menu terbuka */
         .logo-wrapper span { color: var(--primary-red); }
+        
         .nav-right { display: flex; align-items: center; gap: 2.5rem; }
-        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; transition: all 0.4s ease; }
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: #fff; transition: color 0.3s ease; }
         nav.scrolled .nav-links a { color: var(--text-primary); }
         .nav-links a:hover { color: var(--primary-red) !important; }
+
+        /* --- Hamburger Menu Icon --- */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 2001;
+        }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        nav.scrolled .hamburger span { background-color: var(--text-primary); }
+        nav.mobile-open .hamburger span { background-color: #FFFFFF; } /* Putih saat disilang */
 
         /* --- Hero Section --- */
         .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('homebackground.jpg'); background-size: cover; background-position: center; color: #FFFFFF; }
@@ -61,14 +81,8 @@
 
         /* --- About Section --- */
         .about-section { padding: 8rem 0 4rem 0; background-color: var(--bg-white); }
-        
         .about-content { max-width: 900px; margin: 0 auto; }
-        .about-content p { 
-            font-size: 1.15rem; 
-            color: var(--text-secondary); 
-            line-height: 1.8; 
-            text-align: justify; 
-        }
+        .about-content p { font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8; text-align: justify; }
         .highlight-text { color: var(--text-primary); font-weight: 600; }
 
         /* --- Simple Red Divider --- */
@@ -108,7 +122,49 @@
         footer { padding: 2rem 0; background-color: var(--bg-dark); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); }
 
         @media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } .solutions-grid-2x2 { grid-template-columns: 1fr; } }
+        
+        /* --- Mobile Navigation & Responsive Adjustments --- */
+        @media (max-width: 768px) { 
+            .hero h1 { font-size: 2.5rem; } 
+            .solutions-grid-2x2 { grid-template-columns: 1fr; } 
+            
+            /* Tampilkan Hamburger Menu */
+            .hamburger { display: flex; }
+            
+            /* Ubah Nav-Links jadi Dropdown Mobile */
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Sembunyikan di luar layar kanan */
+                width: 70%;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 3rem;
+            }
+            
+            /* Class saat menu aktif (terbuka) */
+            .nav-links.active {
+                right: 0;
+            }
+            .nav-links.active a {
+                color: #FFFFFF;
+                font-size: 1.2rem;
+            }
+            
+            /* Animasi Hamburger ke Silang (X) */
+            .hamburger.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
     </style>
 </head>
 
@@ -128,6 +184,12 @@
                     <li><a href="education.html">Education</a></li>
                     <li><a href="team.html">Team</a></li>
                 </ul>
+                
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </nav>
@@ -204,7 +266,7 @@
         <section class="contact-section">
             <div class="container contact-grid">
                 <div class="contact-text-content">
-                    <span class="contact-subtitle">GET IN TOUCH</span>
+                    <span class="section-subtitle">GET IN TOUCH</span>
                     <h2>Ready to Collaborate?</h2>
                     <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
                     
@@ -253,6 +315,7 @@
     </footer>
 
     <script>
+        // Logika untuk Navbar Berubah Warna saat di-Scroll
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -260,6 +323,16 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
+        });
+
+        // Logika untuk Hamburger Menu (Mobile Dropdown)
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            navbar.classList.toggle('mobile-open'); // Mencegah warna logo berubah saat menu terbuka
         });
     </script>
 </body>
