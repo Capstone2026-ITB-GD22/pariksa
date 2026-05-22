@@ -3,46 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pariksa | High-Precision Disaster Risk Mapping</title>
+    <title>Pariksa | Disaster Risk Mapping Bandung</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ========================================================
-           CSS: GLOBAL VARIABLES & RESETS
-           ======================================================== */
+        /* --- Color Variables --- */
         :root {
             --primary-red: #E53935;
             --dark-red: #B71C1C;
             --bg-white: #FFFFFF;
             --bg-light: #F8F9FA;
             --bg-dark: #000000; 
-            --bg-sidebar: #F8F9FA;
             --text-primary: #1A1A1A;
             --text-secondary: #6B6B6B;
-            --border-color: #D4D4D4; 
+            --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
-            
-            /* Map Classification Colors */
-            --color-very-low: #2E7D32;
-            --color-low: #66BB6A;
-            --color-moderate: #FBC02D;
-            --color-high: #F57C00;
-            --color-very-high: #D32F2F;
-
-            /* Premium Concept Accents */
-            --c-risk: #FF3B30;
-            --c-hazard: #FF9500;
-            --c-vuln: #AF52DE;
-            --c-cap: #34C759;
-            --c-flood: #007AFF;
-            --c-earthquake: #8C4A32;
-            --c-landslide: #A2845E;
-
-            /* Premium Glows */
-            --glow-red: rgba(229, 57, 53, 0.3);
-            --glow-white: rgba(255, 255, 255, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,49 +26,27 @@
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* ========================================================
-           CSS: SPA LOGIC
-           ======================================================== */
-        .spa-page { display: none; }
-        .spa-page.active-page { display: block; }
-
-        /* ========================================================
-           CSS: NAVBAR
-           ======================================================== */
-        nav { position: fixed; top: 0; width: 100%; z-index: 2000; transition: all 0.4s ease; padding: 1rem 0; background-color: transparent; }
+        /* --- Navbar --- */
+        nav { position: fixed; top: 0; width: 100%; background-color: transparent; z-index: 1000; transition: all 0.4s ease; padding: 1rem 0; }
         nav.scrolled { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 0.5rem 0; }
-        nav.nav-solid-dark { background-color: rgba(0, 0, 0, 0.95); padding: 0.8rem 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
-        
-        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 95% !important; width: 100%; margin: 0 auto; }
+        .nav-container { 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+                max-width: 95% !important; 
+                width: 100%; 
+            }
         .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #fff; transition: color 0.4s ease; }
         .logo-img { height: 40px; width: auto; }
-        
         nav.scrolled .logo-wrapper { color: var(--text-primary); }
-        nav.nav-solid-dark .logo-wrapper { color: #FFFFFF; }
         .logo-wrapper span { color: var(--primary-red); }
-        
         .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #fff; transition: color 0.3s ease; cursor: pointer; }
-        
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #fff; transition: color 0.3s ease; }
         nav.scrolled .nav-links a { color: var(--text-primary); }
-        nav.nav-solid-dark .nav-links a { color: #FFFFFF; }
-        .nav-links a:hover, .nav-links a.active-link { color: var(--primary-red) !important; }
+        .nav-links a:hover { color: var(--primary-red) !important; }
 
-        /* ========================================================
-           CSS: GLOBAL HEADERS (SHARED)
-           ======================================================== */
-        .page-header { padding: 10rem 0 5rem 0; background-color: var(--bg-light); text-align: center; position: relative; }
-        .page-header::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: var(--primary-red); box-shadow: 0 0 15px var(--glow-red); }
-        .page-header h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -1px; }
-        .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.2rem; }
-        .header-divider { width: 300px; height: 4px; background-color: var(--primary-red); border-radius: 2px; margin: 3rem auto 0 auto; }
-        .aesthetic-divider { height: 80px; display: flex; align-items: center; justify-content: center; background-color: var(--bg-white); position: relative; }
-        .divider-bar { width: 80px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
-
-        /* ========================================================
-           CSS: HOME SECTION
-           ======================================================== */
+        /* --- Hero Section --- */
         .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('homebackground.jpg'); background-size: cover; background-position: center; color: #FFFFFF; }
         .hero-content { max-width: 950px; margin: 0 auto; padding-top: 60px; }
         .hero h1 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -1px; }
@@ -100,15 +54,28 @@
         .btn { display: inline-block; padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem; background-color: var(--primary-red); color: var(--border-color); }
         .btn:hover { background-color: var(--dark-red); transform: translateY(-2px); }
 
+        /* --- Global Section Styles --- */
         .section-header { text-align: center; max-width: 800px; margin-left: auto; margin-right: auto; }
         .section-subtitle { display: block; color: var(--primary-red); font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
         .section-header h2 { font-size: 2.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.3; }
 
+        /* --- About Section --- */
         .about-section { padding: 8rem 0 4rem 0; background-color: var(--bg-white); }
+        
         .about-content { max-width: 900px; margin: 0 auto; }
-        .about-content p { font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8; text-align: justify; }
+        .about-content p { 
+            font-size: 1.15rem; 
+            color: var(--text-secondary); 
+            line-height: 1.8; 
+            text-align: justify; 
+        }
         .highlight-text { color: var(--text-primary); font-weight: 600; }
 
+        /* --- Simple Red Divider --- */
+        .aesthetic-divider { height: 80px; display: flex; align-items: center; justify-content: center; background-color: var(--bg-white); position: relative; }
+        .divider-bar { width: 80px; height: 4px; background-color: var(--primary-red); border-radius: 2px; }
+
+        /* --- Solutions Section (2x2 Grid) --- */
         .solutions-section { padding: 6rem 0 8rem 0; background-color: var(--bg-light); }
         .solutions-grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; margin-top: 4rem; max-width: 1050px; margin-left: auto; margin-right: auto; }
         .solution-card { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 3.5rem 2.5rem; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
@@ -119,7 +86,8 @@
         .solution-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
         .solution-card p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; text-align: justify; }
 
-        .contact-section { background-color: #000; padding: 8rem 0; color: #FFFFFF; }
+        /* --- Contact Section --- */
+        .contact-section { background-color: var(--bg-dark); padding: 8rem 0; color: #FFFFFF; }
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
         .contact-text-content h2 { font-size: 3rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; }
         .contact-text-content p { font-size: 1.15rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 3rem; }
@@ -136,233 +104,11 @@
         .map-container { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
         .map-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* ========================================================
-           CSS: GUIDE SECTION
-           ======================================================== */
-        .guide-layout { display: flex; gap: 3rem; align-items: flex-start; padding-bottom: 8rem; }
-        .guide-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 100px; border-right: 2px solid var(--border-color); padding-right: 2rem; min-height: calc(100vh - 140px); }
-        .sidebar-title { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
-        .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-        .sidebar-nav a { display: block; padding: 0.8rem 1rem; border-radius: 8px; font-weight: 500; color: var(--text-primary); transition: all 0.2s ease; font-size: 0.95rem; cursor: pointer; }
-        .sidebar-nav a:hover { background-color: rgba(229, 57, 53, 0.05); color: var(--primary-red); }
-        .sidebar-nav a.active-tab { background-color: var(--primary-red); color: white; font-weight: 600; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.2); }
+        /* --- Footer --- */
+        footer { padding: 2rem 0; background-color: var(--bg-dark); text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); }
 
-        .guide-main { flex-grow: 1; min-width: 0; padding-left: 1rem; }
-        .guide-tab { display: none; animation: fadeIn 0.4s ease; }
-        .guide-tab.active-tab { display: block; }
-        .main-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary); letter-spacing: -0.5px; text-align: center; }
-        
-        .step-card { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 2.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s ease; }
-        .step-number { width: 45px; height: 45px; flex-shrink: 0; background-color: var(--primary-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; }
-        .step-content { flex-grow: 1; }
-        .step-content h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
-        .step-image { width: 250px; height: 180px; flex-shrink: 0; background-color: #F0F0F0; border-radius: 12px; border: 2px dashed #CCCCCC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .step-image img { width: 100%; height: 100%; object-fit: cover; }
-
-        .legend-box { display: flex; align-items: center; padding: 1.8rem 2rem; border-radius: 12px; margin-bottom: 1.2rem; color: #FFFFFF; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 2px solid transparent; }
-        .legend-title { font-size: 1.2rem; font-weight: 700; width: 180px; flex-shrink: 0; text-transform: uppercase; }
-        .legend-desc { font-size: 1rem; border-left: 2px solid rgba(255, 255, 255, 0.3); padding-left: 1.8rem; }
-        .box-very-low { background-color: var(--color-very-low); }
-        .box-low { background-color: var(--color-low); }
-        .box-moderate { background-color: var(--color-moderate); color: var(--text-primary); border-color: rgba(0,0,0,0.1); }
-        .box-moderate .legend-desc { border-left-color: rgba(0, 0, 0, 0.1); }
-        .box-high { background-color: var(--color-high); }
-        .box-very-high { background-color: var(--color-very-high); }
-
-        .section-box { background-color: rgba(255, 255, 255, 0.4); border: 2px solid var(--border-color); border-radius: 24px; padding: 3rem; margin-bottom: 3rem; }
-        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .premium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        
-        .p-card { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 2rem 1.5rem; position: relative; display: flex; flex-direction: column; align-items: flex-start; cursor: pointer; transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .p-card:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
-        .glow-icon { width: 60px; height: 60px; border-radius: 16px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; transition: transform 0.4s ease; }
-        .vector-icon svg { width: 34px; height: 34px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .p-card:hover .glow-icon { transform: scale(1.1) rotate(5deg); }
-        .img-icon img { width: 40px; height: 40px; object-fit: contain; filter: grayscale(100%) opacity(0.7); transition: all 0.4s ease; }
-        .p-card:hover .img-icon img { filter: grayscale(0%) opacity(1); transform: scale(1.1); }
-        .p-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); transition: color 0.3s ease; }
-        .p-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; }
-        .click-hint { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 5px; opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
-        .p-card:hover .click-hint { opacity: 1; transform: translateX(0); }
-
-        .p-risk { color: var(--c-risk); } .p-risk h4, .p-risk p { color: var(--text-primary); } .p-risk:hover { border-color: var(--c-risk); } .p-risk .glow-icon { background-color: rgba(255, 59, 48, 0.1); } .p-risk .click-hint { color: var(--c-risk); }
-        .p-hazard { color: var(--c-hazard); } .p-hazard h4, .p-hazard p { color: var(--text-primary); } .p-hazard:hover { border-color: var(--c-hazard); } .p-hazard .glow-icon { background-color: rgba(255, 149, 0, 0.1); } .p-hazard .click-hint { color: var(--c-hazard); }
-        .p-vuln { color: var(--c-vuln); } .p-vuln h4, .p-vuln p { color: var(--text-primary); } .p-vuln:hover { border-color: var(--c-vuln); } .p-vuln .glow-icon { background-color: rgba(175, 82, 222, 0.1); } .p-vuln .click-hint { color: var(--c-vuln); }
-        .p-cap { color: var(--c-cap); } .p-cap h4, .p-cap p { color: var(--text-primary); } .p-cap:hover { border-color: var(--c-cap); } .p-cap .glow-icon { background-color: rgba(52, 199, 89, 0.1); } .p-cap .click-hint { color: var(--c-cap); }
-        .p-flood:hover { border-color: var(--c-flood); } .p-flood .glow-icon { background-color: rgba(0, 122, 255, 0.05); border: 1px solid var(--border-color); } .p-flood:hover h4, .p-flood:hover .click-hint { color: var(--c-flood); }
-        .p-eq:hover { border-color: var(--c-earthquake); } .p-eq .glow-icon { background-color: rgba(140, 74, 50, 0.05); border: 1px solid var(--border-color); } .p-eq:hover h4, .p-eq:hover .click-hint { color: var(--c-earthquake); }
-        .p-landslide:hover { border-color: var(--c-landslide); } .p-landslide .glow-icon { background-color: rgba(162, 132, 94, 0.05); border: 1px solid var(--border-color); } .p-landslide:hover h4, .p-landslide:hover .click-hint { color: var(--c-landslide); }
-
-        .equation-showcase { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 2.5rem; margin-top: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .equation-title { font-size: 1rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; }
-        .eq-flex { display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; justify-content: center; }
-        .eq-symbol { font-size: 3rem; font-weight: 300; color: #CCCCCC; }
-        .eq-fraction { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-        .eq-numerator { display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 3px solid var(--text-primary); width: 100%; justify-content: center; }
-        .eq-denominator { padding-top: 0.5rem; }
-        .eq-item { display: flex; align-items: center; gap: 10px; padding: 0.8rem 1.5rem; border-radius: 50px; font-size: 1.2rem; font-weight: 700; background: var(--bg-white); border: 2px solid transparent; }
-        .eq-item svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
-        .item-risk { color: var(--c-risk); border-color: rgba(255, 59, 48, 0.2); } .item-hazard { color: var(--c-hazard); border-color: rgba(255, 149, 0, 0.2); } .item-vuln { color: var(--c-vuln); border-color: rgba(175, 82, 222, 0.2); } .item-cap { color: var(--c-cap); border-color: rgba(52, 199, 89, 0.2); }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-card { background-color: var(--bg-white); width: 90%; max-width: 480px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(30px) scale(0.95); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 2px solid var(--border-color); }
-        .modal-overlay.active .modal-card { transform: translateY(0) scale(1); }
-        .modal-close { position: absolute; top: 18px; right: 22px; width: 36px; height: 36px; background: var(--bg-light); border-radius: 50%; border: none; font-size: 1.2rem; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .modal-close:hover { background: var(--border-color); color: var(--text-primary); }
-        .modal-top { padding: 3rem 2.5rem 2rem 2.5rem; display: flex; flex-direction: column; align-items: center; background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-white) 100%); border-bottom: 2px solid var(--border-color); }
-        .modal-top .icon-container { width: 80px; height: 80px; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 20px; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .modal-top .icon-container svg { width: 40px; height: 40px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .modal-top .icon-container img { width: 45px; height: 45px; object-fit: contain; }
-        .modal-top .concept-name { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px;}
-        .modal-bottom { padding: 2.5rem; background-color: var(--bg-white); }
-        ul.bullet-list { list-style: none; margin: 0; padding: 0; }
-        ul.bullet-list li { position: relative; padding-left: 1.8rem; margin-bottom: 1.2rem; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; }
-        ul.bullet-list li:last-child { margin-bottom: 0; }
-        ul.bullet-list li::before { content: "•"; position: absolute; left: 0; top: -4px; font-size: 1.8rem; font-weight: bold; color: var(--modal-accent, var(--primary-red)); }
-
-        /* ========================================================
-           CSS: TEAM SECTION
-           ======================================================== */
-        .team-section { padding: 8rem 0; position: relative; }
-        .tilt-wrapper { perspective: 1000px; transition: transform 0.1s ease; }
-        
-        .team-card { background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(234, 234, 234, 0.5); border-radius: 16px; padding: 3.5rem 2rem; text-align: center; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); transform-style: preserve-3d; will-change: transform; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        .team-card:hover { transform: translateZ(20px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); border-color: rgba(229, 57, 53, 0.3); }
-
-        .animate-in { animation: fadeSlideUp 0.6s ease forwards; opacity: 1; }
-
-        .avatar { width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 1.5rem auto; position: relative; transform: translateZ(30px); }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--bg-white); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
-        .avatar::before, .avatar::after { content: ''; position: absolute; border-radius: 50%; top: -10px; left: -10px; right: -10px; bottom: -10px; border: 2px solid var(--primary-red); opacity: 0; transition: all 0.4s ease; }
-        .avatar::after { top: -18px; left: -18px; right: -18px; bottom: -18px; border-color: rgba(229, 57, 53, 0.2); }
-        .team-card:hover .avatar::before { opacity: 1; transform: scale(1.05); }
-        .team-card:hover .avatar::after { opacity: 1; transform: scale(1.1); }
-        .team-card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; transform: translateZ(25px); }
-        .team-id { color: var(--text-secondary); font-weight: 600; font-size: 1rem; letter-spacing: 1px; transform: translateZ(20px); }
-
-        .grid-lecturers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; max-width: 1050px; margin: 0 auto; }
-
-        .student-showcase { background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.9); border-radius: 24px; margin-bottom: 4rem; padding: 7rem 0; }
-        .student-showcase .section-header h2 { color: #FFFFFF; text-shadow: 0 0 15px var(--glow-white); }
-        .student-showcase .section-header span { color: #FFFFFF; opacity: 0.7; }
-        .grid-students { display: flex; flex-wrap: wrap; justify-content: center; gap: 2.5rem; max-width: 1100px; margin: 0 auto; }
-        .grid-students .tilt-wrapper { flex: 0 0 calc(33.333% - 1.67rem); max-width: calc(33.333% - 1.67rem); }
-        .student-showcase .team-card { background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); }
-        .student-showcase .team-card:hover { background-color: rgba(255, 255, 255, 0.08); border-color: rgba(229, 57, 53, 0.5); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .student-showcase .avatar img { border-color: rgba(255, 255, 255, 0.1); }
-        .student-showcase .team-card h3 { color: #FFFFFF; }
-        .student-showcase .team-id { color: var(--primary-red); }
-
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ========================================================
-           CSS: EDUCATION SECTION
-           ======================================================== */
-        .edu-section { padding: 4rem 0; } 
-        .section-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; }
-        .section-title h2 { font-size: 2rem; font-weight: 700; }
-        .section-title span { color: var(--primary-red); text-transform: uppercase; font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; }
-
-        .slider-controls { display: flex; gap: 1rem; }
-        .control-btn { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--border-color); background: var(--bg-white); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-primary); }
-        .control-btn:hover { background: var(--primary-red); color: white; border-color: var(--primary-red); }
-
-        .slider-wrapper { overflow: hidden; position: relative; padding: 10px 0; }
-        .slider-track { display: flex; gap: 2rem; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        .edu-card { min-width: calc(33.333% - 1.35rem); background: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 2.5rem; transition: all 0.3s ease; display: flex; flex-direction: column; }
-        .edu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); border-color: var(--primary-red); }
-        .edu-card h3 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary); min-height: 3.5rem; }
-        .edu-card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; text-align: justify; }
-        .card-link { display: inline-flex; align-items: center; gap: 8px; color: var(--primary-red); font-weight: 700; font-size: 0.9rem; transition: gap 0.3s ease; }
-        .edu-card:hover .card-link { gap: 15px; }
-
-        /* ========================================================
-           CSS: MAPS SECTION (WEBGIS)
-           ======================================================== */
-        .webgis-container { display: flex; height: 100vh; padding-top: 60px; background-color: var(--bg-white); }
-        
-        .sidebar { width: 350px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 1.5rem; overflow-y: auto; z-index: 1000; display: flex; flex-direction: column; gap: 1.5rem; }
-        .panel-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 0.5rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
-
-        .custom-select { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-main); font-size: 0.95rem; cursor: pointer; outline: none; appearance: none; background: var(--bg-white) url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center / 1em; }
-        .custom-select:focus { border-color: var(--primary-red); }
-
-        .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-        .radio-label { display: flex; align-items: center; justify-content: center; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-white); cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; }
-        .radio-input { display: none; }
-        .radio-input:checked + .radio-label { background-color: rgba(229, 57, 53, 0.1); border-color: var(--primary-red); color: var(--primary-red); font-weight: 700; }
-
-        .class-grid { display: flex; flex-direction: column; gap: 0.5rem; }
-        .class-label { display: flex; align-items: center; gap: 10px; padding: 0.6rem 1rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-white); cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; }
-        .color-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
-        .dot-high { background-color: var(--color-high); }
-        .dot-moderate { background-color: var(--color-moderate); }
-        .dot-low { background-color: var(--color-low); }
-        .dot-all { background: linear-gradient(135deg, var(--color-high) 33%, var(--color-moderate) 33%, var(--color-moderate) 66%, var(--color-low) 66%); }
-        .class-input { display: none; }
-        .class-input:checked + .class-label { border-color: var(--text-primary); background-color: #f0f0f0; font-weight: 700; }
-
-        .btn-apply { margin-top: 1rem; width: 100%; padding: 1rem; background-color: var(--primary-red); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease; }
-        .btn-apply:hover { background-color: var(--dark-red); }
-
-        .map-area { flex-grow: 1; position: relative; }
-        #map { width: 100%; height: 100%; background-color: #e5e5e5; z-index: 1; }
-
-        .map-legend { position: absolute; bottom: 30px; left: 20px; z-index: 1000; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); padding: 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-color); min-width: 200px; }
-        .legend-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
-        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text-secondary); }
-
-        .toast { position: absolute; top: 20px; right: 20px; z-index: 1000; background-color: var(--bg-dark); color: white; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .toast.show { transform: translateX(0); }
-
-
-        /* ========================================================
-           CSS: FOOTER & RESPONSIVE
-           ======================================================== */
-        footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.5); text-align: center; font-size: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-
-        @media (max-width: 1024px) { 
-            .edu-card { min-width: calc(50% - 1rem); } 
-        }
-        @media (max-width: 992px) { 
-            .contact-grid { grid-template-columns: 1fr; } 
-            .guide-layout { flex-direction: column; gap: 2rem; }
-            .guide-sidebar { width: 100%; position: static; display: flex; overflow-x: auto; padding-bottom: 1rem; border-right: none; padding-right: 0; border-bottom: 2px solid var(--border-color); min-height: auto; }
-            .sidebar-nav { flex-direction: row; }
-            .guide-main { padding-left: 0; }
-            .grid-lecturers { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .grid-students .tilt-wrapper { flex: 0 0 calc(50% - 1.25rem); max-width: calc(50% - 1.25rem); }
-        }
-        @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.5rem; } 
-            .nav-links { display: none; } 
-            .solutions-grid-2x2 { grid-template-columns: 1fr; } 
-            .section-box { padding: 1.5rem; }
-            .step-card { flex-direction: column; }
-            .step-image { width: 100%; height: auto; aspect-ratio: 16/9; }
-            .legend-box { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .legend-desc { border-left: none; border-top: 1px solid rgba(0,0,0,0.1); padding: 1rem 0 0 0; }
-            .eq-flex { flex-direction: column; gap: 1rem; }
-            .eq-symbol { transform: rotate(90deg); margin: 1rem 0; }
-            .eq-fraction { width: 100%; }
-            .eq-numerator { flex-direction: column; border-bottom-width: 2px; }
-            .grid-2x2, .premium-grid { grid-template-columns: 1fr; }
-            .grid-lecturers { grid-template-columns: 1fr; max-width: 450px; }
-            .grid-students .tilt-wrapper { flex: 0 0 100%; max-width: 450px; }
-            .page-header h1 { font-size: 2.8rem; }
-            .section-header h2 { font-size: 2.2rem; }
-            .edu-card { min-width: 100%; } 
-            .header-divider { width: 200px; }
-            
-            /* Maps Responsive */
-            .webgis-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 50vh; order: 2; border-right: none; border-top: 1px solid var(--border-color); }
-            .map-area { height: 50vh; order: 1; }
-        }
+        @media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .nav-links { display: none; } .solutions-grid-2x2 { grid-template-columns: 1fr; } }
     </style>
 </head>
 
@@ -370,709 +116,143 @@
 
     <nav id="navbar">
         <div class="container nav-container">
-            <a href="#" onclick="navigateSpa('home'); return false;" class="logo-wrapper">
+            <a href="index.html" class="logo-wrapper">
                 <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
                 Pariksa
             </a>
             <div class="nav-right">
                 <ul class="nav-links">
-                    <li><a onclick="navigateSpa('home')" id="nav-home" class="active-link">Home</a></li>
-                    <li><a onclick="navigateSpa('guide')" id="nav-guide">Guide</a></li>
-                    <li><a onclick="navigateSpa('maps')" id="nav-maps">Maps</a></li>
-                    <li><a onclick="navigateSpa('education')" id="nav-education">Education</a></li>
-                    <li><a onclick="navigateSpa('team')" id="nav-team">Team</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html">Team</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main id="spa-main-container">
-
-        <div id="page-home" class="spa-page active-page">
-            
-            <header class="hero">
-                <div class="container hero-content">
-                    <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
-                    <p>Providing parcel-level (1:5,000) multi-hazard risk analysis including earthquakes, floods, and landslides to enhance urban resilience and community preparedness.</p>
-                    <a onclick="navigateSpa('maps')" class="btn">Open WebGIS →</a>
-                </div>
-            </header>
-
-            <section id="about" class="about-section">
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-subtitle">ABOUT PARIKSA</span>
-                        <h2>Bridging the Gap for Urban Resilience</h2>
-                    </div>
-                    <div class="about-content">
-                        <p>Bandung City faces complex geological and hydrometeorological threats, from the active Lembang Fault to significant land subsidence and extreme weather flooding. Currently, existing disaster risk maps are restricted to a macro scale, limiting effective response and situational awareness. Team Pariksa is developing a <span class="highlight-text">High-Precision Disaster Risk Map at a 1:5,000 scale</span> to identify these multi-hazard risks down to the specific property or parcel level. We transform complex geospatial data into actionable spatial intelligence, providing the government, urban planners, and communities with the certainty needed to protect critical assets and save lives.</p>
-                    </div>
-                </div>
-            </section>
-
-            <div class="aesthetic-divider">
-                <div class="divider-bar"></div>
+    <main>
+        <header class="hero">
+            <div class="container hero-content">
+                <h1>High-Precision Disaster Risk Mapping in Bandung City</h1>
+                <p>Providing parcel-level (1:5,000) multi-hazard risk analysis including earthquakes, floods, and landslides to enhance urban resilience and community preparedness.</p>
+                <a href="maps.html" class="btn">Open WebGIS →</a>
             </div>
+        </header>
 
-            <section class="solutions-section">
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-subtitle">STRATEGIC CAPABILITIES</span>
-                        <h2>Empowering Data-Driven Mitigation</h2>
-                        <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.15rem;">We provide robust spatial analysis and comprehensive risk calculations to optimize your disaster preparedness protocols.</p>
-                    </div>
-
-                    <div class="solutions-grid-2x2">
-                        <div class="solution-card">
-                            <div class="solution-icon">
-                                <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                            </div>
-                            <h3>Parcel-Level Precision</h3>
-                            <p>Unlike conventional macro-scale maps, Pariksa identifies potential hazards down to the smallest spatial unit: the land parcel. Our 1:5,000 scale mapping allows stakeholders to evaluate specific vulnerabilities for individual buildings and critical infrastructure with maximum accuracy.</p>
-                        </div>
-                        <div class="solution-card">
-                            <div class="solution-icon">
-                                <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            </div>
-                            <h3>Multi-Hazard Integration</h3>
-                            <p>We synthesize overlapping threat layers—including Lembang Fault seismic activity, historical flood zones, and landslide susceptibility—into a single, unified WebGIS interface. This comprehensive approach enables a holistic evaluation of urban risks in Bandung City.</p>
-                        </div>
-                        <div class="solution-card">
-                            <div class="solution-icon">
-                                <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                            </div>
-                            <h3>Scientific Risk Algorithm</h3>
-                            <p>Our platform calculates standardized risk scores utilizing the proven R = H × (V/C) methodology. By integrating Hazard potential, socio-physical Vulnerability, and regional Capacity, we deliver evidence-based recommendations for targeted mitigation.</p>
-                        </div>
-                        <div class="solution-card">
-                            <div class="solution-icon">
-                                <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                            </div>
-                            <h3>Economic & Social Resilience</h3>
-                            <p>Proactive mitigation is a highly efficient investment. Our financial analysis demonstrates a Benefit-Cost Ratio of 18,161.42, indicating that every single rupiah invested in Pariksa's precision mapping can potentially save thousands in future disaster impacts.</p>
-                        </div>
-                    </div>
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">ABOUT PARIKSA</span>
+                    <h2>Bridging the Gap for Urban Resilience</h2>
                 </div>
-            </section>
-
-            <section class="contact-section">
-                <div class="container contact-grid">
-                    <div class="contact-text-content">
-                        <span class="section-subtitle">GET IN TOUCH</span>
-                        <h2>Ready to Collaborate?</h2>
-                        <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
-                        <div class="contact-info-list">
-                            <div class="contact-info-item">
-                                <div class="contact-icon"><svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
-                                <div class="contact-details"><h4>Email</h4><span>pariksa@gmail.com</span></div>
-                            </div>
-                            <div class="contact-info-item">
-                                <div class="contact-icon"><svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
-                                <div class="contact-details"><h4>Location</h4><span>Bandung, Indonesia</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="map-card">
-                        <h3>Our Location</h3>
-                        <div class="map-info-text">
-                            <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong>
-                            Institut Teknologi Bandung, Labtek IX-C<br>
-                            Jl. Ganesa No.10, Lebak Siliwangi, Coblong,<br>
-                            Bandung City, West Java 40132
-                        </div>
-                        <div class="map-container">
-                            <iframe src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
-                        </div>
-                    </div>
+                <div class="about-content">
+                    <p>Bandung City faces complex geological and hydrometeorological threats, from the active Lembang Fault to significant land subsidence and extreme weather flooding. Currently, existing disaster risk maps are restricted to a macro scale, limiting effective response and situational awareness. Team Pariksa is developing a <span class="highlight-text">High-Precision Disaster Risk Map at a 1:5,000 scale</span> to identify these multi-hazard risks down to the specific property or parcel level. We transform complex geospatial data into actionable spatial intelligence, providing the government, urban planners, and communities with the certainty needed to protect critical assets and save lives.</p>
                 </div>
-            </section>
+            </div>
+        </section>
+
+        <div class="aesthetic-divider">
+            <div class="divider-bar"></div>
         </div>
 
-        <div id="page-guide" class="spa-page">
-            
-            <header class="page-header" style="padding-top: 120px; padding-bottom: 40px; background: none;">
-                <div class="container">
-                    <h1 id="header-title">How to Use Pariksa</h1>
-                    <p id="header-desc" style="color: var(--text-secondary);">Step-by-step instructions to navigate the high-precision disaster risk mapping system.</p>
+        <section class="solutions-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">STRATEGIC CAPABILITIES</span>
+                    <h2>Empowering Data-Driven Mitigation</h2>
+                    <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.15rem;">We provide robust spatial analysis and comprehensive risk calculations to optimize your disaster preparedness protocols.</p>
                 </div>
-            </header>
 
-            <div class="container guide-layout">
-                <aside class="guide-sidebar">
-                    <div class="sidebar-title">Guidebook</div>
-                    <ul class="sidebar-nav">
-                        <li><a onclick="showGuideTab('how-to-use', this)" class="active-tab">How to Use</a></li>
-                        <li><a onclick="showGuideTab('read-map', this)">How to Read the Map</a></li>
-                        <li><a onclick="showGuideTab('concepts', this)">Basic Concepts of Disaster</a></li>
-                        <li><a onclick="showGuideTab('indices', this)">Disaster Indices</a></li>
-                        <li><a onclick="showGuideTab('faq', this)">FAQ</a></li>
-                    </ul>
-                </aside>
-
-                <div class="guide-main">
-                    <div id="how-to-use" class="guide-tab active-tab">
-                        <div class="step-card">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>Lorem Ipsum Dolor Sit</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div class="step-image"><img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+1" alt="Step 1"></div>
+                <div class="solutions-grid-2x2">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
                         </div>
-                        <div class="step-card">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>Consectetur Adipiscing Elit</h3>
-                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            </div>
-                            <div class="step-image"><img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+2" alt="Step 2"></div>
-                        </div>
-                        <div class="step-card">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>Sed Do Eiusmod Tempor</h3>
-                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                            </div>
-                            <div class="step-image"><img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+3" alt="Step 3"></div>
-                        </div>
+                        <h3>Parcel-Level Precision</h3>
+                        <p>Unlike conventional macro-scale maps, Pariksa identifies potential hazards down to the smallest spatial unit: the land parcel. Our 1:5,000 scale mapping allows stakeholders to evaluate specific vulnerabilities for individual buildings and critical infrastructure with maximum accuracy.</p>
                     </div>
 
-                    <div id="read-map" class="guide-tab">
-                        <h2 class="main-title">Risk Level Indicators</h2>
-                        <div class="legend-box box-very-low"><div class="legend-title">Very Low</div><div class="legend-desc">Indicates the most minimal condition level.</div></div>
-                        <div class="legend-box box-low"><div class="legend-title">Low</div><div class="legend-desc">Indicates a low condition level.</div></div>
-                        <div class="legend-box box-moderate"><div class="legend-title">Moderate</div><div class="legend-desc">Indicates a moderate condition level.</div></div>
-                        <div class="legend-box box-high"><div class="legend-title">High</div><div class="legend-desc">Indicates a high condition level.</div></div>
-                        <div class="legend-box box-very-high"><div class="legend-title">Very High</div><div class="legend-desc">Indicates the highest condition level.</div></div>
-                    </div>
-
-                    <div id="concepts" class="guide-tab">
-                        <h2 class="main-title">Disaster Framework</h2>
-                        
-                        <div class="section-box">
-                            <h3 class="section-subtitle">Core Variables</h3>
-                            <div class="grid-2x2">
-                                <div class="p-card p-risk" onclick="openModal('risk')">
-                                    <div class="glow-icon vector-icon"><svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
-                                    <h4>Risk</h4>
-                                    <p>The mathematical probability of harmful consequences or expected losses in a specific area.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                                <div class="p-card p-hazard" onclick="openModal('hazard')">
-                                    <div class="glow-icon vector-icon"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-                                    <h4>Hazard</h4>
-                                    <p>A threatening natural event or phenomenon capable of causing damage and disruption.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                                <div class="p-card p-vuln" onclick="openModal('vulnerability')">
-                                    <div class="glow-icon vector-icon"><svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></div>
-                                    <h4>Vulnerability</h4>
-                                    <p>Physical, social, economic, or environmental weaknesses that increase susceptibility.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                                <div class="p-card p-cap" onclick="openModal('capacity')">
-                                    <div class="glow-icon vector-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-                                    <h4>Capacity</h4>
-                                    <p>Resources and strengths available to anticipate and manage disasters effectively.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                            </div>
-
-                            <div class="equation-showcase">
-                                <div class="equation-title">Disaster Risk Equation</div>
-                                <div class="eq-flex">
-                                    <div class="eq-item item-risk">
-                                        <svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Risk
-                                    </div>
-                                    <div class="eq-symbol">=</div>
-                                    <div class="eq-fraction">
-                                        <div class="eq-numerator">
-                                            <div class="eq-item item-hazard"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Hazard</div>
-                                            <div class="eq-symbol" style="font-size: 2rem;">×</div>
-                                            <div class="eq-item item-vuln"><svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> Vulnerability</div>
-                                        </div>
-                                        <div class="eq-denominator">
-                                            <div class="eq-item item-cap"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Capacity</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                         </div>
+                        <h3>Multi-Hazard Integration</h3>
+                        <p>We synthesize overlapping threat layers—including Lembang Fault seismic activity, historical flood zones, and landslide susceptibility—into a single, unified WebGIS interface. This comprehensive approach enables a holistic evaluation of urban risks in Bandung City.</p>
+                    </div>
 
-                        <div class="section-box">
-                            <h3 class="section-subtitle">Analyzed Threats</h3>
-                            <div class="premium-grid">
-                                <div class="p-card p-flood" onclick="openModal('flood')">
-                                    <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood"></div>
-                                    <h4>Flood Risk</h4>
-                                    <p>Hydrometeorological threat analysis based on terrain and urban drainage models.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                                <div class="p-card p-eq" onclick="openModal('earthquake')">
-                                    <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="EQ"></div>
-                                    <h4>Earthquake</h4>
-                                    <p>Seismic vulnerability analysis related to the activity of the Lembang Fault.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                                <div class="p-card p-landslide" onclick="openModal('landslide')">
-                                    <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide"></div>
-                                    <h4>Landslide</h4>
-                                    <p>Geological threat analysis focusing on steep slopes and soil instability conditions.</p>
-                                    <div class="click-hint">Learn More <span>→</span></div>
-                                </div>
-                            </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                         </div>
+                        <h3>Scientific Risk Algorithm</h3>
+                        <p>Our platform calculates standardized risk scores utilizing the proven R = H × (V/C) methodology. By integrating Hazard potential, socio-physical Vulnerability, and regional Capacity, we deliver evidence-based recommendations for targeted mitigation.</p>
                     </div>
 
-                    <div id="indices" class="guide-tab"><h2 class="main-title">Disaster Indices</h2><p style="text-align: center;">Content coming soon...</p></div>
-                    <div id="faq" class="guide-tab"><h2 class="main-title">FAQ</h2><p style="text-align: center;">Content coming soon...</p></div>
-                </div>
-            </div>
-
-            <div id="conceptModal" class="modal-overlay" onclick="closeModalOutside(event)">
-                <div class="modal-card">
-                    <button class="modal-close" onclick="closeModal()">✕</button>
-                    <div class="modal-top">
-                        <div id="modalIconContainer" class="icon-container" style="color: currentColor;"></div>
-                        <h3 id="modalTitle" class="concept-name">Title</h3>
-                    </div>
-                    <div class="modal-bottom">
-                        <ul id="modalText" class="bullet-list"></ul>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <svg fill="none" stroke="currentColor" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h3>Economic & Social Resilience</h3>
+                        <p>Proactive mitigation is a highly efficient investment. Our financial analysis demonstrates a Benefit-Cost Ratio of 18,161.42, indicating that every single rupiah invested in Pariksa's precision mapping can potentially save thousands in future disaster impacts.</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="page-maps" class="spa-page">
-            <div class="webgis-container">
-                <aside class="sidebar">
-                    <div class="panel-title">Map Layer Controls</div>
-
-                    <div class="form-group">
-                        <label class="form-label">1. Hazard Type</label>
-                        <select id="hazard-select" class="custom-select">
-                            <option value="gempa">Earthquake</option>
-                            <option value="banjir">Flood</option>
-                            <option value="longsor">Landslide</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">2. Analysis Parameter</label>
-                        <div class="radio-grid">
-                            <label>
-                                <input type="radio" name="parameter" value="risiko" class="radio-input" checked>
-                                <div class="radio-label">Risk (R)</div>
-                            </label>
-                            <label>
-                                <input type="radio" name="parameter" value="bahaya" class="radio-input">
-                                <div class="radio-label">Hazard (H)</div>
-                            </label>
-                            <label>
-                                <input type="radio" name="parameter" value="kerentanan" class="radio-input">
-                                <div class="radio-label">Vulnerability (V)</div>
-                            </label>
-                            <label>
-                                <input type="radio" name="parameter" value="kapasitas" class="radio-input">
-                                <div class="radio-label">Capacity (C)</div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">3. Area Classification</label>
-                        <div class="class-grid">
-                            <label>
-                                <input type="radio" name="classification" value="All Classes" class="class-input" checked>
-                                <div class="class-label">
-                                    <span class="color-dot dot-all"></span> Display All Classes
-                                </div>
-                            </label>
-                            <label>
-                                <input type="radio" name="classification" value="High" class="class-input">
-                                <div class="class-label">
-                                    <span class="color-dot dot-high"></span> High
-                                </div>
-                            </label>
-                            <label>
-                                <input type="radio" name="classification" value="Moderate" class="class-input">
-                                <div class="class-label">
-                                    <span class="color-dot dot-moderate"></span> Moderate
-                                </div>
-                            </label>
-                            <label>
-                                <input type="radio" name="classification" value="Low" class="class-input">
-                                <div class="class-label">
-                                    <span class="color-dot dot-low"></span> Low
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button class="btn-apply" onclick="applyFilter()">Render Map</button>
-                </aside>
-
-                <main class="map-area">
-                    <div id="map"></div>
+        <section class="contact-section">
+            <div class="container contact-grid">
+                <div class="contact-text-content">
+                    <span class="contact-subtitle">GET IN TOUCH</span>
+                    <h2>Ready to Collaborate?</h2>
+                    <p>Elevate your disaster risk mitigation strategies. Our platform provides high-precision data and analysis for urban planners.</p>
                     
-                    <div id="toastNotif" class="toast">Loading spatial data...</div>
-
-                    <div class="map-legend">
-                        <div class="legend-title" id="legend-title">Earthquake Risk Map</div>
-                        <div class="legend-item"><span class="color-dot dot-high"></span> High (Red)</div>
-                        <div class="legend-item"><span class="color-dot dot-moderate"></span> Moderate (Yellow)</div>
-                        <div class="legend-item"><span class="color-dot dot-low"></span> Low (Green)</div>
+                    <div class="contact-info-list">
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <span>pariksa@gmail.com</span>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <svg fill="none" stroke="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Location</h4>
+                                <span>Bandung, Indonesia</span>
+                            </div>
+                        </div>
                     </div>
-                </main>
+                </div>
+
+                <div class="map-card">
+                    <h3>Our Location</h3>
+                    <div class="map-info-text">
+                        <strong>Geodesy and Geomatics Engineering<br>Faculty of Earth Science and Technology</strong>
+                        Institut Teknologi Bandung, Labtek IX-C<br>
+                        Jl. Ganesa No.10, Lebak Siliwangi, Coblong,<br>
+                        Bandung City, West Java 40132
+                    </div>
+                    <div class="map-container">
+                        <iframe src="https://maps.google.com/maps?q=Teknik%20Geodesi%20ITB%20Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div id="page-education" class="spa-page">
-            <header class="page-header">
-                <div class="container">
-                    <h1>Resource Center</h1>
-                    <p>Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
-                    <div class="header-divider"></div>
-                </div>
-            </header>
-        
-            <section class="edu-section">
-                <div class="container">
-                    <div class="section-top">
-                        <div class="section-title">
-                            <span>Updates</span>
-                            <h2>Latest News</h2>
-                        </div>
-                        <div class="slider-controls">
-                            <button class="control-btn" onclick="slide('news', -1)">❮</button>
-                            <button class="control-btn" onclick="slide('news', 1)">❯</button>
-                        </div>
-                    </div>
-        
-                    <div class="slider-wrapper">
-                        <div id="news-track" class="slider-track">
-                            <div class="edu-card">
-                                <h3>New LiDAR Survey Completed in North Bandung</h3>
-                                <p>High-resolution aerial data reveals subtle land movement patterns in residential areas near the Lembang fault line.</p>
-                                <a href="#" class="card-link">Read More →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Community Resilience Workshop 2026</h3>
-                                <p>Team Pariksa collaborates with local district leaders to test real-time flood warning integrations.</p>
-                                <a href="#" class="card-link">Read More →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>WebGIS V3.0 Deployment</h3>
-                                <p>Major update featuring multi-hazard overlay capabilities and improved mobile responsiveness for field operations.</p>
-                                <a href="#" class="card-link">Read More →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Collaboration with Regional Agency</h3>
-                                <p>Institutional agreement signed to integrate Pariksa data into provincial disaster response protocols.</p>
-                                <a href="#" class="card-link">Read More →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        
-            <div class="aesthetic-divider">
-                <div class="divider-bar"></div>
-            </div>
-        
-            <section class="edu-section">
-                <div class="container">
-                    <div class="section-top">
-                        <div class="section-title">
-                            <span>Research</span>
-                            <h2>Academic Journals</h2>
-                        </div>
-                        <div class="slider-controls">
-                            <button class="control-btn" onclick="slide('journal', -1)">❮</button>
-                            <button class="control-btn" onclick="slide('journal', 1)">❯</button>
-                        </div>
-                    </div>
-        
-                    <div class="slider-wrapper">
-                        <div id="journal-track" class="slider-track">
-                            <div class="edu-card">
-                                <h3>Remote Sensing Observation of Extreme Precipitation in Great Bandung</h3>
-                                <p>This study investigates the spatial and vertical structures of extreme precipitation and hail events in the Greater Bandung basin by utilizing a combination of X-band polarimetric Doppler weather radar and a low-cost rain scanner radar network to improve early warning systems.</p>
-                                <a href="https://drive.google.com/file/d/1rdK8jlN9HcZSNv6V3rIhLHIhG8ZKwacX/view?usp=drive_link" class="card-link">View Journal →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Land Subsidence in Bandung Basin and its Possible Caused Factors</h3>
-                                <p>This research identifies that excessive groundwater extraction is the primary driver of land subsidence in Bandung's industrial areas, with rates reaching up to 16.9 cm per year as measured by GPS and InSAR data.</p>
-                                <a href="https://drive.google.com/file/d/1odXOyUf87IJa53m5AR-3bAQLKYBrsAPH/view?usp=drive_link" class="card-link">View Journal →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Slip Rate Estimation of the Lembang Fault West Java from Geodetic Observation</h3>
-                                <p>This geodetic study estimates that the Lembang Fault has a slip rate of 6 mm per year, characterized by a combination of shallow creeping and a deeper locked portion that poses a potential seismic risk.</p>
-                                <a href="https://drive.google.com/file/d/1352grpgQCSxbI6WAdd0Oj32H7GNjTs0a/view?usp=drive_link" class="card-link">View Journal →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        
-            <div class="aesthetic-divider">
-                <div class="divider-bar"></div>
-            </div>
-        
-            <section class="edu-section">
-                <div class="container">
-                    <div class="section-top">
-                        <div class="section-title">
-                            <span>Disaster Education</span>
-                            <h2>Videos</h2>
-                        </div>
-                        <div class="slider-controls">
-                            <button class="control-btn" onclick="slide('video', -1)">❮</button>
-                            <button class="control-btn" onclick="slide('video', 1)">❯</button>
-                        </div>
-                    </div>
-        
-                    <div class="slider-wrapper">
-                        <div id="video-track" class="slider-track">
-                            <div class="edu-card">
-                                <h3>Disaster Education - Earthquake</h3>
-                                <p>BNPB presents an educational video on earthquake preparedness, covering actions before, during, and after an event. This video aims to enhance public resilience and readiness in facing disasters.</p>
-                                <a href="https://youtu.be/8-ZZ3uzZkp0?si=Gaa0-_tRi5iK3c2B" target="_blank" class="card-link">Watch Video →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Disaster Education - Flood</h3>
-                                <p>This video provides a comprehensive overview of flood preparedness, including the primary causes of flooding in Indonesia, as well as recommended actions to be taken before, during, and after a flood event. It aims to strengthen public awareness, preparedness, and resilience in mitigating flood risks and impacts.</p>
-                                <a href="https://youtu.be/sJsC6zQCfNI?si=vOW4b3NBz3vG9upP" target="_blank" class="card-link">Watch Video →</a>
-                            </div>
-                            <div class="edu-card">
-                                <h3>Disaster Education - Landslide</h3>
-                                <p>This time, BNPB presents an educational video on landslide disasters. Landslides have occurred frequently in several regions of Indonesia, including Boyolali, Sigi, and Bengkulu in recent times.</p>
-                                <a href="https://youtu.be/UAPce7ywdeI?si=3luQG5a72kuR9RrM" target="_blank" class="card-link">Watch Video →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div id="page-team" class="spa-page">
-            <header class="page-header">
-                <div class="container">
-                    <h1>Meet the People Behind Pariksa</h1>
-                    <p>The advisors and students behind the High-Precision Disaster Risk Mapping project in Bandung.</p>
-                </div>
-            </header>
-        
-            <section class="team-section">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Meet Our Advisors</h2>
-                    </div>
-                    
-                    <div class="grid-lecturers js-animate-group">
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-advisor1.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Dr. Heri Andreas, S.T., M.T.</h3>
-                                <span class="team-id">NIP. 19700101 200001 1 001</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-advisor2.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Dr. Ir. Dina Sarsito, M.T.</h3>
-                                <span class="team-id">NIP. 19680303 199501 2 003</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-advisor3.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Dr. Madam Taqiyya, S.Si., M.Sc.</h3>
-                                <span class="team-id">NIP. 19750202 200501 2 002</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        
-            <section class="team-section student-showcase">
-                <div class="container">
-                    <div class="section-header">
-                        <span>Students</span> 
-                        <h2>Capstone Project Team</h2>
-                    </div>
-        
-                    <div class="grid-students js-animate-group">
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-student1.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Syalala Loovy</h3>
-                                <span class="team-id">NIM. 15122008</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-student2.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Raihan Hady Permana</h3>
-                                <span class="team-id">NIM. 15122060</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-student3.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Varina Erawati Martina</h3>
-                                <span class="team-id">NIM. 15122087</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-student4.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Aura Nisa Arianti</h3>
-                                <span class="team-id">NIM. 15122111</span>
-                            </div>
-                        </div>
-                        <div class="tilt-wrapper">
-                            <div class="team-card js-animate-card">
-                                <div class="avatar"><img src="placeholder-student5.jpg" alt="" onerror="this.style.display='none'"></div>
-                                <h3>Luthfi Aulia Hakim</h3>
-                                <span class="team-id">NIM. 15122119</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
+        </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+            <p>© 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        /* --- 1. GLOBAL VARIABLES (MAP) --- */
-        let map; 
-        let currentWmsLayer = null;
-        const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
-        const defaultCenter = [-6.9147, 107.6098];
-        const defaultZoom = 13;
-
-        const layerData = {
-            "bahaya_longsor": { name: "bahayalongsor" },
-            "risiko_longsor": { name: "risikolongsor" },
-            "kapasitas_banjir": { name: "kapasitasbanjir" },
-            "bahaya_gempa": { name: "bahayagempa" },
-            "risiko_gempa": { name: "risikogempa" },
-            "risiko_banjir": { 
-                name: "risikobanjirgedebage",
-                center: [-6.9544, 107.6978], 
-                zoom: 15 
-            }
-        };
-
-        /* --- 2. MAP LOGIC --- */
-        function initMap() {
-            if (map) return; 
-            map = L.map('map', { zoomControl: false }).setView(defaultCenter, defaultZoom);
-            L.control.zoom({ position: 'bottomright' }).addTo(map);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
-        }
-
-        function addWmsLayer(layerName) {
-            if (currentWmsLayer) map.removeLayer(currentWmsLayer);
-            currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
-                layers: `pariksa:${layerName}`,
-                format: 'image/png',
-                transparent: true,
-                version: '1.1.0',
-                attribution: "Pariksa"
-            }).addTo(map);
-        }
-
-        function applyFilter() {
-            const hazard = document.getElementById('hazard-select').value; 
-            const parameter = document.querySelector('input[name="parameter"]:checked').value; 
-            const hazardText = document.getElementById('hazard-select').options[document.getElementById('hazard-select').selectedIndex].text;
-            const parameterText = document.querySelector(`input[name="parameter"]:checked + .radio-label`).innerText;
-
-            const mapKey = `${parameter}_${hazard}`;
-            const data = layerData[mapKey];
-            const layerName = data ? data.name : `${parameter}${hazard}`; 
-
-            addWmsLayer(layerName);
-
-            if (data && data.center && data.zoom) {
-                map.flyTo(data.center, data.zoom, { animate: true, duration: 1.5 });
-            } else {
-                map.flyTo(defaultCenter, defaultZoom, { animate: true, duration: 1.5 });
-            }
-
-            document.getElementById('legend-title').textContent = `${hazardText} ${parameterText} Map`;
-        }
-
-        function showNotification(message) {
-            const toast = document.getElementById('toastNotif');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-        }
-
-        /* --- 3. SPA NAVIGATION LOGIC --- */
-        function navigateSpa(pageId) {
-            const pages = document.querySelectorAll('.spa-page');
-            pages.forEach(page => page.classList.remove('active-page'));
-            
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => link.classList.remove('active-link'));
-
-            document.getElementById('page-' + pageId).classList.add('active-page');
-            document.getElementById('nav-' + pageId).classList.add('active-link');
-            
-            const nav = document.getElementById('navbar');
-            if(pageId === 'home') {
-                nav.classList.remove('nav-solid-dark');
-            } else {
-                nav.classList.add('nav-solid-dark');
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if(pageId === 'maps') {
-                setTimeout(() => {
-                    initMap();
-                    map.invalidateSize(); 
-                }, 50);
-            }
-
-            if(pageId === 'team') {
-                const groups = document.querySelectorAll('.js-animate-group');
-                groups.forEach(group => {
-                    const cards = group.querySelectorAll('.js-animate-card');
-                    cards.forEach((card, index) => {
-                        card.classList.remove('animate-in');
-                        void card.offsetWidth; 
-                        setTimeout(() => { card.classList.add('animate-in'); }, index * 150); 
-                    });
-                });
-            }
-
-            if(pageId === 'education') {
-                setTimeout(() => {
-                    slide('news', 0);
-                    slide('journal', 0);
-                    slide('video', 0);
-                }, 50);
-            }
-        }
-
-        /* --- 4. NAVBAR SCROLL EFFECT (Khusus Home) --- */
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -1081,127 +261,6 @@
                 navbar.classList.remove('scrolled');
             }
         });
-
-        /* --- 5. GUIDE TAB LOGIC & MODAL --- */
-        function showGuideTab(tabId, element) {
-            const tabs = document.querySelectorAll('.guide-tab');
-            tabs.forEach(t => t.classList.remove('active-tab'));
-            document.getElementById(tabId).classList.add('active-tab');
-
-            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
-            sidebarLinks.forEach(link => link.classList.remove('active-tab'));
-            element.classList.add('active-tab');
-
-            const headerTitle = document.getElementById('header-title');
-            const headerDesc = document.getElementById('header-desc');
-
-            if(tabId === 'how-to-use') {
-                headerTitle.innerText = "How to Use Pariksa";
-                headerDesc.innerText = "Step-by-step instructions to navigate the mapping system.";
-            } else if(tabId === 'read-map') {
-                headerTitle.innerText = "How to Read the Map";
-                headerDesc.innerText = "Understanding color-coded indicators for vulnerability and risk.";
-            } else if(tabId === 'concepts') {
-                headerTitle.innerText = "Basic Concepts of Disaster";
-                headerDesc.innerText = "Explore the core components that shape our precision risk calculation.";
-            } else {
-                headerTitle.innerText = element.innerText;
-                headerDesc.innerText = "Learn more about " + element.innerText + ".";
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        const svgRisk = `<svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
-        const svgHazard = `<svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`;
-        const svgVuln = `<svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>`;
-        const svgCap = `<svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`;
-        const imgFlood = `<img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood">`;
-        const imgEq = `<img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="Earthquake">`;
-        const imgLandslide = `<img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide">`;
-
-        const modalData = {
-            risk: { title: "Risk", color: "var(--c-risk)", iconHTML: svgRisk, points: ["Potential loss resulting from the interaction of hazard, vulnerability, and capacity.", "Represents the mathematical probability of damaging impacts in a specific area.", "Calculated using the formula: Risk = Hazard × (Vulnerability / Capacity)."] },
-            hazard: { title: "Hazard", color: "var(--c-hazard)", iconHTML: svgHazard, points: ["A threatening natural event or phenomenon capable of causing damage.", "Includes geological threats like the active Lembang fault.", "Includes hydrometeorological threats like extreme rainfall intensity."] },
-            vulnerability: { title: "Vulnerability", color: "var(--c-vuln)", iconHTML: svgVuln, points: ["Physical, social, economic, or environmental weaknesses of a region.", "Increases susceptibility to the impacts of hazards.", "Examples include dense populations and settlements on steep slopes."] },
-            capacity: { title: "Capacity", color: "var(--c-cap)", iconHTML: svgCap, points: ["Resources and capabilities available to anticipate and manage disasters.", "Strong capacity significantly reduces overall disaster risk.", "Examples include early warning systems and robust infrastructure."] },
-            flood: { title: "Flood", color: "var(--c-flood)", iconHTML: imgFlood, points: ["Triggered by high rainfall intensity and inadequate urban drainage systems.", "Severely impacts areas with low elevation and high soil saturation.", "Requires strict spatial planning to manage water runoff effectively."] },
-            earthquake: { title: "Earthquake", color: "var(--c-earthquake)", iconHTML: imgEq, points: ["Triggered by tectonic plate movements or active fault lines.", "Poses significant structural risks to dense urban environments.", "Requires strict adherence to seismic building codes for mitigation."] },
-            landslide: { title: "Landslide", color: "var(--c-landslide)", iconHTML: imgLandslide, points: ["Triggered by soil instability on steep topographic slopes.", "Exacerbated by low vegetation cover and heavy rainfall.", "Requires mitigation strategies like retaining walls and reforestation."] }
-        };
-
-        const modal = document.getElementById('conceptModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalIconContainer = document.getElementById('modalIconContainer');
-        const modalText = document.getElementById('modalText');
-
-        function openModal(type) {
-            const data = modalData[type];
-            modalTitle.innerText = data.title;
-            modalTitle.style.color = data.color;
-            modalIconContainer.style.color = data.color; 
-            modalIconContainer.innerHTML = data.iconHTML;
-            modalText.innerHTML = "";
-            data.points.forEach(point => {
-                const li = document.createElement('li');
-                li.innerText = point;
-                modalText.appendChild(li);
-            });
-            document.documentElement.style.setProperty('--modal-accent', data.color);
-            modal.classList.add('active');
-        }
-        function closeModal() { modal.classList.remove('active'); }
-        function closeModalOutside(event) { if (event.target === modal) { closeModal(); } }
-
-        /* --- 6. TILT EFFECT LOGIC (TEAM) --- */
-        const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
-        tiltWrappers.forEach(wrapper => {
-            wrapper.addEventListener('mousemove', (e) => {
-                const card = wrapper.querySelector('.team-card');
-                const cardRect = card.getBoundingClientRect();
-                const cardCenterX = cardRect.left + cardRect.width / 2;
-                const cardCenterY = cardRect.top + cardRect.height / 2;
-                const mouseX = e.clientX - cardCenterX;
-                const mouseY = e.clientY - cardCenterY;
-                const tiltX = (mouseY / (cardRect.height / 2)) * -10; 
-                const tiltY = (mouseX / (cardRect.width / 2)) * 10;  
-                card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
-            });
-            wrapper.addEventListener('mouseleave', (e) => {
-                const card = wrapper.querySelector('.team-card');
-                card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0)`;
-            });
-        });
-
-        /* --- 7. CAROUSEL SLIDER LOGIC (EDUCATION) --- */
-        const positions = { news: 0, journal: 0, video: 0 };
-        function slide(section, direction) {
-            const track = document.getElementById(`${section}-track`);
-            if (!track) return;
-            const cards = track.children;
-            if (cards.length === 0 || cards[0].offsetWidth === 0) return; 
-
-            const cardWidth = cards[0].offsetWidth + 32; 
-            const visibleCards = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
-            let maxIndex = cards.length - visibleCards;
-            if (maxIndex < 0) maxIndex = 0;
-
-            positions[section] += direction;
-            if (positions[section] < 0) positions[section] = 0;
-            if (positions[section] > maxIndex) positions[section] = maxIndex;
-
-            track.style.transform = `translateX(-${positions[section] * cardWidth}px)`;
-        }
-
-        window.addEventListener('resize', () => {
-            if (document.getElementById('page-education').classList.contains('active-page')) {
-                slide('news', 0); slide('journal', 0); slide('video', 0);
-            }
-        });
-
-        /* --- INIT --- */
-        window.onload = () => {
-            navigateSpa('home');
-        };
     </script>
 </body>
 </html>
