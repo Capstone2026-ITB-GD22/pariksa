@@ -414,15 +414,15 @@
             </div>
             <div class="hazard-grid">
                 <label>
-                    <input type="radio" name="hazard" value="gempa" class="hazard-radio" checked>
+                    <input type="radio" name="hazard" value="earthquake" class="hazard-radio" checked>
                     <div class="hazard-card-label"><span class="hazard-name">Earthquake</span></div>
                 </label>
                 <label>
-                    <input type="radio" name="hazard" value="banjir" class="hazard-radio">
+                    <input type="radio" name="hazard" value="flood" class="hazard-radio">
                     <div class="hazard-card-label"><span class="hazard-name">Flood</span></div>
                 </label>
                 <label>
-                    <input type="radio" name="hazard" value="longsor" class="hazard-radio">
+                    <input type="radio" name="hazard" value="landslide" class="hazard-radio">
                     <div class="hazard-card-label"><span class="hazard-name">Landslide</span></div>
                 </label>
             </div>
@@ -570,25 +570,26 @@ const GEOSERVER = {
     /* ----------------------------------------------------------
        📐 LAYER NAMING CONVENTION
        ----------------------------------------------------------
-       RISK (Parcel Vector):
-         Pattern : {workspace}:{kecamatan_id}_{hazard_id}_risk
-         Example : pariksa:andir_gempa_risk
+       Pattern : {parameter_indo}{hazard_indo}{kecamatan}
 
-       RASTER (Hazard / Vulnerability / Capacity):
-         Pattern : {workspace}:{kecamatan_id}_{hazard_id}_{parameter}
-         Example : pariksa:andir_gempa_hazard
-                   pariksa:andir_banjir_vulnerability
-                   pariksa:coblong_longsor_capacity
+       Examples:
+         risikogempaandir
+         bahayagempaandir
+         kerentananbanjircoblong
+         kapasitaslongsorgedebage
+         risikogempa babakanciparay  ← kecamatan tanpa underscore
 
-       Hazard IDs   : gempa | banjir | longsor
-       Parameter IDs: risk  | hazard | vulnerability | capacity
+       Parameter (Indo) : risiko | bahaya | kerentanan | kapasitas
+       Hazard    (Indo) : gempa  | banjir | longsor
+       Kecamatan        : id langsung, underscore dihapus
        ---------------------------------------------------------- */
 
     // 🔧 LAYER OVERRIDES
-    //    Format: 'kecamatan_hazard_parameter': 'actual_layer_name'
+    //    Format: 'parameter_kecamatan_hazard': 'nama_layer_custom'
+    //    Contoh: 'risk_gedebage_flood': 'risikobanjirgede'
     layerOverrides: {
-        // 'gedebage_banjir_risk'        : 'risikobanjirgedebage',
-        // 'andir_gempa_hazard'          : 'bahayagempa_andir',
+        // 'risk_gedebage_flood'  : 'risikobanjirgede',
+        // 'hazard_andir_earthquake' : 'bahayagempaandir_v2',
     },
 
     // ⚙️ Standard WMS parameters
@@ -611,7 +612,7 @@ const KECAMATAN_DATA = [
     { id: 'andir',            name: 'Andir',            center: [-6.9094, 107.5876], zoom: 15 },
     { id: 'antapani',         name: 'Antapani',         center: [-6.9181, 107.6445], zoom: 15 },
     { id: 'arcamanik',        name: 'Arcamanik',        center: [-6.9214, 107.6555], zoom: 15 },
-    { id: 'astanaanyar',      name: 'Astanaanyar',      center: [-6.9261, 107.6022], zoom: 15 },
+    { id: 'astana_anyar',      name: 'Astana Anyar',    center: [-6.9261, 107.6022], zoom: 15 },
     { id: 'babakan_ciparay',  name: 'Babakan Ciparay',  center: [-6.9349, 107.5878], zoom: 15 },
     { id: 'bandung_kidul',    name: 'Bandung Kidul',    center: [-6.9525, 107.6183], zoom: 15 },
     { id: 'bandung_kulon',    name: 'Bandung Kulon',    center: [-6.9229, 107.5810], zoom: 15 },
@@ -712,8 +713,15 @@ document.getElementById('kecamatan-search').addEventListener('input', function (
    🗺️  LAYER MANAGEMENT
    ============================================================ */
 function resolveLayerName(kecId, hazardId, paramId) {
-    const key = `${kecId}_${hazardId}_${paramId}`;
-    return GEOSERVER.layerOverrides[key] ?? `${kecId}_${hazardId}_${paramId}`;
+    // Format: {parameter_indo}{hazard_indo}{kecamatan_tanpa_underscore}
+    // Contoh: risikogempaandir, bahayabanjircoblong, kapasitaslongsorgedebage
+    const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
+    const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
+    const kecClean  = kecId.replace(/_/g, '');           // babakan_ciparay → babakanciparay
+    const auto      = `${paramMap[paramId]}${hazardMap[hazardId]}${kecClean}`;
+    // Override manual jika ada (key: 'risk_andir_earthquake')
+    const overrideKey = `${paramId}_${kecId}_${hazardId}`;
+    return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
 
 function loadWmsLayer(layerName) {
