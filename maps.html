@@ -20,39 +20,29 @@
             --text-secondary: #6B6B6B;
             --border-color: #EAEAEA;
             --font-main: 'Inter', sans-serif;
+
+            /* Classification Colors */
+            --color-high: #d32f2f;
+            --color-moderate: #fbc02d;
+            --color-low: #388e3c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-main); color: var(--text-primary); overflow: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* Minimalist Navbar */
-        nav { 
-            position: fixed; top: 0; width: 100%; z-index: 2000;
-            background-color: rgba(0, 0, 0, 0.95);
-            padding: 0.8rem 0;
-        }
-        .nav-container { 
-            display: flex; justify-content: space-between; align-items: center; 
-            max-width: 95% !important; width: 100%; margin: 0 auto;
-        }
+        /* --- Navbar --- */
+        nav { position: fixed; top: 0; width: 100%; z-index: 2000; background-color: rgba(0, 0, 0, 0.95); padding: 0.8rem 0; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 95%; width: 100%; margin: 0 auto; }
         .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
-        .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
-        
-        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
-        
-        /* Main Layout */
-        .webgis-container {
-            display: flex;
-            height: 100vh;
-            padding-top: 60px;
-        }
 
-        /* Sidebar Control Panel */
+        /* --- Layout --- */
+        .webgis-container { display: flex; height: 100vh; padding-top: 60px; }
+
         .sidebar {
             width: 350px;
             background-color: var(--bg-sidebar);
@@ -66,60 +56,60 @@
             gap: 1.5rem;
         }
 
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
+        .panel-title { font-size: 1.1rem; font-weight: 700; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
 
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .form-label { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Search & Select Input */
-        .custom-input, .custom-select {
-            width: 100%; padding: 0.8rem; border-radius: 8px;
-            border: 1px solid var(--border-color); font-family: var(--font-main);
-            font-size: 0.95rem; color: var(--text-primary); background-color: var(--bg-white);
-            outline: none;
-        }
         .custom-select {
-            cursor: pointer; appearance: none;
+            width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color);
+            font-family: var(--font-main); font-size: 0.95rem; color: var(--text-primary);
+            background-color: white; cursor: pointer; outline: none; appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
         }
-        .custom-input:focus, .custom-select:focus { border-color: var(--primary-red); }
+        .custom-select:focus { border-color: var(--primary-red); }
 
-        /* Parameter Radio Buttons */
-        .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-        .radio-label {
-            display: flex; align-items: center; justify-content: center;
-            padding: 0.6rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--bg-white);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;
-        }
+        /* --- Radio Button Styling --- */
+        .radio-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+        .radio-item { position: relative; }
         .radio-input { display: none; }
+        .radio-label {
+            display: flex; align-items: center; padding: 0.7rem 1rem;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            background: white; cursor: pointer; font-size: 0.9rem; transition: 0.2s;
+        }
         .radio-input:checked + .radio-label {
-            background-color: rgba(229, 57, 53, 0.1);
-            border-color: var(--primary-red);
-            color: var(--primary-red);
-            font-weight: 700;
+            border-color: var(--primary-red); background: rgba(229, 57, 53, 0.05); color: var(--primary-red); font-weight: 600;
         }
 
-        /* Apply Button */
         .btn-apply {
-            margin-top: 1rem; width: 100%; padding: 1rem;
+            margin-top: 0.5rem; width: 100%; padding: 1rem;
             background-color: var(--primary-red); color: white;
-            border: none; border-radius: 8px; font-weight: 700; font-size: 1rem;
-            cursor: pointer; transition: background-color 0.3s ease; font-family: var(--font-main);
+            border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .btn-apply:hover { background-color: var(--dark-red); }
 
-        /* Map Area */
+        /* --- Sidebar Legend --- */
+        .sidebar-legend {
+            margin-top: 1rem;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .legend-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text-primary); text-transform: uppercase; }
+        .legend-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500;}
+        .legend-item:last-child { margin-bottom: 0; }
+        
+        .color-dot { width: 16px; height: 16px; border-radius: 4px; display: inline-block; }
+        .dot-high { background-color: var(--color-high); }
+        .dot-moderate { background-color: var(--color-moderate); }
+        .dot-low { background-color: var(--color-low); }
+
         .map-area { flex-grow: 1; position: relative; }
-        #map { width: 100%; height: 100%; background-color: #e5e5e5; }
+        #map { width: 100%; height: 100%; }
 
         /* Toast Notification */
         .toast {
@@ -133,72 +123,66 @@
 
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 50vh; order: 2; border-right: none; border-top: 1px solid var(--border-color); }
-            .map-area { height: 50vh; order: 1; }
+            .sidebar { width: 100%; height: 50vh; border-right: none; border-top: 1px solid var(--border-color); order: 2; }
+            .map-area { height: 50vh; order: 1;}
             .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <nav id="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo-wrapper">
-                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
-                Pariksa
-            </a>
-            <div class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="guide.html">Guide</a></li>
-                    <li><a href="maps.html" class="active">Maps</a></li>
-                    <li><a href="education.html">Education</a></li>
-                    <li><a href="team.html">Team</a></li>
-                </ul>
-            </div>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo-wrapper">Pariksa<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="guide.html">Guide</a></li>
+                <li><a href="maps.html" class="active">Maps</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
         </div>
     </nav>
 
     <div class="webgis-container">
-        
         <aside class="sidebar">
-            <div class="panel-title">Map Layer Controls</div>
+            <div class="panel-title">Control Panel</div>
 
             <div class="form-group">
                 <label class="form-label">1. Select District</label>
-                <input type="text" id="district-search" class="custom-input" list="districts" placeholder="Search district...">
-                <datalist id="districts">
-                    <option value="Andir">
-                    <option value="Astana Anyar">
-                    <option value="Antapani">
-                    <option value="Arcamanik">
-                    <option value="Babakan Ciparay">
-                    <option value="Bandung Kidul">
-                    <option value="Bandung Kulon">
-                    <option value="Bandung Wetan">
-                    <option value="Batununggal">
-                    <option value="Bojongloa Kaler">
-                    <option value="Bojongloa Kidul">
-                    <option value="Buahbatu">
-                    <option value="Cibeunying Kaler">
-                    <option value="Cibeunying Kidul">
-                    <option value="Cibiru">
-                    <option value="Cicendo">
-                    <option value="Cidadap">
-                    <option value="Cinambo">
-                    <option value="Coblong">
-                    <option value="Gedebage">
-                    <option value="Kiaracondong">
-                    <option value="Lengkong">
-                    <option value="Mandalajati">
-                    <option value="Panyileukan">
-                    <option value="Rancasari">
-                    <option value="Regol">
-                    <option value="Sukajadi">
-                    <option value="Sukasari">
-                    <option value="Sumur Bandung">
-                    <option value="Ujungberung">
-                </datalist>
+                <select id="district-select" class="custom-select">
+                    <option value="" disabled selected>-- Choose District --</option>
+                    <option value="Andir">Andir</option>
+                    <option value="Antapani">Antapani</option>
+                    <option value="Arcamanik">Arcamanik</option>
+                    <option value="Astana Anyar">Astana Anyar</option>
+                    <option value="Babakan Ciparay">Babakan Ciparay</option>
+                    <option value="Bandung Kidul">Bandung Kidul</option>
+                    <option value="Bandung Kulon">Bandung Kulon</option>
+                    <option value="Bandung Wetan">Bandung Wetan</option>
+                    <option value="Batununggal">Batununggal</option>
+                    <option value="Bojongloa Kaler">Bojongloa Kaler</option>
+                    <option value="Bojongloa Kidul">Bojongloa Kidul</option>
+                    <option value="Buahbatu">Buahbatu</option>
+                    <option value="Cibeunying Kaler">Cibeunying Kaler</option>
+                    <option value="Cibeunying Kidul">Cibeunying Kidul</option>
+                    <option value="Cibiru">Cibiru</option>
+                    <option value="Cicendo">Cicendo</option>
+                    <option value="Cidadap">Cidadap</option>
+                    <option value="Cinambo">Cinambo</option>
+                    <option value="Coblong">Coblong</option>
+                    <option value="Gedebage">Gedebage</option>
+                    <option value="Kiaracondong">Kiaracondong</option>
+                    <option value="Lengkong">Lengkong</option>
+                    <option value="Mandalajati">Mandalajati</option>
+                    <option value="Panyileukan">Panyileukan</option>
+                    <option value="Rancasari">Rancasari</option>
+                    <option value="Regol">Regol</option>
+                    <option value="Sukajadi">Sukajadi</option>
+                    <option value="Sukasari">Sukasari</option>
+                    <option value="Sumur Bandung">Sumur Bandung</option>
+                    <option value="Ujungberung">Ujungberung</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -213,26 +197,34 @@
             <div class="form-group">
                 <label class="form-label">3. Analysis Parameter</label>
                 <div class="radio-grid">
-                    <label>
-                        <input type="radio" name="parameter" value="risk" class="radio-input" checked>
-                        <div class="radio-label">Risk (R)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="hazard" class="radio-input">
-                        <div class="radio-label">Hazard (H)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="vulnerability" class="radio-input">
-                        <div class="radio-label">Vulnerability (V)</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="parameter" value="capacity" class="radio-input">
-                        <div class="radio-label">Capacity (C)</div>
-                    </label>
+                    <div class="radio-item">
+                        <input type="radio" name="parameter" value="risk" id="p1" class="radio-input" checked>
+                        <label for="p1" class="radio-label">Risk (Parcel-Based Vektor)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="parameter" value="hazard" id="p2" class="radio-input">
+                        <label for="p2" class="radio-label">Hazard Level</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="parameter" value="vulnerability" id="p3" class="radio-input">
+                        <label for="p3" class="radio-label">Vulnerability</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="parameter" value="capacity" id="p4" class="radio-input">
+                        <label for="p4" class="radio-label">Capacity</label>
+                    </div>
                 </div>
             </div>
 
-            <button class="btn-apply" onclick="applyFilter()">Render Map</button>
+            <button class="btn-apply" onclick="applyMapFilter()">Apply & Render Map</button>
+
+            <div class="sidebar-legend">
+                <div class="legend-title">Risk Level Indicators</div>
+                <div class="legend-item"><span class="color-dot dot-high"></span> High</div>
+                <div class="legend-item"><span class="color-dot dot-moderate"></span> Moderate</div>
+                <div class="legend-item"><span class="color-dot dot-low"></span> Low</div>
+            </div>
+
         </aside>
 
         <main class="map-area">
@@ -241,31 +233,34 @@
         </main>
     </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. Koordinat Pusat & Inisialisasi Peta
+        // ==========================================
+        // 1. INITIAL MAP SETUP
+        // ==========================================
         const defaultCenter = [-6.9147, 107.6098]; // Bandung City Center
         const defaultZoom = 13;
 
-        const map = L.map('map', {
-            zoomControl: false 
-        }).setView(defaultCenter, defaultZoom);
-
+        const map = L.map('map', { zoomControl: false }).setView(defaultCenter, defaultZoom);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            attribution: '&copy; OpenStreetMap, CARTO',
             subdomains: 'abcd',
             maxZoom: 20
         }).addTo(map);
 
         let currentWmsLayer = null;
 
-        // 2. GeoServer Configuration
+        // ==========================================
+        // 2. GEOSERVER CONFIGURATION
+        // ==========================================
         const geoserverUrl = 'http://localhost:8080/geoserver/pariksa/wms';
         const workspace = 'pariksa';
 
-        // 3. Database Koordinat 30 Kecamatan (Digunakan untuk FlyTo)
+        // ==========================================
+        // 3. DISTRICT (KECAMATAN) SPATIAL DATABASE
+        // ==========================================
         const districtData = {
             "andir": { center: [-6.9149, 107.5786], zoom: 15 },
             "antapani": { center: [-6.9168, 107.6534], zoom: 15 },
@@ -299,72 +294,69 @@
             "ujungberung": { center: [-6.9158, 107.6975], zoom: 15 }
         };
 
-        // 4. Layer Request Function
-        function addWmsLayer(layerName) {
-            if (currentWmsLayer) {
-                map.removeLayer(currentWmsLayer);
+        // ==========================================
+        // 4. MAIN FILTER CONTROLLER
+        // ==========================================
+        function applyMapFilter() {
+            const rawDistrict = document.getElementById('district-select').value;
+            const hazard = document.getElementById('hazard-select').value; 
+            const parameter = document.querySelector('input[name="parameter"]:checked').value; 
+
+            // Cek jika Risk dipilih tapi kecamatan belum dipilih
+            if (parameter === 'risk' && !rawDistrict) {
+                showNotification("Please select a district from the dropdown.");
+                return;
             }
 
+            let layerName = "";
+            let formattedDistrict = "";
+            
+            if (rawDistrict) {
+                formattedDistrict = rawDistrict.toLowerCase().replace(/\s+/g, '_');
+            }
+
+            // Logic Pembentukan Nama Layer
+            if (parameter === 'risk') {
+                layerName = `risk_${formattedDistrict}_${hazard}`;
+            } else {
+                layerName = `${parameter}_${hazard}`;
+            }
+
+            console.log(`Requesting Data: ${workspace}:${layerName}`);
+            
+            // Panggil Layer
+            if (currentWmsLayer) { map.removeLayer(currentWmsLayer); }
             currentWmsLayer = L.tileLayer.wms(geoserverUrl, {
                 layers: `${workspace}:${layerName}`, 
                 format: 'image/png',
                 transparent: true,
                 version: '1.1.0',
                 styles: '', 
-                attribution: "Pariksa"
+                attribution: "Pariksa WebGIS"
             });
-            
             currentWmsLayer.addTo(map);
-        }
 
-        // 5. Main Filter Logic
-        function applyFilter() {
-            // A. Ambil nilai dari HTML
-            const rawDistrict = document.getElementById('district-search').value;
-            const hazard = document.getElementById('hazard-select').value; 
-            const parameter = document.querySelector('input[name="parameter"]:checked').value; 
-
-            // Validasi Input Kecamatan jika Parameter = Risk
-            if (parameter === 'risk' && !rawDistrict) {
-                showNotification("Please select a district for Risk Mapping.");
-                return;
-            }
-
-            let layerName = "";
-            const formattedDistrict = rawDistrict.toLowerCase().replace(/\s+/g, '_');
-
-            // B. Logika GeoServer (Pembagian Format Nama Layer)
-            if (parameter === 'risk') {
-                // Memanggil layer Vektor per Kecamatan (Contoh: risk_andir_earthquake)
-                if (districtData[formattedDistrict]) {
-                    layerName = `risk_${formattedDistrict}_${hazard}`;
-                    // Pindah kamera ke tengah kecamatan
-                    const target = districtData[formattedDistrict];
-                    map.flyTo(target.center, target.zoom, { animate: true, duration: 1.5 });
-                } else {
-                    showNotification("District not found in database.");
-                    return;
-                }
+            // Pergerakan Kamera (FlyTo)
+            if (parameter === 'risk' && formattedDistrict && districtData[formattedDistrict]) {
+                const target = districtData[formattedDistrict];
+                map.flyTo(target.center, target.zoom, { animate: true, duration: 1.5 });
             } else {
-                // Memanggil layer General (H/V/C) se-Bandung Raya (Contoh: hazard_flood)
-                layerName = `${parameter}_${hazard}`;
-                // Pindah kamera zoom-out ke seluruh kota
                 map.flyTo(defaultCenter, defaultZoom, { animate: true, duration: 1.5 });
             }
 
-            // Eksekusi pemanggilan layer
-            addWmsLayer(layerName);
-            showNotification(`Loading ${parameter} data...`);
+            showNotification(`Loading ${parameter} spatial data...`);
         }
 
+        // ==========================================
+        // 5. UI NOTIFICATION
+        // ==========================================
         function showNotification(message) {
             const toast = document.getElementById('toastNotif');
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            if (toast) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 3000);
+            }
         }
     </script>
 </body>
