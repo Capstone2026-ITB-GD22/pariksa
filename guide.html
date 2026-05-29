@@ -354,7 +354,6 @@
             <div class="sidebar-title">Guidebook</div>
             <ul class="sidebar-nav">
                 <li><a onclick="showSection('how-to-use', this)" class="active">How to Use</a></li>
-                <li><a onclick="showSection('read-map', this)">How to Read the Map</a></li>
                 <li><a onclick="showSection('concepts', this)">Basic Concepts of Disaster</a></li>
                 <li><a onclick="showSection('indices', this)">Disaster Indices</a></li>
                 <li><a onclick="showSection('faq', this)">FAQ</a></li>
@@ -364,60 +363,68 @@
         <main class="guide-main">
             
             <section id="how-to-use" class="content-section active">
+
                 <div class="step-card">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Lorem Ipsum Dolor Sit</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <h3>Open the WebGIS Map Page</h3>
+                        <p>Navigate to the <strong>Maps</strong> page using the top navigation bar, or click the <strong>"Open WebGIS →"</strong> button on the homepage. The interactive map of Bandung City will load automatically, centred over the city with a clean base map.</p>
                     </div>
-                    <div class="step-image">
-                        <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+1" alt="Step 1">
-                    </div>
+                    <div class="step-image"></div>
                 </div>
+
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>Consectetur Adipiscing Elit</h3>
-                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <h3>Select a Study Area</h3>
+                        <p>In the left sidebar under <strong>Step 1 — District</strong>, use the search box to find a kecamatan by name, or browse the 30-district grid and click a chip to select it. To view the entire city at once, click <strong>"All Bandung City"</strong> at the top. Your selection will be highlighted in red.</p>
                     </div>
-                    <div class="step-image">
-                        <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+2" alt="Step 2">
-                    </div>
+                    <div class="step-image"></div>
                 </div>
+
                 <div class="step-card">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>Sed Do Eiusmod Tempor</h3>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                        <h3>Choose a Hazard Type</h3>
+                        <p>Under <strong>Step 2 — Hazard Type</strong>, select the natural disaster to analyze:<br><br>
+                        • <strong>Earthquake</strong> — Seismic ground shaking related to Lembang Fault activity<br>
+                        • <strong>Flood</strong> — Hydrometeorological inundation based on urban drainage models<br>
+                        • <strong>Landslide</strong> — Slope instability and soil movement susceptibility</p>
                     </div>
-                    <div class="step-image">
-                        <img src="https://placehold.co/400x300/eaeaea/a0a0a0?text=Gambar+3" alt="Step 3">
-                    </div>
+                    <div class="step-image"></div>
                 </div>
-            </section>
 
-            <section id="read-map" class="content-section">
-                <h2 class="main-title">Risk Level Indicators</h2>
-                <div class="legend-box box-very-low">
-                    <div class="legend-title">Very Low</div>
-                    <div class="legend-desc">Indicates the most minimal condition level.</div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Select an Analysis Parameter</h3>
+                        <p>Under <strong>Step 3 — Analysis Parameter</strong>, choose the spatial dimension to display:<br><br>
+                        • <strong>Risk (R)</strong> — Integrated risk score per land parcel at 1:5,000 scale (vector)<br>
+                        • <strong>Hazard (H)</strong> — Physical intensity of the natural threat (raster)<br>
+                        • <strong>Vulnerability (V)</strong> — Social, physical, and economic susceptibility (raster)<br>
+                        • <strong>Capacity (C)</strong> — Community resilience and disaster coping resources (raster)</p>
+                    </div>
+                    <div class="step-image"></div>
                 </div>
-                <div class="legend-box box-low">
-                    <div class="legend-title">Low</div>
-                    <div class="legend-desc">Indicates a low condition level.</div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Render the Map</h3>
+                        <p>Click the red <strong>"Render Map"</strong> button at the bottom of the sidebar. The map will fly to your selected area and load the spatial layer from GeoServer. A loading indicator appears while tiles are fetched. Once complete, the active layer name and type are shown in the <strong>info card</strong> at the top-right of the map.</p>
+                    </div>
+                    <div class="step-image"></div>
                 </div>
-                <div class="legend-box box-moderate">
-                    <div class="legend-title">Moderate</div>
-                    <div class="legend-desc">Indicates a moderate condition level.</div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Read and Interpret the Results</h3>
+                        <p>Use the <strong>classification legend</strong> in the bottom-left corner to interpret the map. Risk levels are classified into 5 categories — from <strong style="color:#15803D">Very Low</strong> to <strong style="color:#991B1B">Very High</strong>. Areas with darker tones require priority attention for disaster mitigation. Switch any parameter or district and re-render at any time to compare results across the city.</p>
+                    </div>
+                    <div class="step-image"></div>
                 </div>
-                <div class="legend-box box-high">
-                    <div class="legend-title">High</div>
-                    <div class="legend-desc">Indicates a high condition level.</div>
-                </div>
-                <div class="legend-box box-very-high">
-                    <div class="legend-title">Very High</div>
-                    <div class="legend-desc">Indicates the highest condition level.</div>
-                </div>
+
             </section>
 
             <section id="concepts" class="content-section">
