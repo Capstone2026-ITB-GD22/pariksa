@@ -778,13 +778,13 @@ document.getElementById('kecamatan-search').addEventListener('input', function (
    🗺️  LAYER MANAGEMENT
    ============================================================ */
 function resolveLayerName(kecId, hazardId, paramId) {
-    // Format: {parameter_indo}{hazard_indo}{kecamatan_tanpa_underscore}
-    // Contoh: risikogempaandir, bahayabanjircoblong, kapasitaslongsorgedebage
+    // Mode: single 'semua' layer per hazard+parameter, filtered by WADMKC via CQL_FILTER
+    // Format: {parameter_indo}{hazard_indo}semua
+    // Contoh: risikogempasemua, bahayabanjirsemua, kapasitaslongdorsemua
     const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
     const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
-    const kecClean  = kecId.replace(/_/g, '');           // babakan_ciparay → babakanciparay
-    const auto      = `${paramMap[paramId]}${hazardMap[hazardId]}${kecClean}`;
-    // Override manual jika ada (key: 'risk_andir_earthquake')
+    const auto = `${paramMap[paramId]}${hazardMap[hazardId]}semua`;
+    // Manual override masih bisa dipakai jika ada layer khusus per kecamatan
     const overrideKey = `${paramId}_${kecId}_${hazardId}`;
     return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
@@ -881,14 +881,25 @@ function renderMap() {
     const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
-    // Build CQL_FILTER if Risk param and specific class selected
-    const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
-        ? `kelas=${selectedClassFilter}`
-        : null;
+    // Build combined CQL_FILTER
+    const filters = [];
+
+    // 1. WADMKC filter — show only selected kecamatan's parcels
+    if (selectedKecId !== 'semua') {
+        const kecName = KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
+        if (kecName) filters.push(`WADMKC='${kecName}'`);
+    }
+
+    // 2. kelas filter — only for Risk (vector) parameter
+    if (paramId === 'risk' && selectedClassFilter !== 'all') {
+        filters.push(`kelas=${selectedClassFilter}`);
+    }
+
+    const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
 
     loadWmsLayer(layerName, cqlFilter);
 
-    // Load boundary overlay (filtered by WADMKC for specific kecamatan)
+    // Boundary overlay — same WADMKC logic
     const wadmkc = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
     loadBoundaryLayer(wadmkc);
 
