@@ -49,7 +49,7 @@
         a { text-decoration: none; color: inherit; }
 
         /* ================================================================
-           NAVBAR — matches guide.html / education.html / team.html exactly
+           NAVBAR
            ================================================================ */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 2000;
@@ -81,7 +81,7 @@
         .webgis-container {
             display: flex;
             height: 100vh;
-            padding-top: 66px; /* matches guide/education/team nav height */
+            padding-top: 66px;
         }
 
         /* ================================================================
@@ -101,7 +101,6 @@
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 2px; }
 
-        /* Sidebar header */
         .sidebar-header {
             padding: 1.1rem 1.4rem;
             border-bottom: 1px solid var(--border-color);
@@ -114,13 +113,11 @@
         }
         .sidebar-header-title svg { color: var(--primary-red); flex-shrink: 0; }
 
-        /* Panel section */
         .panel-section {
             padding: 1.1rem 1.4rem;
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Step label */
         .step-label {
             font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
             text-transform: uppercase; letter-spacing: 1.5px;
@@ -135,7 +132,6 @@
             flex-shrink: 0;
         }
 
-        /* ── Kecamatan Search ── */
         .kec-search-wrap { position: relative; margin-bottom: 0.7rem; }
         .kec-search-wrap svg {
             position: absolute; left: 9px; top: 50%;
@@ -156,7 +152,6 @@
         }
         #kecamatan-search::placeholder { color: #9CA3AF; }
 
-        /* Kecamatan chip grid */
         .kec-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -183,7 +178,6 @@
         }
         .kec-status strong { color: var(--primary-red); }
 
-        /* All Bandung chip */
         .kec-all-chip {
             width: 100%; padding: 0.55rem 0.75rem;
             margin-bottom: 0.5rem;
@@ -196,7 +190,6 @@
         .kec-all-chip:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(229,57,53,0.04); }
         .kec-all-chip.selected { background: var(--primary-red); border-color: var(--dark-red); border-style: solid; color: #fff; }
 
-        /* ── Hazard Cards (text only, no icons) ── */
         .hazard-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
         }
@@ -221,7 +214,6 @@
             color: var(--primary-red); font-weight: 700;
         }
 
-        /* ── Parameter Grid ── */
         .param-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
         }
@@ -280,7 +272,6 @@
         .btn-render:hover { background: var(--dark-red); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(229,57,53,0.35); }
         .btn-render:active { transform: translateY(0); box-shadow: none; }
 
-        /* ── Sidebar Legend ── */
         .sidebar-legend { padding: 1.1rem 1.4rem; flex-grow: 1; }
         .legend-heading {
             font-size: 0.7rem; font-weight: 700; color: var(--text-secondary);
@@ -296,7 +287,6 @@
         .map-area { flex-grow: 1; position: relative; overflow: hidden; }
         #map { width: 100%; height: 100%; }
 
-        /* ── Loading ── */
         .map-loading {
             position: absolute; inset: 0; z-index: 800;
             background: rgba(255,255,255,0.75); backdrop-filter: blur(3px);
@@ -317,7 +307,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner-label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
 
-        /* ── Map Info Card (top-right) ── */
         .map-info-card {
             position: absolute; top: 14px; right: 14px; z-index: 700;
             background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
@@ -342,7 +331,6 @@
         .map-info-card h4 { font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem; }
         .map-info-card p  { font-size: 0.72rem; color: var(--text-secondary); }
 
-        /* ── Map Legend Overlay (bottom-left) ── */
         .map-legend-overlay {
             position: absolute; bottom: 38px; left: 14px; z-index: 700;
             background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
@@ -358,7 +346,6 @@
         .overlay-row { display: flex; align-items: center; gap: 7px; font-size: 0.75rem; color: var(--text-primary); }
         .overlay-swatch { width: 20px; height: 9px; border-radius: 2px; flex-shrink: 0; }
 
-        /* ── Toast ── */
         .toast {
             position: absolute; bottom: 38px; right: 14px; z-index: 1100;
             color: #fff; padding: 0.7rem 1.1rem; border-radius: 9px;
@@ -372,9 +359,6 @@
         .toast.error  { background: #DC2626; }
         .toast.success{ background: #059669; }
 
-        /* ================================================================
-           RESPONSIVE
-           ================================================================ */
         @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
@@ -407,9 +391,6 @@
 
 <div class="webgis-container">
 
-    <!-- ══════════════════════════════════════
-         SIDEBAR
-         ══════════════════════════════════════ -->
     <aside class="sidebar">
 
         <div class="sidebar-header">
@@ -438,11 +419,11 @@
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
                 All Bandung City
             </div>
-            <div class="kec-grid" id="kec-grid"><!-- Populated by JS --></div>
+            <div class="kec-grid" id="kec-grid"></div>
             <div class="kec-status" id="kec-status">30 districts available</div>
         </div>
 
-        <!-- ── STEP 2: Hazard Type (text only) ── -->
+        <!-- ── STEP 2: Hazard Type ── -->
         <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">2</span>
@@ -510,7 +491,7 @@
             </div>
         </div>
 
-        <!-- ── STEP 4: Risk Class Filter (vector only) ── -->
+        <!-- ── STEP 4: Risk Class Filter ── -->
         <div class="panel-section" id="class-filter-panel">
             <div class="step-label">
                 <span class="step-badge">4</span>
@@ -518,10 +499,10 @@
                 <span style="font-size:0.65rem;color:var(--text-secondary);font-weight:400;margin-left:4px;">Vector only</span>
             </div>
             <div class="filter-grid">
-                <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all',  this)">All Classes</button>
-                <button class="filter-btn"              id="filter-low"    onclick="setClassFilter('1',   this)">🟢 Low</button>
-                <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',   this)">🟡 Medium</button>
-                <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',   this)">🔴 High</button>
+                <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all', this)">All Classes</button>
+                <button class="filter-btn"              id="filter-low"    onclick="setClassFilter('1',  this)">🟢 Low</button>
+                <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',  this)">🟡 Medium</button>
+                <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',  this)">🔴 High</button>
             </div>
         </div>
 
@@ -538,38 +519,20 @@
             </button>
         </div>
 
-        <!-- ── Sidebar Legend (below Render Map) ── -->
+        <!-- ── Sidebar Legend ── -->
         <div class="sidebar-legend">
             <div class="legend-heading">Risk Classification Legend</div>
             <div class="legend-list">
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-very-high);"></div>
-                    <span>Very High Risk</span>
-                </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-high);"></div>
-                    <span>High Risk</span>
-                </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-moderate);"></div>
-                    <span>Moderate Risk</span>
-                </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-low);"></div>
-                    <span>Low Risk</span>
-                </div>
-                <div class="legend-row">
-                    <div class="legend-swatch" style="background:var(--c-very-low);"></div>
-                    <span>Very Low Risk</span>
-                </div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-very-high);"></div><span>Very High Risk</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-high);"></div><span>High Risk</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-moderate);"></div><span>Moderate Risk</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-low);"></div><span>Low Risk</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-very-low);"></div><span>Very Low Risk</span></div>
             </div>
         </div>
 
     </aside>
 
-    <!-- ══════════════════════════════════════
-         MAP AREA
-         ══════════════════════════════════════ -->
     <main class="map-area">
         <div id="map"></div>
 
@@ -606,44 +569,11 @@
 <script>
 /* ============================================================
    ⚙️  GEOSERVER CONFIGURATION
-   ============================================================
-   Edit the values below to connect to your GeoServer instance.
-   ------------------------------------------------------------ */
+   ============================================================ */
 const GEOSERVER = {
-    // 🔗 WMS endpoint URL
-    //    Development : 'http://localhost:8080/geoserver/pariksa/wms'
-    //    Production  : 'https://your-server.com/geoserver/pariksa/wms'
     url: 'http://localhost:8080/geoserver/pariksa/wms',
-
-    // 🗂️ GeoServer workspace name
     workspace: 'pariksa',
-
-    /* ----------------------------------------------------------
-       📐 LAYER NAMING CONVENTION
-       ----------------------------------------------------------
-       Pattern : {parameter_indo}{hazard_indo}{kecamatan}
-
-       Examples:
-         risikogempaandir
-         bahayagempaandir
-         kerentananbanjircoblong
-         kapasitaslongsorgedebage
-         risikogempa babakanciparay  ← kecamatan tanpa underscore
-
-       Parameter (Indo) : risiko | bahaya | kerentanan | kapasitas
-       Hazard    (Indo) : gempa  | banjir | longsor
-       Kecamatan        : id langsung, underscore dihapus
-       ---------------------------------------------------------- */
-
-    // 🔧 LAYER OVERRIDES
-    //    Format: 'parameter_kecamatan_hazard': 'nama_layer_custom'
-    //    Contoh: 'risk_gedebage_flood': 'risikobanjirgede'
-    layerOverrides: {
-        // 'risk_gedebage_flood'  : 'risikobanjirgede',
-        // 'hazard_andir_earthquake' : 'bahayagempaandir_v2',
-    },
-
-    // ⚙️ Standard WMS parameters
+    layerOverrides: {},
     wmsParams: {
         format: 'image/png',
         transparent: true,
@@ -651,19 +581,17 @@ const GEOSERVER = {
         styles: '',
     },
 };
-/* ============================================================
-   END GEOSERVER CONFIGURATION
-   ============================================================ */
-
 
 /* ============================================================
    📍 30 KECAMATAN DATA — Bandung City
+   ============================================================
+   wadmkc: nilai atribut di GeoServer (opsional, jika berbeda dari name)
    ============================================================ */
 const KECAMATAN_DATA = [
     { id: 'andir',            name: 'Andir',            center: [-6.9094, 107.5876], zoom: 15 },
     { id: 'antapani',         name: 'Antapani',         center: [-6.9172, 107.6612], zoom: 15 },
     { id: 'arcamanik',        name: 'Arcamanik',        center: [-6.9224, 107.6773], zoom: 15 },
-    { id: 'astanaanyar',      name: 'Astanaanyar',      center: [-6.9373, 107.6035], zoom: 15 },
+    { id: 'astanaanyar',      name: 'Astanaanyar',      wadmkc: 'Astana Anyar',     center: [-6.9373, 107.6035], zoom: 15 },
     { id: 'babakan_ciparay',  name: 'Babakan Ciparay',  center: [-6.9412, 107.5771], zoom: 15 },
     { id: 'bandung_kidul',    name: 'Bandung Kidul',    center: [-6.9574, 107.6300], zoom: 15 },
     { id: 'bandung_kulon',    name: 'Bandung Kulon',    center: [-6.9316, 107.5649], zoom: 15 },
@@ -692,7 +620,6 @@ const KECAMATAN_DATA = [
     { id: 'ujungberung',      name: 'Ujungberung',      center: [-6.9066, 107.7044], zoom: 15 },
 ];
 
-
 /* ============================================================
    🗺️  MAP INITIALIZATION
    ============================================================ */
@@ -707,16 +634,14 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     subdomains: 'abcd', maxZoom: 20,
 }).addTo(map);
 
-
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId       = null;
-let currentWmsLayer     = null;
+let selectedKecId        = null;
+let currentWmsLayer      = null;
 let currentBoundaryLayer = null;
-let toastTimer          = null;
-let selectedClassFilter  = 'all'; // 'all' | '1' | '2' | '3'
-
+let toastTimer           = null;
+let selectedClassFilter  = 'all';
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -737,7 +662,6 @@ function buildKecamatanGrid() {
 
 function selectKecamatan(id, chipEl) {
     selectedKecId = id;
-    // Deselect All Bandung chip
     document.getElementById('kec-all-chip').classList.remove('selected');
     document.querySelectorAll('.kec-chip').forEach(c => c.classList.remove('selected'));
     chipEl.classList.add('selected');
@@ -746,7 +670,6 @@ function selectKecamatan(id, chipEl) {
 
 function selectAllBandung(el) {
     selectedKecId = 'semua';
-    // Deselect all kecamatan chips
     document.querySelectorAll('.kec-chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     refreshKecStatus();
@@ -773,18 +696,14 @@ document.getElementById('kecamatan-search').addEventListener('input', function (
     refreshKecStatus();
 });
 
-
 /* ============================================================
    🗺️  LAYER MANAGEMENT
    ============================================================ */
 function resolveLayerName(kecId, hazardId, paramId) {
-    // Format: {parameter_indo}{hazard_indo}{kecamatan_tanpa_underscore}
-    // Contoh: risikogempaandir, bahayabanjircoblong, kapasitaslongsorgedebage
     const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
     const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
-    const kecClean  = kecId.replace(/_/g, '');           // babakan_ciparay → babakanciparay
+    const kecClean  = kecId.replace(/_/g, '');
     const auto      = `${paramMap[paramId]}${hazardMap[hazardId]}${kecClean}`;
-    // Override manual jika ada (key: 'risk_andir_earthquake')
     const overrideKey = `${paramId}_${kecId}_${hazardId}`;
     return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
@@ -794,13 +713,10 @@ function loadWmsLayer(layerName, cqlFilter) {
         map.removeLayer(currentWmsLayer);
         currentWmsLayer = null;
     }
-
     const wmsOpts = { ...GEOSERVER.wmsParams, layers: `${GEOSERVER.workspace}:${layerName}` };
     if (cqlFilter) wmsOpts.CQL_FILTER = cqlFilter;
-
     currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, wmsOpts);
     currentWmsLayer.addTo(map);
-
     showLoading(true);
     currentWmsLayer.on('load',      () => showLoading(false));
     currentWmsLayer.on('tileerror', () => {
@@ -809,7 +725,7 @@ function loadWmsLayer(layerName, cqlFilter) {
     });
 }
 
-/* Class filter toggle */
+/* Class filter */
 function setClassFilter(value, el) {
     selectedClassFilter = value;
     document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
@@ -817,7 +733,6 @@ function setClassFilter(value, el) {
     el.classList.add(classMap[value]);
 }
 
-/* Show/hide filter panel when parameter changes */
 document.querySelectorAll('.param-radio').forEach(radio => {
     radio.addEventListener('change', function () {
         const panel = document.getElementById('class-filter-panel');
@@ -825,30 +740,24 @@ document.querySelectorAll('.param-radio').forEach(radio => {
             panel.classList.add('visible');
         } else {
             panel.classList.remove('visible');
-            // Reset filter to all when leaving risk
             selectedClassFilter = 'all';
             document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
             document.getElementById('filter-all').classList.add('f-active-all');
         }
     });
 });
-
-// Show filter panel by default (risk is default selected)
 document.getElementById('class-filter-panel').classList.add('visible');
 
 /* ============================================================
    🗺️  BOUNDARY LAYER
    ============================================================ */
-// Outline-only SLD for the kecamatan boundary overlay
 const BOUNDARY_SLD = `<?xml version="1.0"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld"><NamedLayer><Name>${GEOSERVER.workspace}:bataskecamatanbandung</Name><UserStyle><FeatureTypeStyle><Rule><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#E53935</CssParameter><CssParameter name="stroke-width">2.5</CssParameter><CssParameter name="stroke-dasharray">6 3</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>`;
 
-function loadBoundaryLayer(wadmkcName) {
-    // Remove existing boundary layer
+function loadBoundaryLayer(kec) {
     if (currentBoundaryLayer) {
         map.removeLayer(currentBoundaryLayer);
         currentBoundaryLayer = null;
     }
-
     const bParams = {
         service:     'WMS',
         version:     '1.1.1',
@@ -857,12 +766,11 @@ function loadBoundaryLayer(wadmkcName) {
         layers:      `${GEOSERVER.workspace}:bataskecamatanbandung`,
         SLD_BODY:    BOUNDARY_SLD,
     };
-
-    // Filter to specific kecamatan if not "All Bandung"
-    if (wadmkcName) {
-        bParams.CQL_FILTER = `WADMKC='${wadmkcName}'`;
+    // Gunakan wadmkc jika ada (mengatasi perbedaan nama), fallback ke name
+    if (kec) {
+        const wadmkcVal = kec.wadmkc ?? kec.name;
+        bParams.CQL_FILTER = `wadmkc='${wadmkcVal}'`;
     }
-
     currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
     currentBoundaryLayer.addTo(map);
 }
@@ -881,18 +789,17 @@ function renderMap() {
     const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
-    // Build CQL_FILTER if Risk param and specific class selected
     const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
         ? `kelas=${selectedClassFilter}`
         : null;
 
     loadWmsLayer(layerName, cqlFilter);
 
-    // Load boundary overlay (filtered by WADMKC for specific kecamatan)
-    const wadmkc = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
-    loadBoundaryLayer(wadmkc);
+    // Boundary — pass full kec object so wadmkc override is accessible
+    const kecObj = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId);
+    loadBoundaryLayer(kecObj);
 
-    // Zoom: full Bandung for 'semua', kecamatan center for specific district
+    // Zoom
     if (selectedKecId === 'semua') {
         map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: true, duration: 1.2 });
     } else {
@@ -900,12 +807,9 @@ function renderMap() {
         map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
     }
 
-    // Labels — English keys (matching radio values: earthquake/flood/landslide)
-    const hazardLabel = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
-    const paramLabel  = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
-    const paramType   = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
-
-    // Display format: "{District} {Hazard} {Parameter}" — e.g. "Andir Earthquake Risk"
+    const hazardLabel   = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
+    const paramLabel    = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
+    const paramType     = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
     const districtLabel = (selectedKecId === 'semua') ? 'All Bandung City' : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
     const displayLabel  = `${districtLabel} ${hazardLabel} ${paramLabel}`;
 
@@ -916,7 +820,6 @@ function renderMap() {
 
     toast(`Rendering: ${displayLabel}`, 'success');
 }
-
 
 /* ============================================================
    🖼️  UI HELPERS
@@ -933,16 +836,12 @@ function toast(msg, type = 'info') {
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-
 /* ============================================================
    🚀  INIT
    ============================================================ */
 buildKecamatanGrid();
 
-
-/* ============================================================
-   🎞️  PAGE TRANSITION (exit fade)
-   ============================================================ */
+/* Page transition */
 document.querySelectorAll('a[href]').forEach(function(link) {
     link.addEventListener('click', function(e) {
         var href = this.getAttribute('href');
