@@ -711,10 +711,11 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId      = null;
-let currentWmsLayer    = null;
-let toastTimer         = null;
-let selectedClassFilter = 'all'; // 'all' | '1' | '2' | '3'
+let selectedKecId       = null;
+let currentWmsLayer     = null;
+let currentBoundaryLayer = null;
+let toastTimer          = null;
+let selectedClassFilter  = 'all'; // 'all' | '1' | '2' | '3'
 
 
 /* ============================================================
@@ -835,6 +836,36 @@ document.querySelectorAll('.param-radio').forEach(radio => {
 // Show filter panel by default (risk is default selected)
 document.getElementById('class-filter-panel').classList.add('visible');
 
+/* ============================================================
+   🗺️  BOUNDARY LAYER
+   ============================================================ */
+// Outline-only SLD for the kecamatan boundary overlay
+const BOUNDARY_SLD = `<?xml version="1.0"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld"><NamedLayer><Name>${GEOSERVER.workspace}:bataskecamatanbandung</Name><UserStyle><FeatureTypeStyle><Rule><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#E53935</CssParameter><CssParameter name="stroke-width">2.5</CssParameter><CssParameter name="stroke-dasharray">6 3</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>`;
+
+function loadBoundaryLayer(wadmkcName) {
+    // Remove existing boundary layer
+    if (currentBoundaryLayer) {
+        map.removeLayer(currentBoundaryLayer);
+        currentBoundaryLayer = null;
+    }
+
+    const bParams = {
+        service:     'WMS',
+        version:     '1.1.1',
+        format:      'image/png',
+        transparent: true,
+        layers:      `${GEOSERVER.workspace}:bataskecamatanbandung`,
+        SLD_BODY:    BOUNDARY_SLD,
+    };
+
+    // Filter to specific kecamatan if not "All Bandung"
+    if (wadmkcName) {
+        bParams.CQL_FILTER = `WADMKC='${wadmkcName}'`;
+    }
+
+    currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
+    currentBoundaryLayer.addTo(map);
+}
 
 /* ============================================================
    🎯  RENDER MAP
@@ -856,6 +887,10 @@ function renderMap() {
         : null;
 
     loadWmsLayer(layerName, cqlFilter);
+
+    // Load boundary overlay (filtered by WADMKC for specific kecamatan)
+    const wadmkc = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
+    loadBoundaryLayer(wadmkc);
 
     // Zoom: full Bandung for 'semua', kecamatan center for specific district
     if (selectedKecId === 'semua') {
