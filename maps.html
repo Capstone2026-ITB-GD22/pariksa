@@ -615,6 +615,9 @@ const GEOSERVER = {
     //    Production  : 'https://your-server.com/geoserver/pariksa/wms'
     url: 'http://localhost:8080/geoserver/pariksa/wms',
 
+    // 🔗 WFS endpoint URL (untuk fetch polygon kecamatan)
+    wfsUrl: 'http://localhost:8080/geoserver/ows',
+
     // 🗂️ GeoServer workspace name
     workspace: 'pariksa',
 
@@ -711,10 +714,11 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId       = null;
-let currentWmsLayer     = null;
+let selectedKecId        = null;
+let currentWmsLayer      = null;
 let currentBoundaryLayer = null;
-let toastTimer          = null;
+let currentMaskLayer     = null;
+let toastTimer           = null;
 let selectedClassFilter  = 'all'; // 'all' | '1' | '2' | '3'
 
 
@@ -860,16 +864,71 @@ function loadBoundaryLayer(wadmkcName) {
 
     // Filter to specific kecamatan if not "All Bandung"
     if (wadmkcName) {
-        bParams.CQL_FILTER = `WADMKC='${wadmkcName}'`;
+        bParams.CQL_FILTER = `wadmkc='${wadmkcName}'`;
     }
 
     currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
     currentBoundaryLayer.addTo(map);
 }
-
 /* ============================================================
-   🎯  RENDER MAP
+   🎭  KECAMATAN MASK (WFS Polygon Inverse Overlay)
    ============================================================ */
+async function applyKecamatanMask(wadmkcName) {
+    // Hapus mask sebelumnya
+    if (currentMaskLayer) {
+        map.removeLayer(currentMaskLayer);
+        currentMaskLayer = null;
+    }
+
+    // All Bandung City → tidak perlu mask
+    if (!wadmkcName) return;
+
+    try {
+        // Fetch polygon kecamatan dari WFS
+        const params = new URLSearchParams({
+            service:      'WFS',
+            version:      '1.0.0',
+            request:      'GetFeature',
+            typeName:     `${GEOSERVER.workspace}:bataskecamatanbandung`,
+            CQL_FILTER:   `wadmkc='${wadmkcName}'`,
+            outputFormat: 'application/json',
+            maxFeatures:  1,
+        });
+
+        const res = await fetch(`${GEOSERVER.wfsUrl}?${params}`);
+        if (!res.ok) throw new Error(`WFS HTTP ${res.status}`);
+        const geojson = await res.json();
+
+        if (!geojson.features?.length) throw new Error('Feature tidak ditemukan');
+
+        const geom = geojson.features[0].geometry;
+        // Ambil ring pertama dari polygon/multipolygon
+        const ring = geom.type === 'MultiPolygon'
+            ? geom.coordinates[0][0]
+            : geom.coordinates[0];
+
+        // Konversi GeoJSON [lon, lat] → Leaflet [lat, lon]
+        const leafletRing = ring.map(([lon, lat]) => [lat, lon]);
+
+        // Outer ring (seluruh dunia) + lubang (kecamatan)
+        // → area di luar kecamatan tertutup overlay putih
+        const worldRing = [[-90, -180], [-90, 180], [90, 180], [90, -180], [-90, -180]]
+            .map(([lat, lon]) => [lat, lon]);
+
+        currentMaskLayer = L.polygon([worldRing, leafletRing], {
+            fillColor:   '#f8f9fa',
+            fillOpacity: 0.75,
+            stroke:      false,
+            interactive: false,    // tidak bisa diklik
+        }).addTo(map);
+
+    } catch (err) {
+        console.warn('[Pariksa] Mask gagal:', err.message);
+        // Gagal fetch → tidak apa, layer tetap tampil full
+    }
+}
+
+
 function renderMap() {
     if (!selectedKecId) {
         toast('Please select a district (kecamatan) first.', 'error');
@@ -881,28 +940,24 @@ function renderMap() {
     const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
-    // Build combined CQL_FILTER
+    // CQL_FILTER: hanya untuk kelas (kelas tidak butuh WADMKC)
+    // Kecamatan difilter via mask polygon (WFS), bukan CQL
     const filters = [];
-
-    // 1. WADMKC filter — show only selected kecamatan's parcels
-    //    Use kec.wadmkc if defined (handles name mismatches with attribute table)
-    if (selectedKecId !== 'semua') {
-        const kec = KECAMATAN_DATA.find(k => k.id === selectedKecId);
-        const wadmkcVal = kec?.wadmkc ?? kec?.name;
-        if (wadmkcVal) filters.push(`WADMKC='${wadmkcVal}'`);
-    }
-
-    // 2. kelas filter — only for Risk (vector) parameter
     if (paramId === 'risk' && selectedClassFilter !== 'all') {
         filters.push(`kelas=${selectedClassFilter}`);
     }
-
     const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
 
     loadWmsLayer(layerName, cqlFilter);
 
-    // Boundary overlay — same WADMKC logic
-    const wadmkc = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
+    // Mask overlay: tutup area di luar kecamatan yang dipilih
+    const wadmkc = (selectedKecId === 'semua')
+        ? null
+        : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.wadmkc
+          ?? KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
+    applyKecamatanMask(wadmkc);
+
+    // Boundary overlay (garis batas kecamatan di atas mask)
     loadBoundaryLayer(wadmkc);
 
     // Zoom: full Bandung for 'semua', kecamatan center for specific district
