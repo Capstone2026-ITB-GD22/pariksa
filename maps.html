@@ -183,6 +183,19 @@
         }
         .kec-status strong { color: var(--primary-red); }
 
+        /* All Bandung chip */
+        .kec-all-chip {
+            width: 100%; padding: 0.55rem 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 2px dashed var(--border-color); border-radius: 8px;
+            background: var(--bg-sidebar); cursor: pointer;
+            font-size: 0.78rem; font-weight: 700; color: var(--text-secondary);
+            text-align: center; transition: all 0.15s ease; user-select: none;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .kec-all-chip:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(229,57,53,0.04); }
+        .kec-all-chip.selected { background: var(--primary-red); border-color: var(--dark-red); border-style: solid; color: #fff; }
+
         /* ── Hazard Cards (text only, no icons) ── */
         .hazard-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
@@ -234,6 +247,25 @@
             line-height: 1.55;
         }
         .param-note strong { color: var(--text-primary); }
+
+        /* ── Class Filter Panel ── */
+        #class-filter-panel { display: none; }
+        #class-filter-panel.visible { display: block; }
+        .filter-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
+        }
+        .filter-btn {
+            padding: 0.5rem 0.5rem; border: 2px solid var(--border-color);
+            border-radius: 8px; background: var(--bg-sidebar);
+            font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);
+            cursor: pointer; text-align: center; transition: all 0.15s ease;
+            user-select: none; font-family: var(--font-main);
+        }
+        .filter-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+        .filter-btn.f-active-all  { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
+        .filter-btn.f-active-low  { background: #388e3c; border-color: #2e7d32; color: #fff; }
+        .filter-btn.f-active-med  { background: #f9a825; border-color: #f57f17; color: #fff; }
+        .filter-btn.f-active-high { background: #d32f2f; border-color: #b71c1c; color: #fff; }
 
         /* ── Render Button ── */
         .sidebar-actions { padding: 1rem 1.4rem; border-bottom: 1px solid var(--border-color); }
@@ -402,6 +434,10 @@
                 </svg>
                 <input type="text" id="kecamatan-search" placeholder="Search district...">
             </div>
+            <div id="kec-all-chip" class="kec-all-chip" onclick="selectAllBandung(this)">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+                All Bandung City
+            </div>
             <div class="kec-grid" id="kec-grid"><!-- Populated by JS --></div>
             <div class="kec-status" id="kec-status">30 districts available</div>
         </div>
@@ -471,6 +507,21 @@
             <div class="param-note">
                 <strong>Risk (R)</strong> renders parcel-level vector data.
                 Hazard, Vulnerability &amp; Capacity are supplementary raster overlays.
+            </div>
+        </div>
+
+        <!-- ── STEP 4: Risk Class Filter (vector only) ── -->
+        <div class="panel-section" id="class-filter-panel">
+            <div class="step-label">
+                <span class="step-badge">4</span>
+                Risk Class Filter
+                <span style="font-size:0.65rem;color:var(--text-secondary);font-weight:400;margin-left:4px;">Vector only</span>
+            </div>
+            <div class="filter-grid">
+                <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all',  this)">All Classes</button>
+                <button class="filter-btn"              id="filter-low"    onclick="setClassFilter('1',   this)">🟢 Low</button>
+                <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',   this)">🟡 Medium</button>
+                <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',   this)">🔴 High</button>
             </div>
         </div>
 
@@ -660,9 +711,10 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId   = null;
-let currentWmsLayer = null;
-let toastTimer      = null;
+let selectedKecId      = null;
+let currentWmsLayer    = null;
+let toastTimer         = null;
+let selectedClassFilter = 'all'; // 'all' | '1' | '2' | '3'
 
 
 /* ============================================================
@@ -684,15 +736,27 @@ function buildKecamatanGrid() {
 
 function selectKecamatan(id, chipEl) {
     selectedKecId = id;
+    // Deselect All Bandung chip
+    document.getElementById('kec-all-chip').classList.remove('selected');
     document.querySelectorAll('.kec-chip').forEach(c => c.classList.remove('selected'));
     chipEl.classList.add('selected');
+    refreshKecStatus();
+}
+
+function selectAllBandung(el) {
+    selectedKecId = 'semua';
+    // Deselect all kecamatan chips
+    document.querySelectorAll('.kec-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
     refreshKecStatus();
 }
 
 function refreshKecStatus() {
     const visible  = document.querySelectorAll('.kec-chip:not(.hidden)').length;
     const statusEl = document.getElementById('kec-status');
-    if (selectedKecId) {
+    if (selectedKecId === 'semua') {
+        statusEl.innerHTML = `Selected: <strong>All Bandung City</strong>`;
+    } else if (selectedKecId) {
         const name = KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name ?? '';
         statusEl.innerHTML = `Selected: <strong>${name}</strong>`;
     } else {
@@ -724,16 +788,16 @@ function resolveLayerName(kecId, hazardId, paramId) {
     return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
 
-function loadWmsLayer(layerName) {
+function loadWmsLayer(layerName, cqlFilter) {
     if (currentWmsLayer) {
         map.removeLayer(currentWmsLayer);
         currentWmsLayer = null;
     }
 
-    currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
-        ...GEOSERVER.wmsParams,
-        layers: `${GEOSERVER.workspace}:${layerName}`,
-    });
+    const wmsOpts = { ...GEOSERVER.wmsParams, layers: `${GEOSERVER.workspace}:${layerName}` };
+    if (cqlFilter) wmsOpts.CQL_FILTER = cqlFilter;
+
+    currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, wmsOpts);
     currentWmsLayer.addTo(map);
 
     showLoading(true);
@@ -743,6 +807,33 @@ function loadWmsLayer(layerName) {
         toast('Could not load layer. Check your GeoServer connection.', 'error');
     });
 }
+
+/* Class filter toggle */
+function setClassFilter(value, el) {
+    selectedClassFilter = value;
+    document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+    const classMap = { all: 'f-active-all', '1': 'f-active-low', '2': 'f-active-med', '3': 'f-active-high' };
+    el.classList.add(classMap[value]);
+}
+
+/* Show/hide filter panel when parameter changes */
+document.querySelectorAll('.param-radio').forEach(radio => {
+    radio.addEventListener('change', function () {
+        const panel = document.getElementById('class-filter-panel');
+        if (this.value === 'risk') {
+            panel.classList.add('visible');
+        } else {
+            panel.classList.remove('visible');
+            // Reset filter to all when leaving risk
+            selectedClassFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+            document.getElementById('filter-all').classList.add('f-active-all');
+        }
+    });
+});
+
+// Show filter panel by default (risk is default selected)
+document.getElementById('class-filter-panel').classList.add('visible');
 
 
 /* ============================================================
@@ -759,18 +850,29 @@ function renderMap() {
     const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
-    loadWmsLayer(layerName);
+    // Build CQL_FILTER if Risk param and specific class selected
+    const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
+        ? `Kelas=${selectedClassFilter}`
+        : null;
 
-    const kecData = KECAMATAN_DATA.find(k => k.id === selectedKecId);
-    map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
+    loadWmsLayer(layerName, cqlFilter);
+
+    // Zoom: full Bandung for 'semua', kecamatan center for specific district
+    if (selectedKecId === 'semua') {
+        map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: true, duration: 1.2 });
+    } else {
+        const kecData = KECAMATAN_DATA.find(k => k.id === selectedKecId);
+        map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
+    }
 
     // Labels — English keys (matching radio values: earthquake/flood/landslide)
     const hazardLabel = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
     const paramLabel  = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
     const paramType   = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
 
-    // Display format: "{District} {Hazard} {Parameter}"  →  e.g. "Andir Earthquake Risk"
-    const displayLabel = `${kecData.name} ${hazardLabel} ${paramLabel}`;
+    // Display format: "{District} {Hazard} {Parameter}" — e.g. "Andir Earthquake Risk"
+    const districtLabel = (selectedKecId === 'semua') ? 'All Bandung City' : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
+    const displayLabel  = `${districtLabel} ${hazardLabel} ${paramLabel}`;
 
     document.getElementById('info-title').textContent = displayLabel;
     document.getElementById('info-desc').textContent  = paramType;
