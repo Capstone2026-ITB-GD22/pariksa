@@ -852,7 +852,7 @@ function renderMap() {
 
     // Build CQL_FILTER if Risk param and specific class selected
     const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
-        ? `Kelas=${selectedClassFilter}`
+        ? `kelas=${selectedClassFilter}`
         : null;
 
     loadWmsLayer(layerName, cqlFilter);
