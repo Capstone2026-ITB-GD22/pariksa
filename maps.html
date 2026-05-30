@@ -572,6 +572,8 @@
    ============================================================ */
 const GEOSERVER = {
     url: 'http://localhost:8080/geoserver/pariksa/wms',
+    // WFS endpoint — digunakan untuk fetch polygon batas kecamatan
+    wfsUrl: 'http://localhost:8080/geoserver/ows',
     workspace: 'pariksa',
     layerOverrides: {},
     wmsParams: {
@@ -749,30 +751,50 @@ document.querySelectorAll('.param-radio').forEach(radio => {
 document.getElementById('class-filter-panel').classList.add('visible');
 
 /* ============================================================
-   🗺️  BOUNDARY LAYER
+   🗺️  BOUNDARY LAYER  (WFS → Leaflet GeoJSON)
+   Lebih reliable dari SLD_BODY WMS karena styling dilakukan
+   client-side, tidak bergantung pada panjang URL.
    ============================================================ */
-const BOUNDARY_SLD = `<?xml version="1.0"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld"><NamedLayer><Name>${GEOSERVER.workspace}:bataskecamatanbandung</Name><UserStyle><FeatureTypeStyle><Rule><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#E53935</CssParameter><CssParameter name="stroke-width">2.5</CssParameter><CssParameter name="stroke-dasharray">6 3</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>`;
-
-function loadBoundaryLayer(kec) {
+async function loadBoundaryLayer(kec) {
+    // Hapus layer sebelumnya
     if (currentBoundaryLayer) {
         map.removeLayer(currentBoundaryLayer);
         currentBoundaryLayer = null;
     }
-    const bParams = {
-        service:     'WMS',
-        version:     '1.1.1',
-        format:      'image/png',
-        transparent: true,
-        layers:      `${GEOSERVER.workspace}:bataskecamatanbandung`,
-        SLD_BODY:    BOUNDARY_SLD,
-    };
-    // Gunakan wadmkc jika ada (mengatasi perbedaan nama), fallback ke name
-    if (kec) {
-        const wadmkcVal = kec.wadmkc ?? kec.name;
-        bParams.CQL_FILTER = `wadmkc='${wadmkcVal}'`;
+
+    try {
+        const params = new URLSearchParams({
+            service:      'WFS',
+            version:      '1.0.0',
+            request:      'GetFeature',
+            typeName:     `${GEOSERVER.workspace}:bataskecamatanbandung`,
+            outputFormat: 'application/json',
+        });
+
+        // Filter ke kecamatan tertentu jika bukan All Bandung
+        if (kec) {
+            const wadmkcVal = kec.wadmkc ?? kec.name;
+            params.set('CQL_FILTER', `WADMKC='${wadmkcVal}'`);
+        }
+
+        const res = await fetch(`${GEOSERVER.wfsUrl}?${params}`);
+        if (!res.ok) throw new Error(`WFS error ${res.status}`);
+        const geojson = await res.json();
+
+        currentBoundaryLayer = L.geoJSON(geojson, {
+            style: {
+                color:       '#E53935',   // merah
+                weight:      2.5,
+                opacity:     1,
+                fillOpacity: 0,           // transparan
+                dashArray:   '7 4',
+            },
+            interactive: false,
+        }).addTo(map);
+
+    } catch (err) {
+        console.warn('[Pariksa] Boundary layer gagal:', err.message);
     }
-    currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
-    currentBoundaryLayer.addTo(map);
 }
 
 /* ============================================================
