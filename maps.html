@@ -593,7 +593,7 @@ const KECAMATAN_DATA = [
     { id: 'andir',            name: 'Andir',            center: [-6.9094, 107.5876], zoom: 15 },
     { id: 'antapani',         name: 'Antapani',         center: [-6.9172, 107.6612], zoom: 15 },
     { id: 'arcamanik',        name: 'Arcamanik',        center: [-6.9224, 107.6773], zoom: 15 },
-    { id: 'astanaanyar',      name: 'Astanaanyar',      center: [-6.9373, 107.6035], zoom: 15 },
+    { id: 'astanaanyar',      name: 'Astanaanyar',      wadmkc: 'Astana Anyar',     center: [-6.9373, 107.6035], zoom: 15 },
     { id: 'babakan_ciparay',  name: 'Babakan Ciparay',  center: [-6.9412, 107.5771], zoom: 15 },
     { id: 'bandung_kidul',    name: 'Bandung Kidul',    center: [-6.9574, 107.6300], zoom: 15 },
     { id: 'bandung_kulon',    name: 'Bandung Kulon',    center: [-6.9316, 107.5649], zoom: 15 },
@@ -751,51 +751,32 @@ document.querySelectorAll('.param-radio').forEach(radio => {
 document.getElementById('class-filter-panel').classList.add('visible');
 
 /* ============================================================
-   🗺️  BOUNDARY LAYER  (WFS → Leaflet GeoJSON)
-   Lebih reliable dari SLD_BODY WMS karena styling dilakukan
-   client-side, tidak bergantung pada panjang URL.
+   🗺️  BOUNDARY LAYER  (WMS + CQL_FILTER)
    ============================================================ */
-async function loadBoundaryLayer(kec) {
-    // Hapus layer sebelumnya
+function loadBoundaryLayer(kec) {
     if (currentBoundaryLayer) {
         map.removeLayer(currentBoundaryLayer);
         currentBoundaryLayer = null;
     }
 
-    try {
-        const params = new URLSearchParams({
-            service:      'WFS',
-            version:      '1.0.0',
-            request:      'GetFeature',
-            typeName:     `${GEOSERVER.workspace}:bataskecamatanbandung`,
-            outputFormat: 'application/json',
-        });
+    const bParams = {
+        format:      'image/png',
+        transparent: true,
+        version:     '1.1.1',
+        layers:      `${GEOSERVER.workspace}:bataskecamatanbandung`,
+        opacity:     0.6,
+    };
 
-        // Filter ke kecamatan tertentu jika bukan All Bandung
-        if (kec) {
-            const wadmkcVal = kec.wadmkc ?? kec.name;
-            params.set('CQL_FILTER', `WADMKC='${wadmkcVal}'`);
-        }
-
-        const res = await fetch(`${GEOSERVER.wfsUrl}?${params}`);
-        if (!res.ok) throw new Error(`WFS error ${res.status}`);
-        const geojson = await res.json();
-
-        currentBoundaryLayer = L.geoJSON(geojson, {
-            style: {
-                color:       '#E53935',   // merah
-                weight:      2.5,
-                opacity:     1,
-                fillOpacity: 0,           // transparan
-                dashArray:   '7 4',
-            },
-            interactive: false,
-        }).addTo(map);
-
-    } catch (err) {
-        console.warn('[Pariksa] Boundary layer gagal:', err.message);
+    // Filter ke kecamatan tertentu jika bukan All Bandung
+    if (kec) {
+        const wadmkcVal = kec.wadmkc ?? kec.name;
+        bParams.CQL_FILTER = `WADMKC='${wadmkcVal}'`;
     }
+
+    currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
+    currentBoundaryLayer.addTo(map);
 }
+
 
 /* ============================================================
    🎯  RENDER MAP
