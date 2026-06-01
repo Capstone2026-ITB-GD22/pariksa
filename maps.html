@@ -24,12 +24,10 @@
             --border-color:  #E5E7EB;
             --font-main:     'Inter', sans-serif;
 
-            /* 5-Level Risk Colors */
-            --c-very-high: #7F1D1D;
-            --c-high:      #DC2626;
-            --c-moderate:  #D97706;
-            --c-low:       #16A34A;
-            --c-very-low:  #15803D;
+            /* 3-Level Risk Colors */
+            --c-high:     #fa4b3c;
+            --c-moderate: #ffe601;
+            --c-low:      #83fe00;
 
             --sidebar-w: 365px;
         }
@@ -523,11 +521,9 @@
         <div class="sidebar-legend">
             <div class="legend-heading">Risk Classification Legend</div>
             <div class="legend-list">
-                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-very-high);"></div><span>Very High Risk</span></div>
                 <div class="legend-row"><div class="legend-swatch" style="background:var(--c-high);"></div><span>High Risk</span></div>
                 <div class="legend-row"><div class="legend-swatch" style="background:var(--c-moderate);"></div><span>Moderate Risk</span></div>
                 <div class="legend-row"><div class="legend-swatch" style="background:var(--c-low);"></div><span>Low Risk</span></div>
-                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-very-low);"></div><span>Very Low Risk</span></div>
             </div>
         </div>
 
@@ -552,11 +548,9 @@
         <div class="map-legend-overlay">
             <div class="overlay-legend-title" id="overlay-title">Risk Classification</div>
             <div class="overlay-rows">
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-very-high);"></div><span>Very High</span></div>
                 <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-high);"></div><span>High</span></div>
                 <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-moderate);"></div><span>Moderate</span></div>
                 <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-low);"></div><span>Low</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-very-low);"></div><span>Very Low</span></div>
             </div>
         </div>
 
@@ -793,7 +787,7 @@ function renderMap() {
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
     const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
-        ? `kelas=${selectedClassFilter}`
+        ? `indeks=${selectedClassFilter}`
         : null;
 
     loadWmsLayer(layerName, cqlFilter);
