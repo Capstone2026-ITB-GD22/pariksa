@@ -572,6 +572,17 @@ const GEOSERVER = {
     // WFS endpoint — digunakan untuk fetch polygon batas kecamatan
     wfsUrl: 'http://localhost:8080/geoserver/ows',
     workspace: 'pariksa',
+
+    /* ----------------------------------------------------------
+       Hazard+param yang menggunakan SATU file 'semua' + WADMKC filter
+       Key  : '{paramId}_{hazardId}'
+       Value: nama layer GeoServer
+       Untuk menambah longsor/gempa nanti, cukup tambah baris di sini.
+       ---------------------------------------------------------- */
+    singleLayerParams: {
+        'risk_flood': 'risikobanjirsemua',   // banjir pakai 1 file, filter WADMKC
+    },
+
     layerOverrides: {},
     wmsParams: {
         format: 'image/png',
@@ -700,6 +711,12 @@ document.getElementById('kecamatan-search').addEventListener('input', function (
    🗺️  LAYER MANAGEMENT
    ============================================================ */
 function resolveLayerName(kecId, hazardId, paramId) {
+    // Cek apakah kombinasi ini pakai single-layer + WADMKC filter
+    const singleKey = `${paramId}_${hazardId}`;
+    if (GEOSERVER.singleLayerParams[singleKey]) {
+        return GEOSERVER.singleLayerParams[singleKey];
+    }
+    // Per-kecamatan: format normal
     const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
     const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
     const kecClean  = kecId.replace(/_/g, '');
@@ -810,9 +827,24 @@ function renderMap() {
     const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
-    const cqlFilter = (paramId === 'risk' && selectedClassFilter !== 'all')
-        ? `indeks=${selectedClassFilter}`
-        : null;
+    // Build CQL_FILTER
+    const filters = [];
+
+    // 1. WADMKC filter — hanya untuk single-layer hazard (mis. risikobanjirsemua)
+    //    dan hanya saat kecamatan spesifik dipilih (bukan All Bandung City)
+    const isSingleLayer = !!GEOSERVER.singleLayerParams[`${paramId}_${hazardId}`];
+    if (isSingleLayer && selectedKecId !== 'semua') {
+        const kec = KECAMATAN_DATA.find(k => k.id === selectedKecId);
+        const wadmkcVal = kec?.wadmkc ?? kec?.name;
+        if (wadmkcVal) filters.push(`WADMKC='${wadmkcVal}'`);
+    }
+
+    // 2. Indeks filter — hanya untuk parameter Risk dan jika kelas dipilih
+    if (paramId === 'risk' && selectedClassFilter !== 'all') {
+        filters.push(`indeks=${selectedClassFilter}`);
+    }
+
+    const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
 
     loadWmsLayer(layerName, cqlFilter);
 
