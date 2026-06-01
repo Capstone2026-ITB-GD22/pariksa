@@ -360,6 +360,89 @@
         /* Gray background for class highlight mode */
         .wms-gray-bg { filter: grayscale(1) opacity(0.3); }
 
+        /* ── Feature Info Popup ── */
+        .feature-popup {
+            position: absolute; bottom: 90px; left: 14px; z-index: 900;
+            width: 272px;
+            background: rgba(8, 10, 22, 0.93);
+            backdrop-filter: blur(20px) saturate(1.4);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 16px; overflow: hidden;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
+            opacity: 0; transform: translateY(14px) scale(0.97);
+            transition: all 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            pointer-events: none;
+        }
+        .feature-popup.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .fp-header {
+            display: flex; align-items: center; gap: 8px;
+            padding: 0.8rem 0.9rem;
+            background: rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .fp-icon {
+            width: 26px; height: 26px; border-radius: 7px;
+            background: rgba(59,130,246,0.18);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; flex-shrink: 0;
+        }
+        .fp-title { font-size: 0.78rem; font-weight: 700; color: #fff; flex-grow: 1; }
+        .fp-hazard-tag {
+            font-size: 0.58rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.9px; color: #60a5fa;
+            background: rgba(59,130,246,0.12);
+            padding: 2px 7px; border-radius: 20px;
+        }
+        .fp-close {
+            width: 20px; height: 20px; border-radius: 6px;
+            background: rgba(255,255,255,0.07); border: none;
+            color: rgba(255,255,255,0.5); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; transition: all 0.15s; flex-shrink: 0;
+        }
+        .fp-close:hover { background: rgba(255,80,80,0.25); color: #fff; }
+        .fp-body { padding: 0.85rem 0.9rem; display: flex; flex-direction: column; gap: 0; }
+        .fp-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 0.42rem 0;
+        }
+        .fp-row + .fp-row { border-top: 1px solid rgba(255,255,255,0.05); }
+        .fp-row-icon {
+            width: 26px; height: 26px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.78rem; flex-shrink: 0;
+        }
+        .fp-row-text { display: flex; flex-direction: column; gap: 1px; }
+        .fp-row-label {
+            font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.8px; color: rgba(255,255,255,0.35);
+        }
+        .fp-row-value { font-size: 0.82rem; font-weight: 600; color: #f1f5f9; }
+        .fp-risk-pill {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 800;
+        }
+        .fp-footer {
+            padding: 0.5rem 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.6rem; color: rgba(255,255,255,0.2);
+            text-align: right;
+        }
+        .fp-loading, .fp-nodata {
+            padding: 1.2rem 1rem; text-align: center;
+            color: rgba(255,255,255,0.3); font-size: 0.78rem;
+        }
+        .fp-spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top-color: #60a5fa;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+            margin: 0 auto 0.5rem;
+        }
+        /* Crosshair cursor saat flood risk aktif */
+        .map-flood-active { cursor: crosshair !important; }
+
         @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
@@ -558,6 +641,19 @@
         </div>
 
         <div class="toast" id="toast"></div>
+
+        <!-- Feature Info Popup -->
+        <div class="feature-popup" id="feature-popup">
+            <div class="fp-header">
+                <div class="fp-icon">🌊</div>
+                <span class="fp-title">Info Persil</span>
+                <span class="fp-hazard-tag">Flood Risk</span>
+                <button class="fp-close" onclick="closeFeaturePopup()">✕</button>
+            </div>
+            <div id="fp-content">
+                <div class="fp-loading"><div class="fp-spinner"></div>Klik persil pada peta…</div>
+            </div>
+        </div>
     </main>
 
 </div>
@@ -648,12 +744,14 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId        = null;
-let currentWmsLayer      = null;
-let currentBgLayer       = null;   // gray background saat highlight kelas aktif
-let currentBoundaryLayer = null;
-let toastTimer           = null;
-let selectedClassFilter  = 'all';
+let selectedKecId           = null;
+let currentWmsLayer         = null;
+let currentBgLayer          = null;   // gray background saat highlight kelas aktif
+let currentBoundaryLayer    = null;
+let toastTimer              = null;
+let selectedClassFilter     = 'all';
+let currentActiveLayerName  = null;   // nama layer WMS yang aktif
+let currentActiveHazardId   = null;   // hazard yang sedang aktif
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -847,6 +945,21 @@ function renderMap() {
 
     const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
 
+    // Simpan state layer aktif (untuk GetFeatureInfo)
+    currentActiveLayerName = layerName;
+    currentActiveHazardId  = hazardId;
+
+    // Tutup popup lama jika ada
+    closeFeaturePopup();
+
+    // Cursor crosshair hanya saat flood risk aktif
+    const mapEl = document.getElementById('map');
+    if (hazardId === 'flood' && paramId === 'risk') {
+        mapEl.classList.add('map-flood-active');
+    } else {
+        mapEl.classList.remove('map-flood-active');
+    }
+
     loadWmsLayer(layerName, cqlFilter);
 
     // Boundary — pass full kec object so wadmkc override is accessible
@@ -888,6 +1001,107 @@ function toast(msg, type = 'info') {
     el.className   = `toast show${type === 'error' ? ' error' : type === 'success' ? ' success' : ''}`;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+/* ============================================================
+   🌊  GET FEATURE INFO — klik persil untuk info atribut
+   Aktif hanya untuk layer Flood Risk
+   ============================================================ */
+const RISK_LABELS = {
+    '1': { label: 'Low',      color: '#83fe00', bg: 'rgba(131,254,0,0.12)',  dot: '🟢' },
+    '2': { label: 'Moderate', color: '#ffe601', bg: 'rgba(255,230,1,0.12)',  dot: '🟡' },
+    '3': { label: 'High',     color: '#fa4b3c', bg: 'rgba(250,75,60,0.12)', dot: '🔴' },
+};
+
+map.on('click', async function (e) {
+    // Hanya aktif saat layer Flood Risk ditampilkan
+    if (!currentWmsLayer || currentActiveHazardId !== 'flood') return;
+
+    // Tampilkan loading state
+    const popup = document.getElementById('feature-popup');
+    document.getElementById('fp-content').innerHTML =
+        '<div class="fp-loading"><div class="fp-spinner"></div>Memuat data…</div>';
+    popup.classList.add('visible');
+
+    try {
+        const mapSize = map.getSize();
+        const point   = map.latLngToContainerPoint(e.latlng);
+        const bounds  = map.getBounds();
+        const sw      = bounds.getSouthWest();
+        const ne      = bounds.getNorthEast();
+
+        const params = new URLSearchParams({
+            SERVICE:      'WMS',
+            VERSION:      '1.1.1',
+            REQUEST:      'GetFeatureInfo',
+            FORMAT:       'image/png',
+            TRANSPARENT:  true,
+            QUERY_LAYERS: `${GEOSERVER.workspace}:${currentActiveLayerName}`,
+            LAYERS:       `${GEOSERVER.workspace}:${currentActiveLayerName}`,
+            INFO_FORMAT:  'application/json',
+            FEATURE_COUNT: 1,
+            X:     Math.round(point.x),
+            Y:     Math.round(point.y),
+            SRS:   'EPSG:4326',
+            WIDTH:  mapSize.x,
+            HEIGHT: mapSize.y,
+            BBOX:  `${sw.lng},${sw.lat},${ne.lng},${ne.lat}`,
+        });
+
+        const res  = await fetch(`${GEOSERVER.url}?${params}`);
+        const data = await res.json();
+
+        if (!data.features || data.features.length === 0) {
+            document.getElementById('fp-content').innerHTML =
+                '<div class="fp-nodata">Tidak ada data di titik ini.</div>';
+            return;
+        }
+
+        const p = data.features[0].properties;
+        const majority = String(p['_majority'] ?? p['majority'] ?? '');
+        const risk     = RISK_LABELS[majority] ?? { label: majority || '—', color: '#94a3b8', bg: 'rgba(148,163,184,0.12)', dot: '⬜' };
+        const luas     = p['Luas_Ha'] != null ? Number(p['Luas_Ha']).toFixed(4) + ' Ha' : '—';
+        const jenis    = p['JENIS'] ?? p['jenis'] ?? '—';
+
+        document.getElementById('fp-content').innerHTML = `
+            <div class="fp-body">
+                <div class="fp-row">
+                    <div class="fp-row-icon" style="background:rgba(168,85,247,0.15);">🏘️</div>
+                    <div class="fp-row-text">
+                        <span class="fp-row-label">Jenis Lahan</span>
+                        <span class="fp-row-value">${jenis}</span>
+                    </div>
+                </div>
+                <div class="fp-row">
+                    <div class="fp-row-icon" style="background:rgba(20,184,166,0.15);">📐</div>
+                    <div class="fp-row-text">
+                        <span class="fp-row-label">Luas</span>
+                        <span class="fp-row-value">${luas}</span>
+                    </div>
+                </div>
+                <div class="fp-row">
+                    <div class="fp-row-icon" style="background:${risk.bg};">⚠️</div>
+                    <div class="fp-row-text">
+                        <span class="fp-row-label">Kelas Risiko</span>
+                        <span class="fp-row-value">
+                            <span class="fp-risk-pill" style="background:${risk.bg};color:${risk.color};">
+                                ${risk.dot} ${risk.label}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="fp-footer">Klik persil lain untuk memperbarui</div>
+        `;
+    } catch (err) {
+        console.warn('[Pariksa] GetFeatureInfo error:', err);
+        document.getElementById('fp-content').innerHTML =
+            '<div class="fp-nodata">Gagal memuat data. Cek koneksi GeoServer.</div>';
+    }
+});
+
+function closeFeaturePopup() {
+    document.getElementById('feature-popup').classList.remove('visible');
 }
 
 /* ============================================================
