@@ -357,6 +357,9 @@
         .toast.error  { background: #DC2626; }
         .toast.success{ background: #059669; }
 
+        /* Gray background for class highlight mode */
+        .wms-gray-bg { filter: grayscale(1) opacity(0.3); }
+
         @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
@@ -635,6 +638,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
    ============================================================ */
 let selectedKecId        = null;
 let currentWmsLayer      = null;
+let currentBgLayer       = null;   // gray background saat highlight kelas aktif
 let currentBoundaryLayer = null;
 let toastTimer           = null;
 let selectedClassFilter  = 'all';
@@ -705,14 +709,34 @@ function resolveLayerName(kecId, hazardId, paramId) {
 }
 
 function loadWmsLayer(layerName, cqlFilter) {
-    if (currentWmsLayer) {
-        map.removeLayer(currentWmsLayer);
-        currentWmsLayer = null;
+    // Hapus layer sebelumnya
+    if (currentWmsLayer) { map.removeLayer(currentWmsLayer); currentWmsLayer = null; }
+    if (currentBgLayer)  { map.removeLayer(currentBgLayer);  currentBgLayer  = null; }
+
+    if (cqlFilter) {
+        // ── Mode highlight: 2 layer ──
+        // 1. Background: semua persil, abu-abu (grayscale via CSS)
+        currentBgLayer = L.tileLayer.wms(GEOSERVER.url, {
+            ...GEOSERVER.wmsParams,
+            layers:    `${GEOSERVER.workspace}:${layerName}`,
+            className: 'wms-gray-bg',
+        }).addTo(map);
+
+        // 2. Highlight: hanya kelas dipilih, warna penuh (style GeoServer)
+        currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
+            ...GEOSERVER.wmsParams,
+            layers:     `${GEOSERVER.workspace}:${layerName}`,
+            CQL_FILTER: cqlFilter,
+        }).addTo(map);
+
+    } else {
+        // ── Mode normal: 1 layer ──
+        currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
+            ...GEOSERVER.wmsParams,
+            layers: `${GEOSERVER.workspace}:${layerName}`,
+        }).addTo(map);
     }
-    const wmsOpts = { ...GEOSERVER.wmsParams, layers: `${GEOSERVER.workspace}:${layerName}` };
-    if (cqlFilter) wmsOpts.CQL_FILTER = cqlFilter;
-    currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, wmsOpts);
-    currentWmsLayer.addTo(map);
+
     showLoading(true);
     currentWmsLayer.on('load',      () => showLoading(false));
     currentWmsLayer.on('tileerror', () => {
