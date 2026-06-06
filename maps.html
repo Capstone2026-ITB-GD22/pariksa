@@ -333,118 +333,6 @@
         /* Gray background for class highlight mode */
         .wms-gray-bg { filter: grayscale(1) opacity(0.3); }
 
-        /* ================================================================
-           FEATURE INFO POPUP
-           ================================================================ */
-        .fi-popup {
-            position: absolute;
-            bottom: 50px; right: 14px;
-            z-index: 1050;
-            width: 320px;
-            background: #0f172a;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 14px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.45);
-            overflow: hidden;
-            opacity: 0; transform: translateY(12px) scale(0.97);
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            pointer-events: none;
-        }
-        .fi-popup.visible {
-            opacity: 1; transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        .fi-header {
-            display: flex; align-items: center; gap: 8px;
-            padding: 0.75rem 1rem;
-            background: rgba(255,255,255,0.04);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .fi-header-icon {
-            font-size: 0.9rem;
-            width: 28px; height: 28px;
-            background: rgba(229,57,53,0.15);
-            border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .fi-header-title {
-            font-size: 0.8rem; font-weight: 700;
-            color: #f1f5f9; flex-grow: 1;
-        }
-        .fi-header-sub {
-            font-size: 0.65rem; color: rgba(255,255,255,0.35);
-            margin-top: 1px;
-        }
-        .fi-close {
-            width: 22px; height: 22px;
-            background: rgba(255,255,255,0.06);
-            border: none; border-radius: 5px;
-            color: rgba(255,255,255,0.5);
-            cursor: pointer; font-size: 0.75rem;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.15s;
-            flex-shrink: 0;
-        }
-        .fi-close:hover { background: rgba(229,57,53,0.2); color: #fa4b3c; }
-        .fi-body {
-            max-height: 340px;
-            overflow-y: auto;
-            padding: 0.5rem 0;
-        }
-        .fi-body::-webkit-scrollbar { width: 3px; }
-        .fi-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-        .fi-row {
-            display: flex;
-            padding: 0.35rem 1rem;
-            gap: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            transition: background 0.1s;
-        }
-        .fi-row:hover { background: rgba(255,255,255,0.03); }
-        .fi-key {
-            font-size: 0.7rem; color: rgba(255,255,255,0.4);
-            font-weight: 600; min-width: 100px; max-width: 110px;
-            word-break: break-word; line-height: 1.5;
-            flex-shrink: 0;
-        }
-        .fi-val {
-            font-size: 0.75rem; color: #e2e8f0;
-            font-weight: 500; line-height: 1.5;
-            word-break: break-word; flex-grow: 1;
-        }
-        .fi-val.highlight {
-            font-weight: 700;
-        }
-        .fi-state {
-            padding: 1.2rem 1rem;
-            text-align: center;
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.3);
-        }
-        .fi-spinner {
-            width: 20px; height: 20px;
-            border: 2px solid rgba(255,255,255,0.08);
-            border-top-color: var(--primary-red);
-            border-radius: 50%; animation: spin 0.7s linear infinite;
-            margin: 0 auto 0.6rem;
-        }
-        .fi-iframe {
-            width: 100%; height: 280px;
-            border: none;
-            background: #fff;
-            border-radius: 0 0 14px 14px;
-        }
-        .fi-cors-note {
-            padding: 0.7rem 1rem;
-            background: rgba(234,179,8,0.08);
-            border-top: 1px solid rgba(234,179,8,0.15);
-            font-size: 0.65rem;
-            color: rgba(234,179,8,0.7);
-            line-height: 1.5;
-        }
-        .fi-cursor { cursor: crosshair !important; }
-
         @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
@@ -452,7 +340,6 @@
             .map-area { height: 45vh; order: 1; }
             .nav-links { display: none; }
             .kec-grid { max-height: 120px; }
-            .fi-popup { width: calc(100vw - 28px); right: 14px; bottom: 55px; }
         }
     </style>
 </head>
@@ -601,21 +488,6 @@
         </div>
 
         <div class="toast" id="toast"></div>
-
-        <!-- ── Feature Info Popup ── -->
-        <div class="fi-popup" id="fi-popup">
-            <div class="fi-header">
-                <div class="fi-header-icon">📋</div>
-                <div style="flex-grow:1">
-                    <div class="fi-header-title">Feature Information</div>
-                    <div class="fi-header-sub" id="fi-layer-label">—</div>
-                </div>
-                <button class="fi-close" onclick="closeFeaturePopup()" title="Close">✕</button>
-            </div>
-            <div id="fi-body">
-                <div class="fi-state">Click a parcel on the map to view its attributes.</div>
-            </div>
-        </div>
     </main>
 
 </div>
@@ -709,7 +581,6 @@ let currentBgLayer       = null;
 let currentBoundaryLayer = null;
 let toastTimer           = null;
 let selectedClassFilter  = 'all';
-let currentActiveLayerName = null;
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -883,15 +754,6 @@ function renderMap() {
 
     const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
 
-    // Simpan nama layer aktif untuk GetFeatureInfo
-    currentActiveLayerName = layerName;
-
-    // Aktifkan cursor crosshair di map
-    document.getElementById('map').classList.add('fi-cursor');
-
-    // Tutup popup lama
-    closeFeaturePopup();
-
     loadWmsLayer(layerName, cqlFilter);
 
     // Boundary layer
@@ -932,115 +794,6 @@ function toast(msg, type = 'info') {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
-
-/* ============================================================
-   📋  GET FEATURE INFO — klik persil → tampilkan semua atribut
-   CORS fix: coba fetch JSON dulu; jika gagal (CORS/file://),
-   fallback ke iframe yang load text/html dari GeoServer.
-   Iframe tidak diblokir CORS sehingga selalu bisa tampil.
-   ============================================================ */
-function buildGfiUrl(latlng, infoFormat) {
-    const mapSize = map.getSize();
-    const point   = map.latLngToContainerPoint(latlng);
-    const bounds  = map.getBounds();
-    const sw      = bounds.getSouthWest();
-    const ne      = bounds.getNorthEast();
-    const params  = new URLSearchParams({
-        SERVICE:       'WMS',
-        VERSION:       '1.1.1',
-        REQUEST:       'GetFeatureInfo',
-        FORMAT:        'image/png',
-        TRANSPARENT:   'true',
-        QUERY_LAYERS:  `${GEOSERVER.workspace}:${currentActiveLayerName}`,
-        LAYERS:        `${GEOSERVER.workspace}:${currentActiveLayerName}`,
-        INFO_FORMAT:   infoFormat,
-        FEATURE_COUNT: '5',
-        X:             String(Math.round(point.x)),
-        Y:             String(Math.round(point.y)),
-        SRS:           'EPSG:4326',
-        WIDTH:         String(mapSize.x),
-        HEIGHT:        String(mapSize.y),
-        BBOX:          `${sw.lng},${sw.lat},${ne.lng},${ne.lat}`,
-    });
-    return `${GEOSERVER.url}?${params}`;
-}
-
-function renderPropsTable(props) {
-    const entries = Object.entries(props).filter(([k, v]) => v !== null && v !== '' && v !== undefined);
-    if (entries.length === 0) return '<div class="fi-state">No attributes available.</div>';
-    return entries.map(([k, v]) => {
-        const isHighlight = ['indeks','JENIS','jenis','_majority','majority','Luas_Ha'].includes(k);
-        return `<div class="fi-row">
-            <span class="fi-key">${k}</span>
-            <span class="fi-val${isHighlight ? ' highlight' : ''}">${v}</span>
-        </div>`;
-    }).join('');
-}
-
-function setFiBody(html) {
-    document.getElementById('fi-body').innerHTML = html;
-}
-
-function showFeaturePopup(layerLabel) {
-    document.getElementById('fi-layer-label').textContent = layerLabel;
-    document.getElementById('fi-popup').classList.add('visible');
-}
-
-function closeFeaturePopup() {
-    document.getElementById('fi-popup').classList.remove('visible');
-    setFiBody('<div class="fi-state">Click a parcel on the map to view its attributes.</div>');
-}
-
-map.on('click', async function(e) {
-    if (!currentActiveLayerName) return;  // belum ada layer yang di-render
-
-    const hazardId    = document.querySelector('input[name="hazard"]:checked')?.value ?? '';
-    const hazardLabel = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide', multihazard: 'Multi-Hazard' }[hazardId] ?? hazardId;
-    const layerLabel  = `${currentActiveLayerName}`;
-
-    // Tampilkan popup dengan loading
-    showFeaturePopup(layerLabel);
-    setFiBody('<div class="fi-state"><div class="fi-spinner"></div>Loading data…</div>');
-
-    const jsonUrl = buildGfiUrl(e.latlng, 'application/json');
-    const htmlUrl = buildGfiUrl(e.latlng, 'text/html');
-
-    // ── Coba fetch JSON ──
-    try {
-        const res  = await fetch(jsonUrl, { mode: 'cors' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-
-        if (!data.features || data.features.length === 0) {
-            setFiBody('<div class="fi-state">No feature at this location.</div>');
-            return;
-        }
-
-        // Gabungkan semua feature jika lebih dari 1
-        let html = '';
-        data.features.forEach((feat, i) => {
-            if (data.features.length > 1) {
-                html += `<div class="fi-row" style="background:rgba(229,57,53,0.07);">
-                    <span class="fi-key" style="color:var(--primary-red);font-size:0.65rem;">Feature ${i + 1}</span>
-                    <span class="fi-val" style="color:rgba(255,255,255,0.3);font-size:0.65rem;">of ${data.features.length}</span>
-                </div>`;
-            }
-            html += renderPropsTable(feat.properties);
-        });
-        setFiBody(`<div class="fi-body">${html}</div>`);
-
-    } catch (err) {
-        // ── CORS fallback: tampilkan via iframe (tidak kena CORS) ──
-        console.warn('[Pariksa] fetch GFI CORS error, using iframe fallback:', err.message);
-        setFiBody(`
-            <div class="fi-cors-note">
-                ⚠️ Data shown via GeoServer HTML (CORS bypass). Serve maps.html via
-                HTTP server for full JSON view.
-            </div>
-            <iframe class="fi-iframe" src="${htmlUrl}"></iframe>
-        `);
-    }
-});
 
 /* ============================================================
    🚀  INIT
