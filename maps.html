@@ -188,8 +188,9 @@
         .kec-all-chip:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(229,57,53,0.04); }
         .kec-all-chip.selected { background: var(--primary-red); border-color: var(--dark-red); border-style: solid; color: #fff; }
 
+        /* ── Hazard Grid: 2x2 untuk 4 pilihan ── */
         .hazard-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;
         }
         .hazard-radio { display: none; }
         .hazard-card-label {
@@ -212,35 +213,7 @@
             color: var(--primary-red); font-weight: 700;
         }
 
-        .param-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
-        }
-        .param-radio { display: none; }
-        .param-card-label {
-            display: flex; flex-direction: column; gap: 0.15rem;
-            padding: 0.7rem 0.9rem;
-            border: 1.5px solid var(--border-color); border-radius: 8px;
-            background: var(--bg-sidebar); cursor: pointer; transition: all 0.2s;
-        }
-        .param-tag  { font-size: 0.72rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.3px; }
-        .param-name { font-size: 0.82rem; font-weight: 600; color: var(--text-primary); }
-        .param-type { font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px; }
-        .param-card-label:hover { border-color: rgba(229,57,53,0.4); }
-        .param-radio:checked + .param-card-label { border-color: var(--primary-red); background: rgba(229,57,53,0.06); }
-        .param-radio:checked + .param-card-label .param-tag  { color: var(--primary-red); }
-        .param-radio:checked + .param-card-label .param-name { color: var(--primary-red); }
-
-        .param-note {
-            margin-top: 0.75rem; padding: 0.55rem 0.8rem;
-            background: rgba(229,57,53,0.05); border-left: 3px solid var(--primary-red);
-            border-radius: 0 6px 6px 0; font-size: 0.72rem; color: var(--text-secondary);
-            line-height: 1.55;
-        }
-        .param-note strong { color: var(--text-primary); }
-
-        /* ── Class Filter Panel ── */
-        #class-filter-panel { display: none; }
-        #class-filter-panel.visible { display: block; }
+        /* ── Class Filter Panel ── always visible */
         .filter-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
         }
@@ -443,61 +416,18 @@
                     <input type="radio" name="hazard" value="landslide" class="hazard-radio">
                     <div class="hazard-card-label"><span class="hazard-name">Landslide</span></div>
                 </label>
+                <label>
+                    <input type="radio" name="hazard" value="multihazard" class="hazard-radio">
+                    <div class="hazard-card-label"><span class="hazard-name">Multi-Hazard</span></div>
+                </label>
             </div>
         </div>
 
-        <!-- ── STEP 3: Analysis Parameter ── -->
+        <!-- ── STEP 3: Risk Class Filter ── -->
         <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">3</span>
-                Analysis Parameter
-            </div>
-            <div class="param-grid">
-                <label>
-                    <input type="radio" name="parameter" value="risk" class="param-radio" checked>
-                    <div class="param-card-label">
-                        <span class="param-tag">R</span>
-                        <span class="param-name">Risk</span>
-                        <span class="param-type">📍 Parcel Vector</span>
-                    </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="hazard" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">H</span>
-                        <span class="param-name">Hazard</span>
-                        <span class="param-type">🗺️ Raster</span>
-                    </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="vulnerability" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">V</span>
-                        <span class="param-name">Vulnerability</span>
-                        <span class="param-type">🗺️ Raster</span>
-                    </div>
-                </label>
-                <label>
-                    <input type="radio" name="parameter" value="capacity" class="param-radio">
-                    <div class="param-card-label">
-                        <span class="param-tag">C</span>
-                        <span class="param-name">Capacity</span>
-                        <span class="param-type">🗺️ Raster</span>
-                    </div>
-                </label>
-            </div>
-            <div class="param-note">
-                <strong>Risk (R)</strong> renders parcel-level vector data.
-                Hazard, Vulnerability &amp; Capacity are supplementary raster overlays.
-            </div>
-        </div>
-
-        <!-- ── STEP 4: Risk Class Filter ── -->
-        <div class="panel-section" id="class-filter-panel">
-            <div class="step-label">
-                <span class="step-badge">4</span>
                 Risk Class Filter
-                <span style="font-size:0.65rem;color:var(--text-secondary);font-weight:400;margin-left:4px;">Vector only</span>
             </div>
             <div class="filter-grid">
                 <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all', this)">All Classes</button>
@@ -569,19 +499,16 @@
    ============================================================ */
 const GEOSERVER = {
     url: 'http://localhost:8080/geoserver/pariksa/wms',
-    // WFS endpoint — digunakan untuk fetch polygon batas kecamatan
     wfsUrl: 'http://localhost:8080/geoserver/ows',
     workspace: 'pariksa',
 
     /* ----------------------------------------------------------
-       Hazard+param yang menggunakan SATU file 'semua' + WADMKC filter
+       Single-layer hazards: pakai 1 file GeoServer + WADMKC filter
        Key  : '{paramId}_{hazardId}'
        Value: nama layer GeoServer
-       Untuk menambah longsor/gempa nanti, cukup tambah baris di sini.
        ---------------------------------------------------------- */
     singleLayerParams: {
-        // Tambah di sini jika ada hazard yang pakai single file 'semua' + WADMKC filter
-        // Contoh: 'risk_landslide': 'risikolongsorsemua',
+        // Contoh: 'risk_flood': 'risikobanjirsemua',
     },
 
     layerOverrides: {},
@@ -650,7 +577,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
    ============================================================ */
 let selectedKecId        = null;
 let currentWmsLayer      = null;
-let currentBgLayer       = null;   // gray background saat highlight kelas aktif
+let currentBgLayer       = null;
 let currentBoundaryLayer = null;
 let toastTimer           = null;
 let selectedClassFilter  = 'all';
@@ -711,44 +638,43 @@ document.getElementById('kecamatan-search').addEventListener('input', function (
 /* ============================================================
    🗺️  LAYER MANAGEMENT
    ============================================================ */
-function resolveLayerName(kecId, hazardId, paramId) {
-    // Cek apakah kombinasi ini pakai single-layer + WADMKC filter
-    const singleKey = `${paramId}_${hazardId}`;
+function resolveLayerName(kecId, hazardId) {
+    // Cek single-layer override (mis. risikobanjirsemua)
+    const singleKey = `risk_${hazardId}`;
     if (GEOSERVER.singleLayerParams[singleKey]) {
         return GEOSERVER.singleLayerParams[singleKey];
     }
-    // Per-kecamatan: format normal
-    const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
+    const kecClean = kecId.replace(/_/g, '');
+    // Multi-Hazard: risikomultihazard{kec}
+    if (hazardId === 'multihazard') {
+        return `risikomultihazard${kecClean}`;
+    }
+    // Per-kecamatan format normal: risiko{bencana}{kec}
     const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
-    const kecClean  = kecId.replace(/_/g, '');
-    const auto      = `${paramMap[paramId]}${hazardMap[hazardId]}${kecClean}`;
-    const overrideKey = `${paramId}_${kecId}_${hazardId}`;
+    const auto = `risiko${hazardMap[hazardId]}${kecClean}`;
+    const overrideKey = `risk_${kecId}_${hazardId}`;
     return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
 
 function loadWmsLayer(layerName, cqlFilter) {
-    // Hapus layer sebelumnya
     if (currentWmsLayer) { map.removeLayer(currentWmsLayer); currentWmsLayer = null; }
     if (currentBgLayer)  { map.removeLayer(currentBgLayer);  currentBgLayer  = null; }
 
     if (cqlFilter) {
-        // ── Mode highlight: 2 layer ──
-        // 1. Background: semua persil, abu-abu (grayscale via CSS)
+        // Mode highlight: gray background + colored filter layer
         currentBgLayer = L.tileLayer.wms(GEOSERVER.url, {
             ...GEOSERVER.wmsParams,
             layers:    `${GEOSERVER.workspace}:${layerName}`,
             className: 'wms-gray-bg',
         }).addTo(map);
 
-        // 2. Highlight: hanya kelas dipilih, warna penuh (style GeoServer)
         currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
             ...GEOSERVER.wmsParams,
             layers:     `${GEOSERVER.workspace}:${layerName}`,
             CQL_FILTER: cqlFilter,
         }).addTo(map);
-
     } else {
-        // ── Mode normal: 1 layer ──
+        // Mode normal: 1 layer tanpa filter
         currentWmsLayer = L.tileLayer.wms(GEOSERVER.url, {
             ...GEOSERVER.wmsParams,
             layers: `${GEOSERVER.workspace}:${layerName}`,
@@ -771,23 +697,8 @@ function setClassFilter(value, el) {
     el.classList.add(classMap[value]);
 }
 
-document.querySelectorAll('.param-radio').forEach(radio => {
-    radio.addEventListener('change', function () {
-        const panel = document.getElementById('class-filter-panel');
-        if (this.value === 'risk') {
-            panel.classList.add('visible');
-        } else {
-            panel.classList.remove('visible');
-            selectedClassFilter = 'all';
-            document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
-            document.getElementById('filter-all').classList.add('f-active-all');
-        }
-    });
-});
-document.getElementById('class-filter-panel').classList.add('visible');
-
 /* ============================================================
-   🗺️  BOUNDARY LAYER  (WMS + CQL_FILTER)
+   🗺️  BOUNDARY LAYER (WMS + CQL_FILTER)
    ============================================================ */
 function loadBoundaryLayer(kec) {
     if (currentBoundaryLayer) {
@@ -803,7 +714,6 @@ function loadBoundaryLayer(kec) {
         opacity:     0.6,
     };
 
-    // Filter ke kecamatan tertentu jika bukan All Bandung
     if (kec) {
         const wadmkcVal = kec.wadmkc ?? kec.name;
         bParams.CQL_FILTER = `WADMKC='${wadmkcVal}'`;
@@ -812,7 +722,6 @@ function loadBoundaryLayer(kec) {
     currentBoundaryLayer = L.tileLayer.wms(GEOSERVER.url, bParams);
     currentBoundaryLayer.addTo(map);
 }
-
 
 /* ============================================================
    🎯  RENDER MAP
@@ -825,23 +734,21 @@ function renderMap() {
     }
 
     const hazardId  = document.querySelector('input[name="hazard"]:checked').value;
-    const paramId   = document.querySelector('input[name="parameter"]:checked').value;
-    const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
+    const layerName = resolveLayerName(selectedKecId, hazardId);
 
     // Build CQL_FILTER
     const filters = [];
 
-    // 1. WADMKC filter — hanya untuk single-layer hazard (mis. risikobanjirsemua)
-    //    dan hanya saat kecamatan spesifik dipilih (bukan All Bandung City)
-    const isSingleLayer = !!GEOSERVER.singleLayerParams[`${paramId}_${hazardId}`];
+    // WADMKC filter — untuk single-layer hazard saat kecamatan spesifik dipilih
+    const isSingleLayer = !!GEOSERVER.singleLayerParams[`risk_${hazardId}`];
     if (isSingleLayer && selectedKecId !== 'semua') {
         const kec = KECAMATAN_DATA.find(k => k.id === selectedKecId);
         const wadmkcVal = kec?.wadmkc ?? kec?.name;
         if (wadmkcVal) filters.push(`WADMKC='${wadmkcVal}'`);
     }
 
-    // 2. Indeks filter — hanya untuk parameter Risk dan jika kelas dipilih
-    if (paramId === 'risk' && selectedClassFilter !== 'all') {
+    // Indeks filter — jika kelas tertentu dipilih
+    if (selectedClassFilter !== 'all') {
         filters.push(`indeks=${selectedClassFilter}`);
     }
 
@@ -849,11 +756,11 @@ function renderMap() {
 
     loadWmsLayer(layerName, cqlFilter);
 
-    // Boundary — pass full kec object so wadmkc override is accessible
+    // Boundary layer
     const kecObj = (selectedKecId === 'semua') ? null : KECAMATAN_DATA.find(k => k.id === selectedKecId);
     loadBoundaryLayer(kecObj);
 
-    // Zoom
+    // Zoom to selected area
     if (selectedKecId === 'semua') {
         map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: true, duration: 1.2 });
     } else {
@@ -861,16 +768,14 @@ function renderMap() {
         map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
     }
 
-    const hazardLabel   = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
-    const paramLabel    = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
-    const paramType     = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
+    const hazardLabel   = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide', multihazard: 'Multi-Hazard' }[hazardId];
     const districtLabel = (selectedKecId === 'semua') ? 'All Bandung City' : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
-    const displayLabel  = `${districtLabel} ${hazardLabel} ${paramLabel}`;
+    const displayLabel  = `${districtLabel} — ${hazardLabel} Risk`;
 
     document.getElementById('info-title').textContent = displayLabel;
-    document.getElementById('info-desc').textContent  = paramType;
+    document.getElementById('info-desc').textContent  = 'Parcel Vector';
     document.getElementById('map-info-card').classList.add('visible');
-    document.getElementById('overlay-title').textContent = `${hazardLabel} ${paramLabel}`;
+    document.getElementById('overlay-title').textContent = `${hazardLabel} Risk`;
 
     toast(`Rendering: ${displayLabel}`, 'success');
 }
