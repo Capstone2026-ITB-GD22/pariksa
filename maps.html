@@ -189,7 +189,7 @@
         .kec-all-chip.selected { background: var(--primary-red); border-color: var(--dark-red); border-style: solid; color: #fff; }
 
         .hazard-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
         }
         .hazard-radio { display: none; }
         .hazard-card-label {
@@ -239,7 +239,8 @@
         .param-note strong { color: var(--text-primary); }
 
         /* ── Class Filter Panel ── */
-        #class-filter-panel { display: block; }
+        #class-filter-panel { display: none; }
+        #class-filter-panel.visible { display: block; }
         .filter-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;
         }
@@ -359,89 +360,6 @@
         /* Gray background for class highlight mode */
         .wms-gray-bg { filter: grayscale(1) opacity(0.3); }
 
-        /* ── Feature Info Popup ── */
-        .feature-popup {
-            position: absolute; bottom: 90px; left: 14px; z-index: 900;
-            width: 272px;
-            background: rgba(8, 10, 22, 0.93);
-            backdrop-filter: blur(20px) saturate(1.4);
-            border: 1px solid rgba(255,255,255,0.09);
-            border-radius: 16px; overflow: hidden;
-            box-shadow: 0 12px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
-            opacity: 0; transform: translateY(14px) scale(0.97);
-            transition: all 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            pointer-events: none;
-        }
-        .feature-popup.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-        .fp-header {
-            display: flex; align-items: center; gap: 8px;
-            padding: 0.8rem 0.9rem;
-            background: rgba(255,255,255,0.04);
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-        }
-        .fp-icon {
-            width: 26px; height: 26px; border-radius: 7px;
-            background: rgba(59,130,246,0.18);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; flex-shrink: 0;
-        }
-        .fp-title { font-size: 0.78rem; font-weight: 700; color: #fff; flex-grow: 1; }
-        .fp-hazard-tag {
-            font-size: 0.58rem; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 0.9px; color: #60a5fa;
-            background: rgba(59,130,246,0.12);
-            padding: 2px 7px; border-radius: 20px;
-        }
-        .fp-close {
-            width: 20px; height: 20px; border-radius: 6px;
-            background: rgba(255,255,255,0.07); border: none;
-            color: rgba(255,255,255,0.5); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem; transition: all 0.15s; flex-shrink: 0;
-        }
-        .fp-close:hover { background: rgba(255,80,80,0.25); color: #fff; }
-        .fp-body { padding: 0.85rem 0.9rem; display: flex; flex-direction: column; gap: 0; }
-        .fp-row {
-            display: flex; align-items: center; gap: 10px;
-            padding: 0.42rem 0;
-        }
-        .fp-row + .fp-row { border-top: 1px solid rgba(255,255,255,0.05); }
-        .fp-row-icon {
-            width: 26px; height: 26px; border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.78rem; flex-shrink: 0;
-        }
-        .fp-row-text { display: flex; flex-direction: column; gap: 1px; }
-        .fp-row-label {
-            font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.8px; color: rgba(255,255,255,0.35);
-        }
-        .fp-row-value { font-size: 0.82rem; font-weight: 600; color: #f1f5f9; }
-        .fp-risk-pill {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 3px 10px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 800;
-        }
-        .fp-footer {
-            padding: 0.5rem 0.9rem;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            font-size: 0.6rem; color: rgba(255,255,255,0.2);
-            text-align: right;
-        }
-        .fp-loading, .fp-nodata {
-            padding: 1.2rem 1rem; text-align: center;
-            color: rgba(255,255,255,0.3); font-size: 0.78rem;
-        }
-        .fp-spinner {
-            width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top-color: #60a5fa;
-            border-radius: 50%; animation: spin 0.7s linear infinite;
-            margin: 0 auto 0.5rem;
-        }
-        /* Crosshair cursor saat flood risk aktif */
-        .map-flood-active { cursor: crosshair !important; }
-
         @media (max-width: 900px) { :root { --sidebar-w: 310px; } }
         @media (max-width: 768px) {
             .webgis-container { flex-direction: column; }
@@ -506,8 +424,6 @@
             <div class="kec-status" id="kec-status">30 districts available</div>
         </div>
 
-        </div>
-
         <!-- ── STEP 2: Hazard Type ── -->
         <div class="panel-section">
             <div class="step-label">
@@ -527,19 +443,61 @@
                     <input type="radio" name="hazard" value="landslide" class="hazard-radio">
                     <div class="hazard-card-label"><span class="hazard-name">Landslide</span></div>
                 </label>
-                <label>
-                    <input type="radio" name="hazard" value="multihazard" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Multi-Hazard</span></div>
-                </label>
             </div>
         </div>
 
-
-        <!-- ── STEP 3: Risk Class Filter ── -->
-        <div class="panel-section" id="class-filter-panel">
+        <!-- ── STEP 3: Analysis Parameter ── -->
+        <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">3</span>
+                Analysis Parameter
+            </div>
+            <div class="param-grid">
+                <label>
+                    <input type="radio" name="parameter" value="risk" class="param-radio" checked>
+                    <div class="param-card-label">
+                        <span class="param-tag">R</span>
+                        <span class="param-name">Risk</span>
+                        <span class="param-type">📍 Parcel Vector</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="parameter" value="hazard" class="param-radio">
+                    <div class="param-card-label">
+                        <span class="param-tag">H</span>
+                        <span class="param-name">Hazard</span>
+                        <span class="param-type">🗺️ Raster</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="parameter" value="vulnerability" class="param-radio">
+                    <div class="param-card-label">
+                        <span class="param-tag">V</span>
+                        <span class="param-name">Vulnerability</span>
+                        <span class="param-type">🗺️ Raster</span>
+                    </div>
+                </label>
+                <label>
+                    <input type="radio" name="parameter" value="capacity" class="param-radio">
+                    <div class="param-card-label">
+                        <span class="param-tag">C</span>
+                        <span class="param-name">Capacity</span>
+                        <span class="param-type">🗺️ Raster</span>
+                    </div>
+                </label>
+            </div>
+            <div class="param-note">
+                <strong>Risk (R)</strong> renders parcel-level vector data.
+                Hazard, Vulnerability &amp; Capacity are supplementary raster overlays.
+            </div>
+        </div>
+
+        <!-- ── STEP 4: Risk Class Filter ── -->
+        <div class="panel-section" id="class-filter-panel">
+            <div class="step-label">
+                <span class="step-badge">4</span>
                 Risk Class Filter
+                <span style="font-size:0.65rem;color:var(--text-secondary);font-weight:400;margin-left:4px;">Vector only</span>
             </div>
             <div class="filter-grid">
                 <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all', this)">All Classes</button>
@@ -690,14 +648,12 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ============================================================
    🧩  STATE
    ============================================================ */
-let selectedKecId           = null;
-let currentWmsLayer         = null;
-let currentBgLayer          = null;   // gray background saat highlight kelas aktif
-let currentBoundaryLayer    = null;
-let toastTimer              = null;
-let selectedClassFilter     = 'all';
-let currentActiveLayerName  = null;   // nama layer WMS yang aktif
-let currentActiveHazardId   = null;   // hazard yang sedang aktif
+let selectedKecId        = null;
+let currentWmsLayer      = null;
+let currentBgLayer       = null;   // gray background saat highlight kelas aktif
+let currentBoundaryLayer = null;
+let toastTimer           = null;
+let selectedClassFilter  = 'all';
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -762,14 +718,10 @@ function resolveLayerName(kecId, hazardId, paramId) {
         return GEOSERVER.singleLayerParams[singleKey];
     }
     // Per-kecamatan: format normal
-    const paramMap  = { risk: 'risiko' };
+    const paramMap  = { risk: 'risiko', hazard: 'bahaya', vulnerability: 'kerentanan', capacity: 'kapasitas' };
     const hazardMap = { earthquake: 'gempa', flood: 'banjir', landslide: 'longsor' };
     const kecClean  = kecId.replace(/_/g, '');
-    // Multihazard pakai prefix 'resiko' (sesuai penamaan GeoServer)
-    if (hazardId === 'multihazard') {
-        return `risikomultihazard${kecClean}`;
-    }
-    const auto      = `${paramMap[paramId] ?? 'risiko'}${hazardMap[hazardId]}${kecClean}`;
+    const auto      = `${paramMap[paramId]}${hazardMap[hazardId]}${kecClean}`;
     const overrideKey = `${paramId}_${kecId}_${hazardId}`;
     return GEOSERVER.layerOverrides[overrideKey] ?? auto;
 }
@@ -819,6 +771,19 @@ function setClassFilter(value, el) {
     el.classList.add(classMap[value]);
 }
 
+document.querySelectorAll('.param-radio').forEach(radio => {
+    radio.addEventListener('change', function () {
+        const panel = document.getElementById('class-filter-panel');
+        if (this.value === 'risk') {
+            panel.classList.add('visible');
+        } else {
+            panel.classList.remove('visible');
+            selectedClassFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+            document.getElementById('filter-all').classList.add('f-active-all');
+        }
+    });
+});
 document.getElementById('class-filter-panel').classList.add('visible');
 
 /* ============================================================
@@ -860,7 +825,7 @@ function renderMap() {
     }
 
     const hazardId  = document.querySelector('input[name="hazard"]:checked').value;
-    const paramId   = 'risk'; // hanya parameter Risk yang tersedia
+    const paramId   = document.querySelector('input[name="parameter"]:checked').value;
     const layerName = resolveLayerName(selectedKecId, hazardId, paramId);
 
     // Build CQL_FILTER
@@ -875,18 +840,12 @@ function renderMap() {
         if (wadmkcVal) filters.push(`WADMKC='${wadmkcVal}'`);
     }
 
-    // 2. Indeks filter — jika kelas dipilih
-    if (selectedClassFilter !== 'all') {
+    // 2. Indeks filter — hanya untuk parameter Risk dan jika kelas dipilih
+    if (paramId === 'risk' && selectedClassFilter !== 'all') {
         filters.push(`indeks=${selectedClassFilter}`);
     }
 
     const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
-
-    // Simpan state layer aktif
-    currentActiveLayerName = layerName;
-    currentActiveHazardId  = hazardId;
-
-    closeFeaturePopup();
 
     loadWmsLayer(layerName, cqlFilter);
 
@@ -902,14 +861,16 @@ function renderMap() {
         map.flyTo(kecData.center, kecData.zoom, { animate: true, duration: 1.2 });
     }
 
-    const hazardLabel   = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide', multihazard: 'Multi-Hazard' }[hazardId];
+    const hazardLabel   = { earthquake: 'Earthquake', flood: 'Flood', landslide: 'Landslide' }[hazardId];
+    const paramLabel    = { risk: 'Risk', hazard: 'Hazard', vulnerability: 'Vulnerability', capacity: 'Capacity' }[paramId];
+    const paramType     = (paramId === 'risk') ? 'Parcel Vector' : 'Raster';
     const districtLabel = (selectedKecId === 'semua') ? 'All Bandung City' : KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name;
-    const displayLabel  = `${districtLabel} — ${hazardLabel} Risk`;
+    const displayLabel  = `${districtLabel} ${hazardLabel} ${paramLabel}`;
 
     document.getElementById('info-title').textContent = displayLabel;
-    document.getElementById('info-desc').textContent  = 'Parcel Vector';
+    document.getElementById('info-desc').textContent  = paramType;
     document.getElementById('map-info-card').classList.add('visible');
-    document.getElementById('overlay-title').textContent = `${hazardLabel} Risk`;
+    document.getElementById('overlay-title').textContent = `${hazardLabel} ${paramLabel}`;
 
     toast(`Rendering: ${displayLabel}`, 'success');
 }
@@ -929,14 +890,9 @@ function toast(msg, type = 'info') {
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-
-function closeFeaturePopup() {}
-
-
 /* ============================================================
    🚀  INIT
    ============================================================ */
-
 buildKecamatanGrid();
 
 /* Page transition */
