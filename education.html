@@ -44,13 +44,50 @@
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
         
-        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { 
             font-weight: 600; font-size: 0.95rem; color: #FFFFFF; 
             transition: color 0.3s ease; 
         }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
+
+        /* Language Toggle */
+        .lang-btn {
+            background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25);
+            color: #fff; padding: 5px 14px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            font-family: var(--font-main); letter-spacing: 0.5px;
+            flex-shrink: 0; transition: all 0.2s ease;
+        }
+        .lang-btn:hover { background: var(--primary-red); border-color: var(--primary-red); }
+
+        /* Mobile Hamburger */
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; z-index: 2001; background: none; border: none; padding: 4px;
+        }
+        .hamburger span {
+            width: 24px; height: 2.5px; background-color: #FFFFFF;
+            border-radius: 2px; transition: all 0.3s ease; display: block;
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%;
+                width: 75%; height: 100vh; background-color: rgba(0,0,0,0.97);
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 2.5rem; list-style: none;
+                transition: right 0.35s cubic-bezier(0.165,0.84,0.44,1); z-index: 1900;
+            }
+            .nav-links.mob-open { right: 0; }
+            .nav-links.mob-open li a { color: #fff; font-size: 1.15rem; }
+            .hamburger.mob-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+            .hamburger.mob-open span:nth-child(2) { opacity: 0; }
+            .hamburger.mob-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+            .page-header h1 { font-size: 2rem; }
+            .page-header p { font-size: 1rem; }
+        }
 
         /* Page Header */
         .page-header { padding: 10rem 0 5rem 0; background-color: var(--bg-light); text-align: center; }
@@ -116,8 +153,6 @@
         @media (max-width: 1024px) { .edu-card { min-width: calc(50% - 1rem); } }
         @media (max-width: 768px) { 
             .edu-card { min-width: 100%; } 
-            .page-header h1 { font-size: 2.2rem; }
-            .nav-links { display: none; }
             .header-divider { width: 200px; }
         }
     </style>
@@ -131,21 +166,23 @@
                 Pariksa
             </a>
             <div class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="guide.html">Guide</a></li>
-                    <li><a href="maps.html">Maps</a></li>
-                    <li><a href="education.html" class="active">Education</a></li>
-                    <li><a href="team.html">Team</a></li>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="guide.html" data-i18n="nav.guide">Guide</a></li>
+                    <li><a href="maps.html" data-i18n="nav.maps">Maps</a></li>
+                    <li><a href="education.html" class="active" data-i18n="nav.education">Education</a></li>
+                    <li><a href="team.html" data-i18n="nav.team">Team</a></li>
                 </ul>
+                <button class="lang-btn" id="lang-btn" onclick="toggleLang()">ID</button>
+                <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
             </div>
         </div>
     </nav>
 
     <header class="page-header">
         <div class="container">
-            <h1>Resource Center</h1>
-            <p>Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
+            <h1 data-i18n="edu.header.h1">Resource Center</h1>
+            <p data-i18n="edu.header.p">Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
             <div class="header-divider"></div>
         </div>
     </header>
@@ -166,24 +203,24 @@
             <div class="slider-wrapper">
                 <div id="news-track" class="slider-track">
                     <div class="edu-card">
-                        <h3>South Bandung Floods Affect Thousands of Residents and Disrupt Transportation</h3>
-                        <p>Severe flooding in South Bandung, triggered by three consecutive days of heavy rainfall, affected 34,497 residents, inundated hundreds of homes, displaced hundreds of people, and disrupted major road access across several districts.</p>
-                        <a href="https://jabarprov.go.id/berita/banjir-bandung-selatan-ratusan-rumah-terdampak-dan-akses-jalan-terputus-23760" class="card-link">Read More →</a>
+                        <h3>New LiDAR Survey Completed in North Bandung</h3>
+                        <p>High-resolution aerial data reveals subtle land movement patterns in residential areas near the Lembang fault line.</p>
+                        <a href="#" class="card-link">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Rapid Emergency Response Deployed Following Landslide in West Bandung</h3>
-                        <p>Following a deadly landslide in Cisarua, West Bandung, triggered by intense rainfall, the Ministry of Public Works deployed emergency personnel, heavy equipment, and relief facilities to support rescue operations and assist 113 affected residents.</p>
-                        <a href="https://sahabat.pu.go.id/eppid/berita/detail/respons-cepat-bencana-longsor-di-cisarua-bandung-barat-kementerian-pu-kerahkan-alat-berat-dan-sarana" class="card-link">Read More →</a>
+                        <h3>Community Resilience Workshop 2026</h3>
+                        <p>Team Pariksa collaborates with local district leaders to test real-time flood warning integrations.</p>
+                        <a href="#" class="card-link">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>ITB Expert Explains Mudflow Mechanism Behind West Bandung Landslide and Ongoing Risks</h3>
-                        <p>An ITB geologist explained that the West Bandung disaster was caused by a landslide-dammed river that later collapsed, triggering a destructive mudflow carrying sediment and debris downstream, with additional risks remaining due to potential upstream blockages.</p>
-                        <a href="https://itb.ac.id/berita/longsor-bandung-barat-pakar-itb-jelaskan-mekanisme-aliran-lumpur-dan-potensi-bahaya-susulannya/63243" class="card-link">Read More →</a>
+                        <h3>WebGIS V3.0 Deployment</h3>
+                        <p>Major update featuring multi-hazard overlay capabilities and improved mobile responsiveness for field operations.</p>
+                        <a href="#" class="card-link">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Flooding in Bandung Affects 600 Residents</h3>
-                        <p>Heavy rainfall caused the Cikapundung River to overflow in central Bandung, affecting 600 residents and inundating 600 homes, while emergency response teams provided evacuation support and temporary flood protection measures.</p>
-                        <a href="https://www.bnpb.go.id/berita/banjir-genangi-bandung-600-jiwa-terdampak" class="card-link">Read More →</a>
+                        <h3>Collaboration with Regional Agency</h3>
+                        <p>Institutional agreement signed to integrate Pariksa data into provincial disaster response protocols.</p>
+                        <a href="#" class="card-link">Read More →</a>
                     </div>
                 </div>
             </div>
@@ -269,9 +306,10 @@
     </section>
 
     <footer>
-        <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        <p data-i18n="footer">&copy; 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
     </footer>
 
+    <script src="lang.js"></script>
     <script>
         const positions = {
             news: 0,
@@ -305,6 +343,20 @@
             slide('journal', 0);
             slide('video', 0);
         });
+
+        // Hamburger mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinks  = document.getElementById('nav-links');
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('mob-open');
+                navLinks.classList.toggle('mob-open');
+            });
+            navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+                hamburger.classList.remove('mob-open');
+                navLinks.classList.remove('mob-open');
+            }));
+        }
         // Page transition on exit
         document.querySelectorAll('a[href]').forEach(function(link) {
             link.addEventListener('click', function(e) {
