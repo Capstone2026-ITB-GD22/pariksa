@@ -58,30 +58,10 @@
         .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
-        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
-
-        /* Language Toggle */
-        .lang-btn {
-            background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25);
-            color: #fff; padding: 5px 14px; border-radius: 20px;
-            font-size: 0.78rem; font-weight: 700; cursor: pointer;
-            font-family: var(--font-main); letter-spacing: 0.5px;
-            flex-shrink: 0; transition: all 0.2s ease;
-        }
-        .lang-btn:hover { background: var(--primary-red); border-color: var(--primary-red); }
-
-        /* Mobile Hamburger */
-        .hamburger {
-            display: none; flex-direction: column; gap: 5px;
-            cursor: pointer; z-index: 2001; background: none; border: none; padding: 4px;
-        }
-        .hamburger span {
-            width: 24px; height: 2.5px; background-color: #FFFFFF;
-            border-radius: 2px; transition: all 0.3s ease; display: block;
-        }
 
         /* --- Guide Header --- */
         .guide-header { padding: 120px 0 40px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; text-align: center; }
@@ -325,19 +305,7 @@
             .guide-main { padding-left: 0; }
         }
         @media (max-width: 768px) {
-            .hamburger { display: flex; }
-            .nav-links {
-                position: fixed; top: 0; right: -100%;
-                width: 75%; height: 100vh; background-color: rgba(0,0,0,0.97);
-                flex-direction: column; justify-content: center; align-items: center;
-                gap: 2.5rem; list-style: none;
-                transition: right 0.35s cubic-bezier(0.165,0.84,0.44,1); z-index: 1900;
-            }
-            .nav-links.mob-open { right: 0; }
-            .nav-links.mob-open li a { color: #fff; font-size: 1.15rem; }
-            .hamburger.mob-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-            .hamburger.mob-open span:nth-child(2) { opacity: 0; }
-            .hamburger.mob-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+            .nav-links { display: none; }
             .section-box { padding: 1.5rem; }
             .step-card { flex-direction: column; }
             .step-image { width: 100%; height: auto; aspect-ratio: 16/9; }
@@ -362,15 +330,13 @@
                 Pariksa
             </a>
             <div class="nav-right">
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-                    <li><a href="guide.html" class="active" data-i18n="nav.guide">Guide</a></li>
-                    <li><a href="maps.html" data-i18n="nav.maps">Maps</a></li>
-                    <li><a href="education.html" data-i18n="nav.education">Education</a></li>
-                    <li><a href="team.html" data-i18n="nav.team">Team</a></li>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html" class="active">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html">Team</a></li>
                 </ul>
-                <button class="lang-btn" id="lang-btn" onclick="toggleLang()">ID</button>
-                <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
             </div>
         </div>
     </nav>
@@ -385,12 +351,12 @@
     <div class="container guide-layout">
         
         <aside class="guide-sidebar">
-            <div class="sidebar-title" data-i18n="guide.sidebar.title">Guidebook</div>
+            <div class="sidebar-title">Guidebook</div>
             <ul class="sidebar-nav">
-                <li><a onclick="showSection('how-to-use', this)" class="active" data-i18n="guide.sidebar.use">How to Use</a></li>
-                <li><a onclick="showSection('concepts', this)" data-i18n="guide.sidebar.concepts">Basic Concepts of Disaster</a></li>
-                <li><a onclick="showSection('indices', this)" data-i18n="guide.sidebar.method">Disaster Indices</a></li>
-                <li><a onclick="showSection('faq', this)" data-i18n="guide.sidebar.faq">FAQ</a></li>
+                <li><a onclick="showSection('how-to-use', this)" class="active">How to Use</a></li>
+                <li><a onclick="showSection('concepts', this)">Basic Concepts of Disaster</a></li>
+                <li><a onclick="showSection('indices', this)">Disaster Indices</a></li>
+                <li><a onclick="showSection('faq', this)">FAQ</a></li>
             </ul>
         </aside>
 
@@ -584,11 +550,10 @@
 
     <footer>
         <div class="container">
-            <p data-i18n="footer">&copy; 2026 Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
         </div>
     </footer>
 
-    <script src="lang.js"></script>
     <script>
         function showSection(sectionId, element) {
             const sections = document.querySelectorAll('.content-section');
@@ -696,20 +661,6 @@
             if (event.target === modal) {
                 closeModal();
             }
-        }
-
-        // Hamburger mobile menu
-        const hamburger = document.getElementById('hamburger');
-        const navLinks  = document.getElementById('nav-links');
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('mob-open');
-                navLinks.classList.toggle('mob-open');
-            });
-            navLinks.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', () => {
-                hamburger.classList.remove('mob-open');
-                navLinks.classList.remove('mob-open');
-            }));
         }
         // Page transition on exit
         document.querySelectorAll('a[href]').forEach(function(link) {
