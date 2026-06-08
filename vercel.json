@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/geoserver/:match*",
+      "destination": "http://103.93.132.242:8080/geoserver/:match*"
+    }
+  ]
+}
