@@ -12,11 +12,14 @@
         :root {
             --red:       #E53935;
             --dark-red:  #B71C1C;
-            --bg:        #060c1a;
-            --bg-card:   rgba(255, 255, 255, 0.045);
-            --bg-hover:  rgba(255, 255, 255, 0.08);
-            --border:    rgba(255, 255, 255, 0.08);
-            --border-h:  rgba(229, 57, 53, 0.4);
+            --bg:        #FFFFFF;
+            --bg-light:  #F8F9FA;
+            --bg-card:   #111827;
+            --bg-hover:  #1a2438;
+            --border:    #EAEAEA;
+            --border-h:  rgba(229, 57, 53, 0.5);
+            --text:      #1A1A1A;
+            --text-sec:  #6B6B6B;
             --font:      'Inter', sans-serif;
         }
 
@@ -24,7 +27,7 @@
         body {
             font-family: var(--font);
             background: var(--bg);
-            color: #fff;
+            color: var(--text);
             overflow-x: hidden;
             animation: pageEnter 0.4s ease both;
         }
@@ -54,16 +57,18 @@
 
         /* ── Hero ── */
         .hero {
-            padding: 9.5rem 0 5rem;
+            padding: 10rem 0 5.5rem;
             text-align: center;
             position: relative;
+            background: var(--bg-light);
             border-bottom: 1px solid var(--border);
         }
-        .hero::before {
+        .hero::after {
             content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(229,57,53,0.13), transparent 70%);
-            pointer-events: none;
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 2px;
+            background: var(--red);
+            box-shadow: 0 0 12px rgba(229,57,53,0.4);
         }
         .hero-eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
@@ -77,9 +82,10 @@
         .hero h1 {
             font-size: 3.4rem; font-weight: 700; letter-spacing: -1.5px;
             line-height: 1.15; margin-bottom: 1rem;
+            color: var(--text);
         }
         .hero p {
-            color: rgba(255,255,255,0.5); font-size: 1.05rem;
+            color: var(--text-sec); font-size: 1.05rem;
             max-width: 500px; margin: 0 auto; line-height: 1.8;
         }
 
@@ -104,10 +110,10 @@
         }
         .section-title {
             font-size: 2rem; font-weight: 700; letter-spacing: -0.5px;
-            color: #fff;
+            color: var(--text);
         }
         .section-sub {
-            font-size: 0.92rem; color: rgba(255,255,255,0.4);
+            font-size: 0.92rem; color: var(--text-sec);
             margin-top: 0.4rem;
         }
 
@@ -116,7 +122,7 @@
 
         .team-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255,255,255,0.07);
             border-radius: 20px;
             padding: 2.8rem 1.8rem 2.2rem;
             text-align: center;
@@ -129,8 +135,8 @@
         }
         .team-card:hover {
             background: var(--bg-hover);
-            border-color: var(--border-h);
-            box-shadow: 0 20px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(229,57,53,0.1) inset;
+            border-color: rgba(229,57,53,0.45);
+            box-shadow: 0 20px 48px rgba(0,0,0,0.25), 0 0 0 1px rgba(229,57,53,0.08) inset;
         }
         .animate-in { animation: fadeUp 0.55s ease forwards; }
         @keyframes fadeUp {
@@ -157,7 +163,7 @@
             border: 2px solid rgba(229,57,53,0);
             transition: border-color 0.35s ease;
         }
-        .team-card:hover .avatar-ring { border-color: rgba(229,57,53,0.5); }
+        .team-card:hover .avatar-ring { border-color: rgba(229,57,53,0.55); }
 
         /* Card text */
         .card-name {
@@ -165,8 +171,8 @@
             margin-bottom: 0.3rem; line-height: 1.4;
         }
         .card-role {
-            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;
-            color: var(--red); text-transform: uppercase; margin-bottom: 0.1rem;
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+            color: var(--red); text-transform: uppercase; margin-bottom: 0.2rem;
         }
         .card-nim {
             font-size: 0.78rem; color: rgba(255,255,255,0.3);
@@ -202,7 +208,7 @@
             padding: 2.5rem 0;
             text-align: center;
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.25);
+            color: var(--text-sec);
         }
 
         /* ── Responsive ── */
