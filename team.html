@@ -3,409 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team | Pariksa — Disaster Risk Mapping Bandung</title>
-    <meta name="description" content="Meet the academic advisors and capstone students behind the Pariksa high-precision disaster risk mapping project.">
-
+    <title>Team | Pariksa Spatial Intelligence</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
+        /* --- Color Variables & WOW Factors --- */
         :root {
-            --red:       #E53935;
-            --dark-red:  #B71C1C;
-            --bg:        #FFFFFF;
-            --bg-light:  #F8F9FA;
-            --bg-card:   #111827;
-            --bg-hover:  #1a2438;
-            --border:    #EAEAEA;
-            --border-h:  rgba(229, 57, 53, 0.5);
-            --text:      #1A1A1A;
-            --text-sec:  #6B6B6B;
-            --font:      'Inter', sans-serif;
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --bg-dark: #000000; 
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --border-color: #EAEAEA;
+            --font-main: 'Inter', sans-serif;
+            
+            /* WOW Factor: Premium Glows */
+            --glow-red: rgba(229, 57, 53, 0.3);
+            --glow-white: rgba(255, 255, 255, 0.15);
         }
 
+        /* --- Base Reset --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            animation: pageEnter 0.4s ease both;
-        }
-        @keyframes pageEnter { from { opacity: 0; } to { opacity: 1; } }
+        body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-white); line-height: 1.6; overflow-x: hidden; animation: pageEnter 0.45s ease both; }
+        @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         a { text-decoration: none; color: inherit; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-        /* ── Navbar ── */
-        nav {
+        /* --- Navbar Konsisten --- */
+        nav { 
             position: fixed; top: 0; width: 100%; z-index: 2000;
-            background: rgba(6, 12, 26, 0.92);
-            padding: 0.85rem 0;
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
-        .nav-container {
-            display: flex; justify-content: space-between; align-items: center;
-            max-width: 95%; width: 100%; margin: 0 auto;
+        .nav-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            max-width: 95% !important; width: 100%; margin: 0 auto;
         }
-        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.45rem; font-weight: 700; color: #fff; }
-        .logo-img { height: 38px; width: auto; }
-        .logo-wrapper .logo-accent { color: var(--red); }
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
+        .logo-img { height: 40px; width: auto; }
+        .logo-wrapper span { color: var(--primary-red); }
+        
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { font-weight: 600; font-size: 0.92rem; color: rgba(255,255,255,0.6); transition: color 0.2s; }
-        .nav-links a:hover { color: #fff; }
-        .nav-links a.active { color: #fff; }
+        .nav-links a { font-weight: 600; font-size: 0.95rem; color: #FFFFFF; transition: color 0.2s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
 
-        /* ── Hero ── */
-        .hero {
-            padding: 10rem 0 5.5rem;
-            text-align: center;
-            position: relative;
-            background: var(--bg-light);
-            border-bottom: 1px solid var(--border);
-        }
-        .hero::after {
-            content: '';
-            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 120px; height: 2px;
-            background: var(--red);
-            box-shadow: 0 0 12px rgba(229,57,53,0.4);
-        }
-        .hero-eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 5px 16px;
-            border: 1px solid rgba(229,57,53,0.35);
-            border-radius: 20px;
-            color: var(--red); font-size: 0.75rem; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
-        .hero h1 {
-            font-size: 3.4rem; font-weight: 700; letter-spacing: -1.5px;
-            line-height: 1.15; margin-bottom: 1rem;
-            color: var(--text);
-        }
-        .hero p {
-            color: var(--text-sec); font-size: 1.05rem;
-            max-width: 500px; margin: 0 auto; line-height: 1.8;
-        }
+        /* --- Page Header --- */
+        .page-header { padding: 12rem 0 6rem 0; background-color: var(--bg-light); text-align: center; position: relative; }
+        .page-header::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 2px; background: var(--primary-red); box-shadow: 0 0 15px var(--glow-red); }
+        .page-header h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -1px; }
+        .page-header p { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: 1.2rem; }
 
-        /* ── Section ── */
-        .team-section { padding: 7rem 0; }
-        .team-section + .team-section {
-            border-top: 1px solid var(--border);
-        }
+        /* --- Team Section Base --- */
+        .team-section { padding: 8rem 0; position: relative; }
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-header span { display: block; color: var(--primary-red); font-size: 0.95rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .section-header h2 { font-size: 3rem; font-weight: 700; color: var(--text-primary); letter-spacing: -1px; }
 
-        .section-header { margin-bottom: 3.5rem; }
-        .section-eyebrow {
-            display: flex; align-items: center; gap: 1rem;
-            margin-bottom: 0.8rem;
-        }
-        .section-eyebrow span {
-            font-size: 0.75rem; font-weight: 700; letter-spacing: 2.5px;
-            text-transform: uppercase; color: var(--red);
-        }
-        .section-eyebrow::after {
-            content: ''; flex-grow: 1; height: 1px;
-            background: var(--border);
-        }
-        .section-title {
-            font-size: 2rem; font-weight: 700; letter-spacing: -0.5px;
-            color: var(--text);
-        }
-        .section-sub {
-            font-size: 0.92rem; color: var(--text-sec);
-            margin-top: 0.4rem;
-        }
-
-        /* ── Cards ── */
-        .tilt-wrapper { perspective: 1000px; }
-
+        /* --- WOW Factor: Glassmorphism & Tilt Base --- */
+        .tilt-wrapper { perspective: 1000px; transition: transform 0.1s ease; }
+        
         .team-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 20px;
-            padding: 2.8rem 1.8rem 2.2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(234, 234, 234, 0.5);
+            border-radius: 16px;
+            padding: 3.5rem 2rem; 
             text-align: center;
-            display: flex; flex-direction: column; align-items: center;
-            height: 100%;
-            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-style: preserve-3d; 
             will-change: transform;
-            opacity: 0;
-        }
-        .team-card:hover {
-            background: var(--bg-hover);
-            border-color: rgba(229,57,53,0.45);
-            box-shadow: 0 20px 48px rgba(0,0,0,0.25), 0 0 0 1px rgba(229,57,53,0.08) inset;
-        }
-        .animate-in { animation: fadeUp 0.55s ease forwards; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to   { opacity: 1; transform: translateY(0); }
+            opacity: 0; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
         }
 
-        /* Avatar */
+        .team-card:hover { 
+            transform: translateZ(20px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+            border-color: rgba(229, 57, 53, 0.3); 
+        }
+
+        .animate-in { animation: fadeSlideUp 0.6s ease forwards; opacity: 1; }
+
         .avatar {
-            width: 100px; height: 100px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            margin-bottom: 1.4rem;
-            position: relative; flex-shrink: 0;
-        }
-        .avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover; border-radius: 50%;
-            border: 2.5px solid rgba(255,255,255,0.12);
-            display: block;
-        }
-        .avatar-ring {
-            position: absolute; inset: -7px;
-            border-radius: 50%;
-            border: 2px solid rgba(229,57,53,0);
-            transition: border-color 0.35s ease;
-        }
-        .team-card:hover .avatar-ring { border-color: rgba(229,57,53,0.55); }
-
-        /* Card text */
-        .card-name {
-            font-size: 1rem; font-weight: 700; color: #fff;
-            margin-bottom: 0.3rem; line-height: 1.4;
-        }
-        .card-role {
-            font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
-            color: var(--red); text-transform: uppercase; margin-bottom: 0.2rem;
-        }
-        .card-nim {
-            font-size: 0.78rem; color: rgba(255,255,255,0.3);
-            letter-spacing: 1px; font-weight: 500;
+            margin: 0 auto 1.5rem auto;
+            position: relative;
+            transform: translateZ(30px); 
         }
 
-        /* ── Advisor Grid: 3 columns centered ── */
-        .advisor-grid {
+        .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--bg-white); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        .avatar::before, .avatar::after {
+            content: ''; position: absolute; border-radius: 50%;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 2px solid var(--primary-red); opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .avatar::after { top: -18px; left: -18px; right: -18px; bottom: -18px; border-color: rgba(229, 57, 53, 0.2); }
+        
+        .team-card:hover .avatar::before { opacity: 1; transform: scale(1.05); }
+        .team-card:hover .avatar::after { opacity: 1; transform: scale(1.1); }
+
+        .team-card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; transform: translateZ(25px); }
+        .team-id { color: var(--text-secondary); font-weight: 600; font-size: 1rem; letter-spacing: 1px; transform: translateZ(20px); }
+
+        /* --- Grids --- */
+        .grid-lecturers {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.8rem;
-            max-width: 860px;
-            margin: 0 auto;
-        }
-
-        /* ── Student Grid: flexbox 3+2 ── */
-        .student-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.8rem;
+            gap: 2.5rem;
             max-width: 1050px;
             margin: 0 auto;
         }
-        .student-grid .tilt-wrapper {
-            flex: 0 0 calc(33.333% - 1.2rem);
-            max-width: calc(33.333% - 1.2rem);
+
+        /* --- Lecturer Section: Dark (matches student-showcase) --- */
+        .lecturer-section {
+            background-color: var(--bg-dark);
+            border-radius: 24px;
+            margin-bottom: 0;
+            padding: 7rem 0;
+        }
+        .lecturer-section .section-header h2 { color: #FFFFFF; text-shadow: 0 0 15px var(--glow-white); }
+        .lecturer-section .section-header span { color: #FFFFFF; opacity: 0.7; }
+        .lecturer-section .team-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .lecturer-section .team-card:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(229, 57, 53, 0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .lecturer-section .avatar img { border-color: rgba(255, 255, 255, 0.1); }
+        .lecturer-section .team-card h3 { color: #FFFFFF; }
+
+        /* --- PREMIUM Section: Students (Black Background & Symmetric Layout) --- */
+        .student-showcase {
+            background-color: var(--bg-dark);
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 24px;
+            margin-bottom: 4rem;
+            padding: 7rem 0;
+        }
+        
+        .student-showcase .section-header h2 { color: #FFFFFF; text-shadow: 0 0 15px var(--glow-white); }
+        .student-showcase .section-header span { color: #FFFFFF; opacity: 0.7; }
+
+        /* Simetris Flexbox Grid untuk 5 Kartu (3 di atas, 2 di tengah) */
+        .grid-students {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        /* ── Footer ── */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 2.5rem 0;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-sec);
+        .grid-students .tilt-wrapper {
+            flex: 0 0 calc(33.333% - 1.67rem);
+            max-width: calc(33.333% - 1.67rem);
         }
 
-        /* ── Responsive ── */
-        @media (max-width: 1024px) {
-            .student-grid .tilt-wrapper { flex: 0 0 calc(50% - 0.9rem); max-width: calc(50% - 0.9rem); }
+        .student-showcase .team-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .student-showcase .team-card:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(229, 57, 53, 0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        .student-showcase .avatar img { border-color: rgba(255, 255, 255, 0.1); }
+        .student-showcase .team-card h3 { color: #FFFFFF; }
+        .student-showcase .team-id { color: var(--primary-red); }
+
+        /* --- Animations & Footer --- */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer { padding: 3rem 0; background-color: var(--bg-dark); color: rgba(255, 255, 255, 0.4); text-align: center; font-size: 0.9rem; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .grid-lecturers { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+            .grid-students .tilt-wrapper { flex: 0 0 calc(50% - 1.25rem); max-width: calc(50% - 1.25rem); }
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 2.2rem; }
-            .advisor-grid { grid-template-columns: 1fr; max-width: 340px; }
-            .student-grid .tilt-wrapper { flex: 0 0 100%; max-width: 340px; }
+            .grid-lecturers { grid-template-columns: 1fr; max-width: 450px; }
+            .grid-students .tilt-wrapper { flex: 0 0 100%; max-width: 450px; }
+            .page-header h1 { font-size: 2.8rem; }
+            .section-header h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav>
-        <div class="nav-container">
+    <nav id="navbar">
+        <div class="container nav-container">
             <a href="index.html" class="logo-wrapper">
-                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'">
+                <img src="LOGO.png" alt="Pariksa Logo" class="logo-img" onerror="this.style.display='none'"> 
                 Pariksa
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="guide.html">Guide</a></li>
-                <li><a href="maps.html">Maps</a></li>
-                <li><a href="education.html">Education</a></li>
-                <li><a href="team.html" class="active">Team</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="guide.html">Guide</a></li>
+                    <li><a href="maps.html">Maps</a></li>
+                    <li><a href="education.html">Education</a></li>
+                    <li><a href="team.html" class="active">Team</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero">
+    <header class="page-header">
         <div class="container">
-            <div class="hero-eyebrow">Pariksa Project</div>
-            <h1>Meet the Team</h1>
-            <p>The academics and students behind Bandung's high-precision disaster risk mapping initiative.</p>
+            <h1>Meet the People Behind Pariksa</h1>
+            <p>The advisors and students behind the High-Precision Disaster Risk Mapping project in Bandung.</p>
         </div>
-    </section>
+    </header>
 
-    <!-- ── Advisors ── -->
-    <section class="team-section">
+    <!-- Advisor section — dark background matching student section -->
+    <section class="team-section lecturer-section">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow"><span>Advisors</span></div>
-                <div class="section-title">Academic Advisors</div>
-                <div class="section-sub">Faculty members who guided the research and methodology</div>
+                <h2>Meet Our Advisors</h2>
             </div>
-
-            <div class="advisor-grid js-animate-group">
-
+            
+            <div class="grid-lecturers js-animate-group">
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotopayayas.jpg" alt="Dr. Heri Andreas" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-role">Academic Advisor</div>
-                        <div class="card-name">Dr. Heri Andreas, S.T., M.T.</div>
+                        <div class="avatar"><img src="fotopayayas.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Heri Andreas, S.T., M.T.</h3>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotobumadam.jpg" alt="Dr. Madam Taqiyya" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-role">Academic Advisor</div>
-                        <div class="card-name">Dr. Madam Taqiyya, S.Si., M.Sc</div>
+                        <div class="avatar"><img src="fotobumadam.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Madam Taqiyya, S.Si., M.Sc</h3>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotobudina.png" alt="Dr. Dina Sarsito" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-role">Academic Advisor</div>
-                        <div class="card-name">Dr. Ir. Dina Sarsito, M.T.</div>
+                        <div class="avatar"><img src="fotobudina.png" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Dr. Ir. Dina Sarsito, M.T.</h3>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- ── Students ── -->
-    <section class="team-section">
+    <section class="team-section student-showcase">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow"><span>Students</span></div>
-                <div class="section-title">Capstone Project Team</div>
-                <div class="section-sub">Geodesy Engineering — Institut Teknologi Bandung</div>
+                <span>Students</span> 
+                <h2>Capstone Project Team</h2>
             </div>
 
-            <div class="student-grid js-animate-group">
-
+            <div class="grid-students js-animate-group">
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotolala.jpg" alt="Syalala Loovy" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-name">Syalala Loovy</div>
-                        <div class="card-nim">NIM. 15122008</div>
+                        <div class="avatar"><img src="fotolala.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Syalala Loovy</h3>
+                        <span class="team-id">NIM. 15122008</span>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotohady.jpg" alt="Raihan Hady Permana" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-name">Raihan Hady Permana</div>
-                        <div class="card-nim">NIM. 15122060</div>
+                        <div class="avatar"><img src="fotohady.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Raihan Hady Permana</h3>
+                        <span class="team-id">NIM. 15122060</span>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotovarina.jpg" alt="Varina Erawati Martina" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-name">Varina Erawati Martina</div>
-                        <div class="card-nim">NIM. 15122087</div>
+                        <div class="avatar"><img src="fotovarina.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Varina Erawati Martina</h3>
+                        <span class="team-id">NIM. 15122087</span>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotoaura.jpg" alt="Aura Nisa Arianti" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-name">Aura Nisa Arianti</div>
-                        <div class="card-nim">NIM. 15122111</div>
+                        <div class="avatar"><img src="fotoaura.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Aura Nisa Arianti</h3>
+                        <span class="team-id">NIM. 15122111</span>
                     </div>
                 </div>
-
                 <div class="tilt-wrapper">
                     <div class="team-card js-animate-card">
-                        <div class="avatar">
-                            <img src="fotoluthfi.jpg" alt="Luthfi Aulia Hakim" onerror="this.style.display='none'">
-                            <div class="avatar-ring"></div>
-                        </div>
-                        <div class="card-name">Luthfi Aulia Hakim</div>
-                        <div class="card-nim">NIM. 15122119</div>
+                        <div class="avatar"><img src="fotoluthfi.jpg" alt="" onerror="this.style.display='none'"></div>
+                        <h3>Luthfi Aulia Hakim</h3>
+                        <span class="team-id">NIM. 15122119</span>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        <div class="container">
+            <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        </div>
     </footer>
 
     <script>
-        // Staggered entrance animation
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.js-animate-group').forEach(group => {
-                group.querySelectorAll('.js-animate-card').forEach((card, i) => {
-                    setTimeout(() => card.classList.add('animate-in'), i * 110);
+            const groups = document.querySelectorAll('.js-animate-group');
+            
+            groups.forEach(group => {
+                const cards = group.querySelectorAll('.js-animate-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 150); 
                 });
             });
         });
 
-        // 3D tilt on hover
-        document.querySelectorAll('.tilt-wrapper').forEach(wrapper => {
-            const card = wrapper.querySelector('.team-card');
-            wrapper.addEventListener('mousemove', e => {
-                const r = card.getBoundingClientRect();
-                const x = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-                const y = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-                card.style.transform = `rotateX(${-y * 7}deg) rotateY(${x * 7}deg) translateZ(14px)`;
+        const tiltWrappers = document.querySelectorAll('.tilt-wrapper');
+
+        tiltWrappers.forEach(wrapper => {
+            wrapper.addEventListener('mousemove', (e) => {
+                const card = wrapper.querySelector('.team-card');
+                const cardRect = card.getBoundingClientRect();
+                
+                const cardCenterX = cardRect.left + cardRect.width / 2;
+                const cardCenterY = cardRect.top + cardRect.height / 2;
+                
+                const mouseX = e.clientX - cardCenterX;
+                const mouseY = e.clientY - cardCenterY;
+                
+                const tiltX = (mouseY / (cardRect.height / 2)) * -10; 
+                const tiltY = (mouseX / (cardRect.width / 2)) * 10;  
+                
+                card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
             });
-            wrapper.addEventListener('mouseleave', () => {
-                card.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+
+            wrapper.addEventListener('mouseleave', (e) => {
+                const card = wrapper.querySelector('.team-card');
+                card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0)`;
             });
         });
 
-        // Page transition
-        document.querySelectorAll('a[href]').forEach(link => {
-            link.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
+        // Page transition on exit
+        document.querySelectorAll('a[href]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
                 if (href && href[0] !== '#' && !/^(https?:|mailto:|javascript:)/i.test(href)) {
                     e.preventDefault();
-                    document.body.style.transition = 'opacity 0.25s ease';
+                    document.body.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
                     document.body.style.opacity = '0';
-                    setTimeout(() => window.location.href = href, 260);
+                    document.body.style.transform = 'translateY(-8px)';
+                    var dest = href;
+                    setTimeout(function() { window.location.href = dest; }, 260);
                 }
             });
         });
