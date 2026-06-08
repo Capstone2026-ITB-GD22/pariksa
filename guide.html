@@ -29,13 +29,14 @@
             --color-very-high: #D32F2F;
 
             /* Premium Concept Accents */
-            --c-risk: #FF3B30;
-            --c-hazard: #FF9500;
-            --c-vuln: #AF52DE;
-            --c-cap: #34C759;
-            --c-flood: #007AFF;
+            --c-risk:       #FF3B30;
+            --c-hazard:     #FF9500;
+            --c-vuln:       #AF52DE;
+            --c-cap:        #34C759;
+            --c-flood:      #007AFF;
             --c-earthquake: #8C4A32;
-            --c-landslide: #A2845E;
+            --c-landslide:  #A2845E;
+            --c-multihazard:#C2185B;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -218,6 +219,10 @@
         .p-landslide:hover { border-color: var(--c-landslide); }
         .p-landslide .glow-icon { background-color: rgba(162, 132, 94, 0.05); border: 1px solid var(--border-color); }
         .p-landslide:hover h4, .p-landslide:hover .click-hint { color: var(--c-landslide); }
+
+        .p-multihazard:hover { border-color: var(--c-multihazard); }
+        .p-multihazard .glow-icon { background-color: rgba(194,24,91,0.07); border: 1px solid var(--border-color); color: var(--c-multihazard); }
+        .p-multihazard:hover h4, .p-multihazard:hover .click-hint { color: var(--c-multihazard); }
 
 
         /* Disaster Risk Equation (Statis, tanpa pop-up) */
@@ -581,6 +586,18 @@
                             <p>Geological threat analysis focusing on steep slopes and soil instability conditions.</p>
                             <div class="click-hint">Learn More <span>→</span></div>
                         </div>
+                        <div class="p-card p-multihazard" onclick="openModal('multihazard')">
+                            <div class="glow-icon vector-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="3" width="20" height="4" rx="1"/>
+                                    <rect x="2" y="10" width="20" height="4" rx="1" opacity="0.7"/>
+                                    <rect x="2" y="17" width="20" height="4" rx="1" opacity="0.4"/>
+                                </svg>
+                            </div>
+                            <h4>Multi-Hazard</h4>
+                            <p>Composite spatial overlay combining all individual hazard layers into a unified risk classification.</p>
+                            <div class="click-hint">Learn More <span>→</span></div>
+                        </div>
                     </div>
                 </div>
 
@@ -713,6 +730,7 @@
         const imgFlood = `<img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood">`;
         const imgEq = `<img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="Earthquake">`;
         const imgLandslide = `<img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide">`;
+        const svgMultihazard = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="4" rx="1"/><rect x="2" y="10" width="20" height="4" rx="1" opacity="0.7"/><rect x="2" y="17" width="20" height="4" rx="1" opacity="0.4"/></svg>`;
 
         // Modal Data Content (Format Poin Sesuai Instruksi)
         const modalData = {
@@ -743,6 +761,10 @@
             landslide: {
                 title: "Landslide", color: "var(--c-landslide)", iconHTML: imgLandslide,
                 points: ["Triggered by soil instability on steep topographic slopes.", "Exacerbated by low vegetation cover and heavy rainfall.", "Requires mitigation strategies like retaining walls and reforestation."]
+            },
+            multihazard: {
+                title: "Multi-Hazard", color: "var(--c-multihazard)", iconHTML: svgMultihazard,
+                points: ["A spatial overlay that combines Flood, Earthquake, and Landslide risk layers into a single composite index.", "Identifies parcels of land simultaneously exposed to two or more disaster types — the highest-priority zones for intervention.", "Produced by a weighted spatial aggregation of all three individual risk maps, revealing compounding vulnerabilities invisible in single-hazard analysis."]
             }
         };
 
