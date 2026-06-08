@@ -97,12 +97,33 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Step Cards (How to Use) --- */
-        .step-card { background-color: var(--bg-white); border: 2px solid var(--border-color); border-radius: 16px; padding: 2.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s ease; }
-        .step-number { width: 45px; height: 45px; flex-shrink: 0; background-color: var(--primary-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; }
+        .step-card {
+            display: flex; gap: 1.5rem; align-items: flex-start;
+            padding: 1.8rem 2rem; margin-bottom: 1.2rem;
+            background: var(--bg-white); border: 2px solid var(--border-color);
+            border-radius: 16px; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step-card:hover { border-color: var(--primary-red); box-shadow: 0 8px 24px rgba(229,57,53,0.07); }
+        .step-number {
+            width: 38px; height: 38px; flex-shrink: 0;
+            background: var(--primary-red); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; font-weight: 700; margin-top: 2px;
+        }
         .step-content { flex-grow: 1; }
-        .step-content h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
-        .step-image { width: 250px; height: 180px; flex-shrink: 0; background-color: #F0F0F0; border-radius: 12px; border: 2px dashed #CCCCCC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .step-image img { width: 100%; height: 100%; object-fit: cover; }
+        .step-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .step-content p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin: 0; }
+        .step-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 0.9rem; }
+        .step-chip {
+            padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+            border: 1.5px solid var(--border-color); color: var(--text-secondary);
+            background: var(--bg-light);
+        }
+        .step-chip.red  { background: rgba(229,57,53,0.07);  border-color: rgba(229,57,53,0.2);  color: var(--primary-red); }
+        .step-chip.green{ background: rgba(52,199,89,0.07);  border-color: rgba(52,199,89,0.2);  color: #22863a; }
+        .step-chip.yell { background: rgba(180,140,0,0.07);  border-color: rgba(180,140,0,0.2);  color: #7a6000; }
+        .step-chip.blue { background: rgba(0,122,255,0.07);  border-color: rgba(0,122,255,0.2);  color: #0060cc; }
+        .step-chip.pink { background: rgba(194,24,91,0.07);  border-color: rgba(194,24,91,0.2);  color: #c2185b; }
 
         /* --- Legend Boxes (How to Read Map) --- */
         .legend-box { display: flex; align-items: center; padding: 1.8rem 2rem; border-radius: 12px; margin-bottom: 1.2rem; color: #FFFFFF; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 2px solid transparent; }
@@ -167,15 +188,11 @@
         .vector-icon svg { width: 34px; height: 34px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .p-card:hover .glow-icon { transform: scale(1.1) rotate(5deg); }
         
-        .img-icon img { 
+        .img-icon img {
             width: 40px; height: 40px; object-fit: contain;
-            filter: grayscale(100%) opacity(0.7); 
-            transition: all 0.4s ease;
+            transition: transform 0.4s ease;
         }
-        .p-card:hover .img-icon img { 
-            filter: grayscale(0%) opacity(1); 
-            transform: scale(1.1);
-        }
+        .p-card:hover .img-icon img { transform: scale(1.12); }
 
         .p-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); transition: color 0.3s ease; }
         .p-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; }
@@ -431,62 +448,68 @@
                 <div class="step-card">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Open the WebGIS Map Page</h3>
-                        <p>Navigate to the <strong>Maps</strong> page using the top navigation bar, or click the <strong>"Open WebGIS →"</strong> button on the homepage. The interactive map of Bandung City will load automatically, centred over the city with a clean base map.</p>
+                        <h3>Open the Maps Page</h3>
+                        <p>Click <strong>Maps</strong> in the top navigation bar, or use the <strong>"Open WebGIS →"</strong> button on the homepage. The interactive map will load centred over Bandung City with a clean basemap from CartoDB.</p>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>Select a Study Area</h3>
-                        <p>In the left sidebar under <strong>Step 1 — District</strong>, use the search box to find a kecamatan by name, or browse the 30-district grid and click a chip to select it. To view the entire city at once, click <strong>"All Bandung City"</strong> at the top. Your selection will be highlighted in red.</p>
+                        <h3>Step 1 — Select a District</h3>
+                        <p>In the left sidebar, use the search box to find a kecamatan by name, or scroll the chip grid and click one to select it. To view all 30 districts at once, click the <strong>"All Bandung City"</strong> button at the top. Your selection highlights in red.</p>
+                        <div class="step-tags">
+                            <span class="step-chip">Andir</span>
+                            <span class="step-chip">Coblong</span>
+                            <span class="step-chip">Cicendo</span>
+                            <span class="step-chip red">All Bandung City</span>
+                            <span class="step-chip">+ 27 more…</span>
+                        </div>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
                 <div class="step-card">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>Choose a Hazard Type</h3>
-                        <p>Under <strong>Step 2 — Hazard Type</strong>, select the natural disaster to analyze:<br><br>
-                        • <strong>Earthquake</strong> — Seismic ground shaking related to Lembang Fault activity<br>
-                        • <strong>Flood</strong> — Hydrometeorological inundation based on urban drainage models<br>
-                        • <strong>Landslide</strong> — Slope instability and soil movement susceptibility</p>
+                        <h3>Step 2 — Choose Hazard Type</h3>
+                        <p>Select the natural disaster category to analyse. Each hazard uses a dedicated spatial dataset computed at 1:5,000 scale.</p>
+                        <div class="step-tags">
+                            <span class="step-chip blue">🌊 Earthquake</span>
+                            <span class="step-chip blue">💧 Flood</span>
+                            <span class="step-chip blue">⛰ Landslide</span>
+                            <span class="step-chip pink">⚡ Multi-Hazard</span>
+                        </div>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
                 <div class="step-card">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>Select an Analysis Parameter</h3>
-                        <p>Under <strong>Step 3 — Analysis Parameter</strong>, choose the spatial dimension to display:<br><br>
-                        • <strong>Risk (R)</strong> — Integrated risk score per land parcel at 1:5,000 scale (vector)<br>
-                        • <strong>Hazard (H)</strong> — Physical intensity of the natural threat (raster)<br>
-                        • <strong>Vulnerability (V)</strong> — Social, physical, and economic susceptibility (raster)<br>
-                        • <strong>Capacity (C)</strong> — Community resilience and disaster coping resources (raster)</p>
+                        <h3>Step 3 — Apply Risk Class Filter <em style="font-weight:400;font-size:0.85em;color:var(--text-secondary)">(optional)</em></h3>
+                        <p>Filter the visible parcels by risk class to focus on specific areas. Selecting <strong>All Classes</strong> shows the complete dataset.</p>
+                        <div class="step-tags">
+                            <span class="step-chip">All Classes</span>
+                            <span class="step-chip green">🟢 Low</span>
+                            <span class="step-chip yell">🟡 Medium</span>
+                            <span class="step-chip red">🔴 High</span>
+                        </div>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
                 <div class="step-card">
                     <div class="step-number">5</div>
                     <div class="step-content">
-                        <h3>Render the Map</h3>
-                        <p>Click the red <strong>"Render Map"</strong> button at the bottom of the sidebar. The map will fly to your selected area and load the spatial layer from GeoServer. A loading indicator appears while tiles are fetched. Once complete, the active layer name and type are shown in the <strong>info card</strong> at the top-right of the map.</p>
+                        <h3>Render Map</h3>
+                        <p>Click the red <strong>"Render Map"</strong> button at the bottom of the sidebar. The map will fly to your selected area and load the WMS layer from GeoServer. A loading spinner appears while data is fetched. Once complete, the <strong>Active Layer card</strong> in the top-right confirms what is displayed.</p>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
                 <div class="step-card">
                     <div class="step-number">6</div>
                     <div class="step-content">
-                        <h3>Read and Interpret the Results</h3>
-                        <p>Use the <strong>classification legend</strong> in the bottom-left corner to interpret the map. Risk levels are classified into 5 categories — from <strong style="color:#15803D">Very Low</strong> to <strong style="color:#991B1B">Very High</strong>. Areas with darker tones require priority attention for disaster mitigation. Switch any parameter or district and re-render at any time to compare results across the city.</p>
+                        <h3>Read & Explore the Results</h3>
+                        <p>Use the <strong>Risk Classification Legend</strong> in the sidebar to interpret the colour coding: <strong style="color:#fa4b3c">Red = High</strong>, <strong style="color:#b8a200">Yellow = Moderate</strong>, <strong style="color:#5aaa00">Green = Low</strong>. Click any parcel on the map to open the <strong>Feature Information</strong> popup showing all attribute data for that land parcel.</p>
                     </div>
-                    <div class="step-image"></div>
                 </div>
 
             </section>
@@ -568,25 +591,22 @@
                     <h3 class="section-subtitle">Analyzed Threats</h3>
                     
                     <div class="premium-grid">
-                        <div class="p-card p-flood" onclick="openModal('flood')">
+                        <div class="p-card p-flood">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/tsunami.png" alt="Flood"></div>
                             <h4>Flood Risk</h4>
                             <p>Hydrometeorological threat analysis based on terrain and urban drainage models.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
                         </div>
-                        <div class="p-card p-eq" onclick="openModal('earthquake')">
+                        <div class="p-card p-eq">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/earthquakes.png" alt="EQ"></div>
                             <h4>Earthquake</h4>
                             <p>Seismic vulnerability analysis related to the activity of the Lembang Fault.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
                         </div>
-                        <div class="p-card p-landslide" onclick="openModal('landslide')">
+                        <div class="p-card p-landslide">
                             <div class="glow-icon img-icon"><img src="https://img.icons8.com/color/96/000000/landslide.png" alt="Landslide"></div>
                             <h4>Landslide</h4>
                             <p>Geological threat analysis focusing on steep slopes and soil instability conditions.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
                         </div>
-                        <div class="p-card p-multihazard" onclick="openModal('multihazard')">
+                        <div class="p-card p-multihazard">
                             <div class="glow-icon vector-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="2" y="3" width="20" height="4" rx="1"/>
@@ -596,7 +616,6 @@
                             </div>
                             <h4>Multi-Hazard</h4>
                             <p>Composite spatial overlay combining all individual hazard layers into a unified risk classification.</p>
-                            <div class="click-hint">Learn More <span>→</span></div>
                         </div>
                     </div>
                 </div>
