@@ -33,6 +33,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; }
         body {
             font-family: var(--font-main);
             color: var(--text-primary);
@@ -972,14 +973,30 @@ const navLinks     = document.getElementById('navLinks');
 const navOverlay   = document.getElementById('navOverlay');
 
 hamburger.addEventListener('click', () => {
+    const isOpening = !hamburger.classList.contains('active');
     hamburger.classList.toggle('active');
     navLinks.classList.toggle('mobile-open');
     navOverlay.classList.toggle('active');
+    // Kunci body scroll saat menu nav terbuka (tapi jangan ganggu map)
+    if (isOpening) {
+        document.documentElement.style.overflow = 'hidden';
+    } else {
+        document.documentElement.style.overflow = '';
+    }
 });
 navOverlay.addEventListener('click', () => {
     hamburger.classList.remove('active');
     navLinks.classList.remove('mobile-open');
     navOverlay.classList.remove('active');
+    document.documentElement.style.overflow = '';
+});
+navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('mobile-open');
+        navOverlay.classList.remove('active');
+        document.documentElement.style.overflow = '';
+    });
 });
 
 /* ── Mobile Bottom Panel Toggle ── */
