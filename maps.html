@@ -446,31 +446,35 @@
             /* Toggle button visible on mobile */
             .mobile-panel-toggle { display: flex; }
 
-            /* When panel is open, hide the toggle button */
+            /* When panel is open, change toggle button */
             .mobile-panel-toggle.panel-open {
                 bottom: calc(75vh + 12px);
                 background: #374151;
             }
 
-            /* Info card repositioned */
+            /* Active Layer card — sembunyikan di mobile */
             .map-info-card {
-                top: auto;
-                bottom: 80px;
-                right: 10px;
-                max-width: 200px;
+                display: none !important;
             }
 
-            /* Legend overlay repositioned */
+            /* Legend → naik di atas tombol Open Controls
+               Toggle button: bottom 20px, tinggi ~46px → top edge ~66px
+               Legend ditaruh di bottom: 76px agar ada jarak 10px dari toggle */
             .map-legend-overlay {
-                bottom: 80px;
+                bottom: 78px;
                 left: 10px;
             }
 
-            /* Toast repositioned */
+            /* Toast tetap di atas legend area */
             .toast {
-                bottom: 80px;
+                bottom: 78px;
                 right: 10px;
                 max-width: 220px;
+            }
+
+            /* Zoom control (Leaflet) naik lebih tinggi agar tidak ketimpa UI */
+            .leaflet-bottom.leaflet-right {
+                bottom: 78px;
             }
 
             /* Kec grid */
