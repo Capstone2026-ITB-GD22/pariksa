@@ -511,13 +511,29 @@
         /* Click cursor on map when layer is active */
         .leaflet-container.fi-mode { cursor: crosshair !important; }
 
-        /* Mobile: sembunyikan fi-drawer */
+        /* Mobile: fi-drawer as full-width bottom sheet */
         @media (max-width: 768px) {
-            .fi-drawer  { display: none !important; }
-            .fi-backdrop{ display: none !important; }
+            /* Backdrop blocks interaction below on mobile */
+            .fi-backdrop {
+                background: rgba(0,0,0,0.35);
+                pointer-events: auto;
+            }
+            /* Bottom sheet */
+            .fi-drawer {
+                left: 0; right: 0; bottom: 0;
+                width: 100%;
+                border-radius: 20px 20px 0 0;
+                max-height: 65vh;
+                transform: translateY(100%);
+                opacity: 1;
+                pointer-events: auto;
+                z-index: 1600;
+            }
+            .fi-drawer.open { transform: translateY(0); }
+            .fi-handle { display: flex; }  /* show drag handle on mobile */
         }
 
-        /* Desktop: fi-drawer sebagai floating card di pojok kanan */
+        /* Desktop: floating card bottom-right */
         @media (min-width: 769px) {
             .fi-drawer {
                 left: auto; right: 18px; bottom: 18px;
@@ -662,6 +678,10 @@
                 right: 10px;
                 max-width: 220px;
             }
+
+            /* Saat fi-drawer terbuka di mobile, naikkan toast agar tidak ketimpa */
+            .fi-drawer.open ~ * .toast,
+            body.fi-open .toast { bottom: calc(65vh + 12px); }
 
             /* Zoom control (Leaflet) naik lebih tinggi agar tidak ketimpa UI */
             .leaflet-bottom.leaflet-right {
@@ -1203,7 +1223,7 @@ function toast(msg, type = 'info') {
 }
 
 /* ============================================================
-   🔍  FEATURE INFO — WMS GetFeatureInfo (Desktop only)
+   🔍  FEATURE INFO — WMS GetFeatureInfo (Desktop + Mobile)
    ============================================================ */
 let currentLayerName   = null;
 let currentClickMarker = null;
@@ -1216,13 +1236,26 @@ const fiSubtitle  = document.getElementById('fiSubtitle');
 const fiCoord     = document.getElementById('fiCoord');
 const fiCoordText = document.getElementById('fiCoordText');
 
-function openFiDrawer()  { fiDrawer.classList.add('open'); }
+function openFiDrawer() {
+    fiDrawer.classList.add('open');
+    fiBackdrop.classList.add('active');
+}
 function closeFiDrawer() {
     fiDrawer.classList.remove('open');
+    fiBackdrop.classList.remove('active');
     if (currentClickMarker) { map.removeLayer(currentClickMarker); currentClickMarker = null; }
 }
 
 document.getElementById('fiClose').addEventListener('click', closeFiDrawer);
+fiBackdrop.addEventListener('click', closeFiDrawer);
+
+/* Drag-to-close on mobile via handle */
+let _fiDragStartY = 0;
+const fiHandle = document.getElementById('fiHandle');
+fiHandle.addEventListener('touchstart', e => { _fiDragStartY = e.touches[0].clientY; }, { passive: true });
+fiHandle.addEventListener('touchend',   e => {
+    if (e.changedTouches[0].clientY - _fiDragStartY > 50) closeFiDrawer();
+}, { passive: true });
 
 /* ── Ambil nilai indeks berdasarkan hazard type ── */
 function getIndeksValue(props) {
@@ -1305,9 +1338,8 @@ function buildSimpleInfo(props) {
            '<div class="fi-attr-row"><div class="fi-attr-key">Index</div><div class="fi-attr-val">'    + indeksDisplay + '</div></div>';
 }
 
-/* ── Map click handler — desktop only ── */
+/* ── Map click/tap handler — works on all screen sizes ── */
 map.on('click', async function(e) {
-    if (window.innerWidth <= 768) return;  // desktop only
     if (!currentLayerName) { toast('Please render a map layer first, then click a parcel.', 'error'); return; }
 
     const latlng = e.latlng;
