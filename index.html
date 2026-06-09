@@ -22,6 +22,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; }
         body { font-family: var(--font-main); color: var(--text-primary); background-color: var(--bg-white); line-height: 1.6; overflow-x: hidden; animation: pageEnter 0.45s ease both; }
         @keyframes pageEnter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         a { text-decoration: none; color: inherit; }
@@ -331,9 +332,22 @@
         const navLinks = document.querySelector('.nav-links');
 
         hamburger.addEventListener('click', () => {
+            const isOpening = !hamburger.classList.contains('active');
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('active');
-            navbar.classList.toggle('mobile-open'); // Mencegah warna logo berubah saat menu terbuka
+            navbar.classList.toggle('mobile-open');
+            // Kunci scroll body saat menu terbuka
+            document.body.style.overflow = isOpening ? 'hidden' : '';
+        });
+
+        // Tutup menu saat klik link di dalamnya
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                navbar.classList.remove('mobile-open');
+                document.body.style.overflow = '';
+            });
         });
         // Page transition on exit
         document.querySelectorAll('a[href]').forEach(function(link) {
