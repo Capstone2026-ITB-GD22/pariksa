@@ -352,12 +352,12 @@
         /* ================================================================
            FEATURE INFO DRAWER
            ================================================================ */
-        /* Backdrop overlay */
+        /* Backdrop — non-blocking, jangan blur peta */
         .fi-backdrop {
             position: absolute; inset: 0; z-index: 1590;
-            background: rgba(0,0,0,0.25);
+            background: transparent;
             display: none;
-            backdrop-filter: blur(1px);
+            pointer-events: none;
         }
         .fi-backdrop.active { display: block; }
 
@@ -509,18 +509,24 @@
         /* Click cursor on map when layer is active */
         .leaflet-container.fi-mode { cursor: crosshair !important; }
 
-        /* Desktop: drawer appears as floating card on right side of map */
+        /* Mobile: sembunyikan fi-drawer */
+        @media (max-width: 768px) {
+            .fi-drawer  { display: none !important; }
+            .fi-backdrop{ display: none !important; }
+        }
+
+        /* Desktop: fi-drawer sebagai floating card di pojok kanan */
         @media (min-width: 769px) {
             .fi-drawer {
                 left: auto; right: 18px; bottom: 18px;
                 width: 320px;
                 border-radius: 16px;
-                max-height: 70vh;
+                max-height: 72vh;
                 transform: translateY(14px);
                 opacity: 0;
                 transition: transform 0.3s cubic-bezier(0.32,0.72,0,1), opacity 0.25s ease;
                 pointer-events: none;
-                z-index: 800;  /* desktop: below navbar but above map */
+                z-index: 800;
             }
             .fi-drawer.open {
                 transform: translateY(0);
@@ -971,6 +977,7 @@ let currentBgLayer       = null;
 let currentBoundaryLayer = null;
 let toastTimer           = null;
 let selectedClassFilter  = 'all';
+let selectedHazardId     = 'earthquake'; // untuk GetFeatureInfo indeks logic
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -1131,6 +1138,7 @@ function renderMap() {
     }
 
     const hazardId  = document.querySelector('input[name="hazard"]:checked').value;
+    selectedHazardId = hazardId; // simpan untuk GetFeatureInfo
     const layerName = resolveLayerName(selectedKecId, hazardId);
 
     // Build CQL_FILTER
@@ -1193,7 +1201,7 @@ function toast(msg, type = 'info') {
 }
 
 /* ============================================================
-   🔍  FEATURE INFO — WMS GetFeatureInfo on map click
+   🔍  FEATURE INFO — WMS GetFeatureInfo (Desktop only)
    ============================================================ */
 let currentLayerName   = null;
 let currentClickMarker = null;
@@ -1206,106 +1214,108 @@ const fiSubtitle  = document.getElementById('fiSubtitle');
 const fiCoord     = document.getElementById('fiCoord');
 const fiCoordText = document.getElementById('fiCoordText');
 
-function openFiDrawer() {
-    fiDrawer.classList.add('open');
-    fiBackdrop.classList.add('active');
-}
+function openFiDrawer()  { fiDrawer.classList.add('open'); }
 function closeFiDrawer() {
     fiDrawer.classList.remove('open');
-    fiBackdrop.classList.remove('active');
     if (currentClickMarker) { map.removeLayer(currentClickMarker); currentClickMarker = null; }
 }
 
 document.getElementById('fiClose').addEventListener('click', closeFiDrawer);
-fiBackdrop.addEventListener('click', closeFiDrawer);
 
-/* Drag-to-close (mobile) */
-let fiDragStartY = 0;
-const fiHandle = document.getElementById('fiHandle');
-fiHandle.addEventListener('touchstart', e => { fiDragStartY = e.touches[0].clientY; }, { passive: true });
-fiHandle.addEventListener('touchend',   e => {
-    if (e.changedTouches[0].clientY - fiDragStartY > 50) closeFiDrawer();
-}, { passive: true });
-
-/* Risk level from props */
-function getRiskInfo(props) {
-    const fields = ['indeks','INDEKS','risiko','RISIKO','risk','RISK','kelas','KELAS'];
-    let raw = null;
-    for (const k of fields) {
-        if (props[k] !== null && props[k] !== undefined && props[k] !== '') { raw = String(props[k]).trim(); break; }
+/* ── Ambil nilai indeks berdasarkan hazard type ── */
+function getIndeksValue(props) {
+    if (selectedHazardId === 'earthquake' || selectedHazardId === 'multihazard') {
+        // Gempa & Multihazard → field skor_major
+        const v = props['skor_major'] ?? props['SKOR_MAJOR'] ?? props['Skor_major'];
+        return (v !== undefined && v !== null) ? String(v) : null;
+    } else {
+        // Banjir & Longsor → field berakhiran _majority
+        const key = Object.keys(props).find(k => k.toLowerCase().endsWith('_majority'));
+        if (key) {
+            const v = props[key];
+            return (v !== undefined && v !== null) ? String(v) : null;
+        }
+        return null;
     }
-    if (!raw) return { cls:'risk-unknown', label:'Unknown Risk',   dot:'#9CA3AF' };
-    const n = parseFloat(raw), lo = raw.toLowerCase();
+}
+
+/* ── Konversi nilai numerik ke label risiko ── */
+function getRiskFromValue(raw) {
+    if (raw === null || raw === undefined) return { cls:'risk-unknown', label:'Tidak Diketahui', dot:'#9CA3AF' };
+    const n  = parseFloat(raw);
+    const lo = String(raw).toLowerCase();
     if (n === 3 || lo.includes('high')   || lo.includes('tinggi'))
-        return { cls:'risk-high',     label:'High Risk',     dot:'#DC2626' };
+        return { cls:'risk-high',     label:'Tinggi (High)',     dot:'#DC2626' };
     if (n === 2 || lo.includes('mod')    || lo.includes('sedang'))
-        return { cls:'risk-moderate', label:'Moderate Risk', dot:'#EAB308' };
+        return { cls:'risk-moderate', label:'Sedang (Moderate)', dot:'#EAB308' };
     if (n === 1 || lo.includes('low')    || lo.includes('rendah'))
-        return { cls:'risk-low',      label:'Low Risk',      dot:'#16A34A' };
-    return { cls:'risk-unknown', label:'Index: '+raw, dot:'#9CA3AF' };
+        return { cls:'risk-low',      label:'Rendah (Low)',      dot:'#16A34A' };
+    return { cls:'risk-unknown', label:'Index: ' + raw, dot:'#9CA3AF' };
 }
 
-/* Format attribute value */
-function formatAttrVal(v) {
-    if (v === null || v === undefined) return '<em class="null-val">null</em>';
-    const s = String(v).trim();
-    if (!s || s === 'null' || s === 'NULL') return '<em class="null-val">\u2014</em>';
-    if (!isNaN(s) && s.includes('.') && s.length > 10) return parseFloat(s).toFixed(6);
-    return s;
+/* ── Format luas ── */
+function formatLuas(raw) {
+    if (raw === null || raw === undefined || raw === '') return '\u2014';
+    const n = parseFloat(raw);
+    return isNaN(n) ? String(raw) : n.toFixed(4) + ' ha';
 }
 
-/* Pretty-print field key */
-function prettyKey(k) {
-    return k.replace(/_/g,' ').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/\b\w/g, c => c.toUpperCase());
-}
-
-/* Build attribute table rows */
-const GEOM_SKIP = new Set(['geometry','geom','the_geom','wkb_geometry','shape',
-                            'GEOMETRY','GEOM','THE_GEOM','WKB_GEOMETRY','SHAPE']);
-function buildAttrRows(props) {
-    const rows = Object.entries(props).filter(([k]) => !GEOM_SKIP.has(k));
-    if (!rows.length) return '<div class="fi-empty"><div class="fi-empty-icon">📋</div><span>No attributes returned</span></div>';
-    return rows.map(([k,v]) =>
-        `<div class="fi-attr-row">
-            <div class="fi-attr-key">${prettyKey(k)}</div>
-            <div class="fi-attr-val">${formatAttrVal(v)}</div>
-         </div>`
-    ).join('');
-}
-
-/* Resolve a human-readable title from properties */
-function resolveFeatureTitle(props, featId) {
-    const ids = ['IDPERS','idpers','NMPERSIL','nmpersil','NLP','nlp','NOMOR','nomor','NO_PERSIL','no_persil','ID','FID'];
-    for (const k of ids) {
-        if (props[k] !== null && props[k] !== undefined && String(props[k]).trim())
-            return 'Parcel #' + props[k];
+/* ── Build 4-field info card HTML ── */
+function buildSimpleInfo(props) {
+    // 1. Kecamatan
+    let kecName = '\u2014';
+    if (selectedKecId && selectedKecId !== 'semua') {
+        kecName = KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name ?? '\u2014';
+    } else {
+        kecName = props['WADMKC'] || props['wadmkc'] || props['KEC'] || 'All Bandung';
     }
-    return featId ? String(featId).replace(/.*\./,'Parcel #') : 'Parcel Detail';
+
+    // 2. Jenis
+    const jenis = props['JENIS'] || props['jenis'] || props['Jenis'] || '\u2014';
+
+    // 3. Luas
+    const luasRaw = props['luas_ha'] ?? props['LUAS_HA'] ?? props['Luas_ha'] ?? props['luas'] ?? null;
+    const luas = formatLuas(luasRaw);
+
+    // 4. Indeks Risiko
+    const indeksRaw   = getIndeksValue(props);
+    const risk        = getRiskFromValue(indeksRaw);
+    const indeksLabel = indeksRaw !== null ? indeksRaw : '\u2014';
+
+    return '<div class="fi-risk-banner ' + risk.cls + '">' +
+               '<div class="fi-risk-dot" style="background:' + risk.dot + '"></div>' +
+               'Risiko ' + risk.label +
+           '</div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Kecamatan</div><div class="fi-attr-val">' + kecName    + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Jenis</div><div class="fi-attr-val">'      + jenis      + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Luas</div><div class="fi-attr-val">'       + luas       + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Indeks Risiko</div><div class="fi-attr-val">' + indeksLabel + '</div></div>';
 }
 
-/* Main click handler */
+/* ── Map click handler — desktop only ── */
 map.on('click', async function(e) {
-    if (!currentLayerName) { toast('Render a layer first, then click a parcel.', 'error'); return; }
+    if (window.innerWidth <= 768) return;  // skip di mobile
+    if (!currentLayerName) { toast('Render layer terlebih dahulu, lalu klik persil.', 'error'); return; }
 
     const latlng = e.latlng;
 
-    /* Click marker */
+    // Marker titik klik
     if (currentClickMarker) map.removeLayer(currentClickMarker);
     currentClickMarker = L.circleMarker(latlng, {
         radius: 7, color: '#E53935', weight: 2.5, fillColor: '#fff', fillOpacity: 1
     }).addTo(map);
 
-    /* Open drawer with loading state */
-    fiTitle.textContent    = 'Querying parcel\u2026';
+    // Buka drawer — state loading
+    fiTitle.textContent    = 'Mengambil data\u2026';
     fiSubtitle.textContent = currentLayerName;
-    fiBody.innerHTML       = '<div class="fi-loading"><div class="fi-spinner"></div>Fetching attributes\u2026</div>';
+    fiBody.innerHTML       = '<div class="fi-loading"><div class="fi-spinner"></div>Memuat atribut\u2026</div>';
     fiCoord.style.display  = 'none';
     openFiDrawer();
 
-    /* Build GetFeatureInfo URL */
-    const sz  = map.getSize();
-    const bb  = map.getBounds();
-    const pt  = map.latLngToContainerPoint(latlng);
+    // Bangun URL GetFeatureInfo
+    const sz   = map.getSize();
+    const bb   = map.getBounds();
+    const pt   = map.latLngToContainerPoint(latlng);
     const bbox = [bb.getWest(), bb.getSouth(), bb.getEast(), bb.getNorth()].join(',');
 
     const p = new URLSearchParams({
@@ -1331,47 +1341,42 @@ map.on('click', async function(e) {
         const resp = await fetch(GEOSERVER.url + '?' + p.toString());
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const json = await resp.json();
-        if (json.exceptions) throw new Error(json.exceptions[0]?.text ?? 'GeoServer error');
+        if (json.exceptions) throw new Error((json.exceptions[0] && json.exceptions[0].text) ? json.exceptions[0].text : 'GeoServer error');
 
-        const features = json.features ?? [];
+        const features = json.features || [];
 
         if (!features.length) {
-            fiTitle.textContent    = 'No Parcel Found';
-            fiSubtitle.textContent = 'Click directly on a colored parcel';
-            fiBody.innerHTML = '<div class="fi-empty"><div class="fi-empty-icon">🔍</div><span>No feature at this point.<br>Click on a <strong>colored</strong> area.</span></div>';
+            fiTitle.textContent    = 'Persil Tidak Ditemukan';
+            fiSubtitle.textContent = 'Klik tepat di atas area berwarna';
+            fiBody.innerHTML       = '<div class="fi-empty"><div class="fi-empty-icon">\uD83D\uDD0D</div><span>Tidak ada persil di titik ini.<br>Klik tepat di area <strong>berwarna</strong>.</span></div>';
             fiCoord.style.display   = 'flex';
             fiCoordText.textContent = latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
             return;
         }
 
         const feat  = features[0];
-        const props = feat.properties ?? {};
-        const risk  = getRiskInfo(props);
+        const props = feat.properties || {};
 
-        fiTitle.textContent    = resolveFeatureTitle(props, feat.id);
-        fiSubtitle.textContent = currentLayerName;
-
-        fiBody.innerHTML =
-            '<div class="fi-risk-banner ' + risk.cls + '">' +
-                '<div class="fi-risk-dot" style="background:' + risk.dot + '"></div>' +
-                risk.label +
-            '</div>' +
-            buildAttrRows(props);
-
+        fiTitle.textContent     = 'Detail Persil';
+        fiSubtitle.textContent  = currentLayerName;
+        fiBody.innerHTML        = buildSimpleInfo(props);
         fiCoord.style.display   = 'flex';
         fiCoordText.textContent = latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
 
     } catch(err) {
         console.error('[FeatureInfo]', err);
-        fiTitle.textContent    = 'Query Failed';
+        fiTitle.textContent    = 'Query Gagal';
         fiSubtitle.textContent = err.message;
-        fiBody.innerHTML = '<div class="fi-empty"><div class="fi-empty-icon">⚠️</div><span>Could not retrieve info.<br><em>' + err.message + '</em></span></div>';
+        fiBody.innerHTML       = '<div class="fi-empty"><div class="fi-empty-icon">\u26A0\uFE0F</div><span>Gagal mengambil data.<br><em>' + err.message + '</em></span></div>';
     }
 });
 
-/* Enable crosshair once a layer is loaded */
+/* Aktifkan crosshair cursor setelah layer dimuat */
 function enableFiMode()  { map.getContainer().classList.add('fi-mode'); }
 function disableFiMode() { map.getContainer().classList.remove('fi-mode'); closeFiDrawer(); }
+
+
+
 
 
 /* ============================================================
