@@ -457,12 +457,14 @@
                 display: none !important;
             }
 
-            /* Legend → naik di atas tombol Open Controls
-               Toggle button: bottom 20px, tinggi ~46px → top edge ~66px
-               Legend ditaruh di bottom: 76px agar ada jarak 10px dari toggle */
+            /* Risk Classification legend — sembunyikan di mobile */
             .map-legend-overlay {
-                bottom: 78px;
-                left: 10px;
+                display: none !important;
+            }
+
+            /* Leaflet attribution & OpenStreetMap text — sembunyikan di mobile */
+            .leaflet-control-attribution {
+                display: none !important;
             }
 
             /* Toast tetap di atas legend area */
