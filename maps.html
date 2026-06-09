@@ -1241,18 +1241,26 @@ function getIndeksValue(props) {
     }
 }
 
-/* ── Map numeric value to risk label ── */
+/* ── Map value to risk label ──
+   Handles both integer codes (1/2/3) and float scores (0–1) from skor_major */
 function getRiskFromValue(raw) {
-    if (raw === null || raw === undefined) return { cls:'risk-unknown', label:'Unknown',  dot:'#9CA3AF' };
+    if (raw === null || raw === undefined) return { cls:'risk-unknown', label:'Unknown', dot:'#9CA3AF' };
     const n  = parseFloat(raw);
     const lo = String(raw).toLowerCase();
-    if (n === 3 || lo.includes('high')   || lo.includes('tinggi'))
+    // Integer class codes or keyword
+    if (n === 3 || lo.includes('high')  || lo.includes('tinggi'))
         return { cls:'risk-high',     label:'High',     dot:'#DC2626' };
-    if (n === 2 || lo.includes('mod')    || lo.includes('sedang'))
+    if (n === 2 || lo.includes('mod')   || lo.includes('sedang'))
         return { cls:'risk-moderate', label:'Moderate', dot:'#EAB308' };
-    if (n === 1 || lo.includes('low')    || lo.includes('rendah'))
+    if (n === 1 || lo.includes('low')   || lo.includes('rendah'))
         return { cls:'risk-low',      label:'Low',      dot:'#16A34A' };
-    return { cls:'risk-unknown', label:'Index: ' + raw, dot:'#9CA3AF' };
+    // Float score range 0–1 (e.g. skor_major)
+    if (!isNaN(n)) {
+        if (n >= 0.66) return { cls:'risk-high',     label:'High',     dot:'#DC2626' };
+        if (n >= 0.33) return { cls:'risk-moderate', label:'Moderate', dot:'#EAB308' };
+        if (n >= 0)    return { cls:'risk-low',      label:'Low',      dot:'#16A34A' };
+    }
+    return { cls:'risk-unknown', label:'Unknown', dot:'#9CA3AF' };
 }
 
 /* ── Format luas ── */
@@ -1280,18 +1288,21 @@ function buildSimpleInfo(props) {
     const luas = formatLuas(luasRaw);
 
     // 4. Risk Class — show Low / Moderate / High label
-    const indeksRaw = getIndeksValue(props);
-    const risk      = getRiskFromValue(indeksRaw);
-    const riskClass = indeksRaw !== null ? risk.label : '\u2014';
+    const indeksRaw   = getIndeksValue(props);
+    const risk        = getRiskFromValue(indeksRaw);
+    // Format raw value: 4 decimal places if float, otherwise as-is
+    const indeksDisplay = indeksRaw !== null
+        ? (isNaN(parseFloat(indeksRaw)) ? indeksRaw : parseFloat(indeksRaw).toFixed(4))
+        : '\u2014';
 
     return '<div class="fi-risk-banner ' + risk.cls + '">' +
                '<div class="fi-risk-dot" style="background:' + risk.dot + '"></div>' +
                'Risk: ' + risk.label +
            '</div>' +
-           '<div class="fi-attr-row"><div class="fi-attr-key">District</div><div class="fi-attr-val">'    + kecName   + '</div></div>' +
-           '<div class="fi-attr-row"><div class="fi-attr-key">Type</div><div class="fi-attr-val">'       + jenis     + '</div></div>' +
-           '<div class="fi-attr-row"><div class="fi-attr-key">Area</div><div class="fi-attr-val">'       + luas      + '</div></div>' +
-           '<div class="fi-attr-row"><div class="fi-attr-key">Risk Class</div><div class="fi-attr-val">' + riskClass + '</div></div>';
+           '<div class="fi-attr-row"><div class="fi-attr-key">District</div><div class="fi-attr-val">' + kecName       + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Type</div><div class="fi-attr-val">'     + jenis         + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Area</div><div class="fi-attr-val">'     + luas          + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Index</div><div class="fi-attr-val">'    + indeksDisplay + '</div></div>';
 }
 
 /* ── Map click handler — desktop only ── */
