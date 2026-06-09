@@ -349,6 +349,195 @@
         /* Gray background for class highlight mode */
         .wms-gray-bg { filter: grayscale(1) opacity(0.3); }
 
+        /* ================================================================
+           FEATURE INFO DRAWER
+           ================================================================ */
+        /* Backdrop — non-blocking, jangan blur peta */
+        .fi-backdrop {
+            position: absolute; inset: 0; z-index: 1590;
+            background: transparent;
+            display: none;
+            pointer-events: none;
+        }
+        .fi-backdrop.active { display: block; }
+
+        /* Drawer panel */
+        .fi-drawer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 1600;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -8px 48px rgba(0,0,0,0.18);
+            transform: translateY(100%);
+            transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .fi-drawer.open { transform: translateY(0); }
+
+        /* Drag handle */
+        .fi-handle {
+            display: flex; justify-content: center; padding: 10px 0 6px;
+            cursor: grab; flex-shrink: 0;
+        }
+        .fi-handle-bar {
+            width: 38px; height: 5px;
+            background: #D1D5DB; border-radius: 3px;
+        }
+
+        /* Header */
+        .fi-header {
+            padding: 0 1.2rem 0.9rem;
+            border-bottom: 1px solid #F3F4F6;
+            flex-shrink: 0;
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+        }
+
+        .fi-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.2px; color: var(--primary-red);
+            margin-bottom: 0.3rem;
+        }
+        .fi-badge-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--primary-red);
+            animation: blink 2s ease-in-out infinite;
+        }
+        .fi-title {
+            font-size: 1rem; font-weight: 700;
+            color: var(--text-primary); line-height: 1.3;
+            margin: 0;
+        }
+        .fi-title:empty { display: none; }
+        .fi-subtitle {
+            font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.18rem;
+        }
+        .fi-subtitle:empty { display: none; }
+        .fi-close {
+            flex-shrink: 0;
+            background: #F3F4F6; border: none; border-radius: 50%;
+            width: 30px; height: 30px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #6B7280; transition: background 0.15s, color 0.15s;
+        }
+        .fi-close:hover { background: #E5E7EB; color: #111827; }
+
+        /* Loading state inside drawer */
+        .fi-loading {
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.75rem; padding: 2rem;
+            font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;
+            flex-shrink: 0;
+        }
+        .fi-spinner {
+            width: 20px; height: 20px;
+            border: 2px solid #E5E7EB;
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 0.65s linear infinite;
+            flex-shrink: 0;
+        }
+
+        /* No-data state */
+        .fi-empty {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0.5rem; padding: 2rem 1.5rem;
+            font-size: 0.85rem; color: var(--text-secondary); text-align: center;
+        }
+        .fi-empty-icon { font-size: 2rem; }
+
+        /* Attribute table body */
+        .fi-body {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 0.5rem 0 1rem;
+        }
+        .fi-body::-webkit-scrollbar { width: 4px; }
+        .fi-body::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 2px; }
+
+        /* Risk badge at top of table */
+        .fi-risk-banner {
+            margin: 0.5rem 1.2rem 0.75rem;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            display: flex; align-items: center; gap: 0.6rem;
+            font-size: 0.82rem; font-weight: 700;
+        }
+        .fi-risk-banner.risk-high     { background: rgba(220,38,38,0.10); color: #B91C1C; border-left: 4px solid #DC2626; }
+        .fi-risk-banner.risk-moderate { background: rgba(234,179,8,0.12);  color: #92400E; border-left: 4px solid #EAB308; }
+        .fi-risk-banner.risk-low      { background: rgba(22,163,74,0.10);  color: #166534; border-left: 4px solid #16A34A; }
+        .fi-risk-banner.risk-unknown  { background: rgba(107,114,128,0.1); color: #374151; border-left: 4px solid #9CA3AF; }
+        .fi-risk-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        }
+
+        /* Attribute rows */
+        .fi-attr-row {
+            display: flex; align-items: baseline;
+            padding: 0.52rem 1.2rem;
+            border-bottom: 1px solid #F9FAFB;
+            gap: 0.5rem;
+        }
+        .fi-attr-row:last-child { border-bottom: none; }
+        .fi-attr-key {
+            flex: 0 0 38%; min-width: 0;
+            font-size: 0.7rem; font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: 0.8px;
+            word-break: break-all;
+        }
+        .fi-attr-val {
+            flex: 1; min-width: 0;
+            font-size: 0.82rem; font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+        .fi-attr-val.null-val { color: #9CA3AF; font-style: italic; }
+
+        /* Coordinate footer */
+        .fi-coord {
+            flex-shrink: 0;
+            padding: 0.55rem 1.2rem;
+            border-top: 1px solid #F3F4F6;
+            font-size: 0.68rem; color: var(--text-secondary);
+            display: flex; gap: 0.5rem; align-items: center;
+        }
+        .fi-coord svg { flex-shrink: 0; }
+
+        /* Click cursor on map when layer is active */
+        .leaflet-container.fi-mode { cursor: crosshair !important; }
+
+        /* Mobile: sembunyikan fi-drawer */
+        @media (max-width: 768px) {
+            .fi-drawer  { display: none !important; }
+            .fi-backdrop{ display: none !important; }
+        }
+
+        /* Desktop: fi-drawer sebagai floating card di pojok kanan */
+        @media (min-width: 769px) {
+            .fi-drawer {
+                left: auto; right: 18px; bottom: 18px;
+                width: 320px;
+                border-radius: 16px;
+                max-height: 72vh;
+                transform: translateY(14px);
+                opacity: 0;
+                transition: transform 0.3s cubic-bezier(0.32,0.72,0,1), opacity 0.25s ease;
+                pointer-events: none;
+                z-index: 800;
+            }
+            .fi-drawer.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .fi-handle { display: none; }
+        }
+
         /* ── Mobile Panel Toggle Button ── */
         .mobile-panel-toggle {
             display: none;
@@ -653,6 +842,42 @@
         </div>
 
         <div class="toast" id="toast"></div>
+
+        <!-- ══ FEATURE INFO DRAWER ══ -->
+        <div class="fi-backdrop" id="fiBackdrop"></div>
+        <div class="fi-drawer"  id="fiDrawer">
+            <div class="fi-handle" id="fiHandle">
+                <div class="fi-handle-bar"></div>
+            </div>
+            <div class="fi-header">
+                <div class="fi-header-left">
+                    <div class="fi-badge">
+                        <div class="fi-badge-dot"></div>
+                        Feature Info
+                    </div>
+                    <h3 class="fi-title" id="fiTitle">—</h3>
+                    <div class="fi-subtitle" id="fiSubtitle">Click a parcel to inspect attributes</div>
+                </div>
+                <button class="fi-close" id="fiClose" title="Close">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="fi-body" id="fiBody">
+                <div class="fi-empty">
+                    <div class="fi-empty-icon">🗺️</div>
+                    <span>Click any parcel on the map<br>to view its attributes</span>
+                </div>
+            </div>
+            <div class="fi-coord" id="fiCoord" style="display:none">
+                <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path stroke-linecap="round" d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                </svg>
+                <span id="fiCoordText"></span>
+            </div>
+        </div>
     </main>
 
 </div>
@@ -754,6 +979,7 @@ let currentBgLayer       = null;
 let currentBoundaryLayer = null;
 let toastTimer           = null;
 let selectedClassFilter  = 'all';
+let selectedHazardId     = 'earthquake'; // untuk GetFeatureInfo indeks logic
 
 /* ============================================================
    🏙️  KECAMATAN CHIPS
@@ -833,6 +1059,10 @@ function loadWmsLayer(layerName, cqlFilter) {
     if (currentWmsLayer) { map.removeLayer(currentWmsLayer); currentWmsLayer = null; }
     if (currentBgLayer)  { map.removeLayer(currentBgLayer);  currentBgLayer  = null; }
 
+    // Track active layer name for GetFeatureInfo
+    currentLayerName = layerName;
+    closeFiDrawer();
+
     if (cqlFilter) {
         // Mode highlight: gray background + colored filter layer
         currentBgLayer = L.tileLayer.wms(GEOSERVER.url, {
@@ -855,7 +1085,10 @@ function loadWmsLayer(layerName, cqlFilter) {
     }
 
     showLoading(true);
-    currentWmsLayer.on('load',      () => showLoading(false));
+    currentWmsLayer.on('load', () => {
+        showLoading(false);
+        enableFiMode();  // activate crosshair cursor once tiles loaded
+    });
     currentWmsLayer.on('tileerror', () => {
         showLoading(false);
         toast('Could not load layer. Check your GeoServer connection.', 'error');
@@ -907,6 +1140,7 @@ function renderMap() {
     }
 
     const hazardId  = document.querySelector('input[name="hazard"]:checked').value;
+    selectedHazardId = hazardId; // simpan untuk GetFeatureInfo
     const layerName = resolveLayerName(selectedKecId, hazardId);
 
     // Build CQL_FILTER
@@ -967,6 +1201,185 @@ function toast(msg, type = 'info') {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
+
+/* ============================================================
+   🔍  FEATURE INFO — WMS GetFeatureInfo (Desktop only)
+   ============================================================ */
+let currentLayerName   = null;
+let currentClickMarker = null;
+
+const fiDrawer    = document.getElementById('fiDrawer');
+const fiBackdrop  = document.getElementById('fiBackdrop');
+const fiBody      = document.getElementById('fiBody');
+const fiTitle     = document.getElementById('fiTitle');
+const fiSubtitle  = document.getElementById('fiSubtitle');
+const fiCoord     = document.getElementById('fiCoord');
+const fiCoordText = document.getElementById('fiCoordText');
+
+function openFiDrawer()  { fiDrawer.classList.add('open'); }
+function closeFiDrawer() {
+    fiDrawer.classList.remove('open');
+    if (currentClickMarker) { map.removeLayer(currentClickMarker); currentClickMarker = null; }
+}
+
+document.getElementById('fiClose').addEventListener('click', closeFiDrawer);
+
+/* ── Ambil nilai indeks berdasarkan hazard type ── */
+function getIndeksValue(props) {
+    if (selectedHazardId === 'earthquake' || selectedHazardId === 'multihazard') {
+        // Gempa & Multihazard → field skor_major
+        const v = props['skor_major'] ?? props['SKOR_MAJOR'] ?? props['Skor_major'];
+        return (v !== undefined && v !== null) ? String(v) : null;
+    } else {
+        // Banjir & Longsor → field berakhiran _majority
+        const key = Object.keys(props).find(k => k.toLowerCase().endsWith('_majority'));
+        if (key) {
+            const v = props[key];
+            return (v !== undefined && v !== null) ? String(v) : null;
+        }
+        return null;
+    }
+}
+
+/* ── Map numeric value to risk label ── */
+function getRiskFromValue(raw) {
+    if (raw === null || raw === undefined) return { cls:'risk-unknown', label:'Unknown',  dot:'#9CA3AF' };
+    const n  = parseFloat(raw);
+    const lo = String(raw).toLowerCase();
+    if (n === 3 || lo.includes('high')   || lo.includes('tinggi'))
+        return { cls:'risk-high',     label:'High',     dot:'#DC2626' };
+    if (n === 2 || lo.includes('mod')    || lo.includes('sedang'))
+        return { cls:'risk-moderate', label:'Moderate', dot:'#EAB308' };
+    if (n === 1 || lo.includes('low')    || lo.includes('rendah'))
+        return { cls:'risk-low',      label:'Low',      dot:'#16A34A' };
+    return { cls:'risk-unknown', label:'Index: ' + raw, dot:'#9CA3AF' };
+}
+
+/* ── Format luas ── */
+function formatLuas(raw) {
+    if (raw === null || raw === undefined || raw === '') return '\u2014';
+    const n = parseFloat(raw);
+    return isNaN(n) ? String(raw) : n.toFixed(4) + ' ha';
+}
+
+/* ── Build 4-field info card HTML ── */
+function buildSimpleInfo(props) {
+    // 1. District
+    let kecName = '\u2014';
+    if (selectedKecId && selectedKecId !== 'semua') {
+        kecName = KECAMATAN_DATA.find(k => k.id === selectedKecId)?.name ?? '\u2014';
+    } else {
+        kecName = props['WADMKC'] || props['wadmkc'] || props['KEC'] || 'All Bandung';
+    }
+
+    // 2. Type
+    const jenis = props['JENIS'] || props['jenis'] || props['Jenis'] || '\u2014';
+
+    // 3. Area — Luas_Ha field name from shapefile
+    const luasRaw = props['Luas_Ha'] ?? props['luas_ha'] ?? props['LUAS_HA'] ?? props['Luas_ha'] ?? props['luas'] ?? null;
+    const luas = formatLuas(luasRaw);
+
+    // 4. Risk Class — show Low / Moderate / High label
+    const indeksRaw = getIndeksValue(props);
+    const risk      = getRiskFromValue(indeksRaw);
+    const riskClass = indeksRaw !== null ? risk.label : '\u2014';
+
+    return '<div class="fi-risk-banner ' + risk.cls + '">' +
+               '<div class="fi-risk-dot" style="background:' + risk.dot + '"></div>' +
+               'Risk: ' + risk.label +
+           '</div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">District</div><div class="fi-attr-val">'    + kecName   + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Type</div><div class="fi-attr-val">'       + jenis     + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Area</div><div class="fi-attr-val">'       + luas      + '</div></div>' +
+           '<div class="fi-attr-row"><div class="fi-attr-key">Risk Class</div><div class="fi-attr-val">' + riskClass + '</div></div>';
+}
+
+/* ── Map click handler — desktop only ── */
+map.on('click', async function(e) {
+    if (window.innerWidth <= 768) return;  // desktop only
+    if (!currentLayerName) { toast('Please render a map layer first, then click a parcel.', 'error'); return; }
+
+    const latlng = e.latlng;
+
+    // Marker titik klik
+    if (currentClickMarker) map.removeLayer(currentClickMarker);
+    currentClickMarker = L.circleMarker(latlng, {
+        radius: 7, color: '#E53935', weight: 2.5, fillColor: '#fff', fillOpacity: 1
+    }).addTo(map);
+
+    // Open drawer — loading state
+    fiTitle.textContent    = '';
+    fiSubtitle.textContent = '';
+    fiBody.innerHTML       = '<div class="fi-loading"><div class="fi-spinner"></div>Loading attributes…</div>';
+    fiCoord.style.display  = 'none';
+    openFiDrawer();
+
+    // Bangun URL GetFeatureInfo
+    const sz   = map.getSize();
+    const bb   = map.getBounds();
+    const pt   = map.latLngToContainerPoint(latlng);
+    const bbox = [bb.getWest(), bb.getSouth(), bb.getEast(), bb.getNorth()].join(',');
+
+    const p = new URLSearchParams({
+        service:       'WMS',
+        version:       '1.1.1',
+        request:       'GetFeatureInfo',
+        layers:        GEOSERVER.workspace + ':' + currentLayerName,
+        query_layers:  GEOSERVER.workspace + ':' + currentLayerName,
+        styles:        '',
+        bbox:          bbox,
+        width:         sz.x,
+        height:        sz.y,
+        srs:           'EPSG:4326',
+        x:             Math.round(pt.x),
+        y:             Math.round(pt.y),
+        info_format:   'application/json',
+        feature_count: 1,
+        exceptions:    'application/json',
+    });
+    if (selectedClassFilter !== 'all') p.set('CQL_FILTER', 'indeks=' + selectedClassFilter);
+
+    try {
+        const resp = await fetch(GEOSERVER.url + '?' + p.toString());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const json = await resp.json();
+        if (json.exceptions) throw new Error((json.exceptions[0] && json.exceptions[0].text) ? json.exceptions[0].text : 'GeoServer error');
+
+        const features = json.features || [];
+
+        if (!features.length) {
+            fiTitle.textContent    = '';
+            fiSubtitle.textContent = 'Click directly on a colored area';
+            fiBody.innerHTML       = '<div class="fi-empty"><div class="fi-empty-icon">🔍</div><span>No parcel found at this point.<br>Click on a <strong>colored</strong> area.</span></div>';
+            fiCoord.style.display   = 'flex';
+            fiCoordText.textContent = latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
+            return;
+        }
+
+        const feat  = features[0];
+        const props = feat.properties || {};
+
+        fiTitle.textContent     = '';
+        fiSubtitle.textContent  = '';
+        fiBody.innerHTML        = buildSimpleInfo(props);
+        fiCoord.style.display   = 'flex';
+        fiCoordText.textContent = latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
+
+    } catch(err) {
+        console.error('[FeatureInfo]', err);
+        fiTitle.textContent    = 'Query Failed';
+        fiSubtitle.textContent = err.message;
+        fiBody.innerHTML       = '<div class="fi-empty"><div class="fi-empty-icon">⚠️</div><span>Could not retrieve feature info.<br><em>' + err.message + '</em></span></div>';
+    }
+});
+
+/* Aktifkan crosshair cursor setelah layer dimuat */
+function enableFiMode()  { map.getContainer().classList.add('fi-mode'); }
+function disableFiMode() { map.getContainer().classList.remove('fi-mode'); closeFiDrawer(); }
+
+
+
+
 
 /* ============================================================
    🚀  INIT
