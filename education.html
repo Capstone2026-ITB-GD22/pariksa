@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,13 +46,28 @@
         .logo-wrapper span { color: var(--primary-red); }
         nav.mobile-open .logo-wrapper { color: #FFFFFF; }
         
-        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; transition: all 0.4s ease; }
         .nav-links a { 
             font-weight: 600; font-size: 0.95rem; color: #FFFFFF; 
             transition: color 0.3s ease; 
         }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-red) !important; }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex; align-items: center; gap: 2px;
+            background: rgba(255,255,255,0.08); border-radius: 20px; padding: 3px;
+            flex-shrink: 0;
+        }
+        .lang-btn {
+            padding: 3px 10px; border-radius: 16px; border: none;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s ease; background: transparent;
+            color: rgba(255,255,255,0.55); font-family: var(--font-main); letter-spacing: 0.5px;
+        }
+        .lang-btn.lang-active { background: var(--primary-red); color: #fff !important; }
+        .lang-btn:hover:not(.lang-active) { color: rgba(255,255,255,0.9); }
 
         /* Hamburger icon */
         .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 2001; }
@@ -66,11 +81,8 @@
 
         /* Header Long Red Divider */
         .header-divider {
-            width: 300px;
-            height: 4px;
-            background-color: var(--primary-red);
-            border-radius: 2px;
-            margin: 3rem auto 0 auto;
+            width: 300px; height: 4px; background-color: var(--primary-red);
+            border-radius: 2px; margin: 3rem auto 0 auto;
         }
 
         /* Simple Red Divider */
@@ -124,14 +136,9 @@
         @media (max-width: 768px) { 
             .hamburger { display: flex; }
             .nav-links {
-                position: fixed;
-                top: 0; right: -100%;
-                width: 70%; height: 100vh;
-                background-color: rgba(0, 0, 0, 0.95);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 3rem;
+                position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+                background-color: rgba(0, 0, 0, 0.95); flex-direction: column;
+                justify-content: center; align-items: center; gap: 3rem;
             }
             .nav-links.active { right: 0; }
             .nav-links.active a { color: #FFFFFF; font-size: 1.2rem; }
@@ -164,12 +171,18 @@
             </a>
             <div class="nav-right">
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="guide.html">Guide</a></li>
-                    <li><a href="maps.html">Maps</a></li>
-                    <li><a href="education.html" class="active">Education</a></li>
-                    <li><a href="team.html">Team</a></li>
+                    <li><a href="index.html"     data-i18n="navHome">Home</a></li>
+                    <li><a href="guide.html"      data-i18n="navGuide">Guide</a></li>
+                    <li><a href="maps.html"       data-i18n="navMaps">Maps</a></li>
+                    <li><a href="education.html"  data-i18n="navEducation" class="active">Education</a></li>
+                    <li><a href="team.html"       data-i18n="navTeam">Team</a></li>
                 </ul>
+
+                <div class="lang-toggle">
+                    <button class="lang-btn" id="btn-id" onclick="setLang('id')">ID</button>
+                    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+                </div>
+
                 <div class="hamburger" id="hamburger">
                     <span></span><span></span><span></span>
                 </div>
@@ -179,8 +192,8 @@
 
     <header class="page-header">
         <div class="container">
-            <h1>Resource Center</h1>
-            <p>Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
+            <h1 data-i18n="pageTitle">Resource Center</h1>
+            <p data-i18n="pageDesc">Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.</p>
             <div class="header-divider"></div>
         </div>
     </header>
@@ -189,8 +202,8 @@
         <div class="container">
             <div class="section-top">
                 <div class="section-title">
-                    <span>Updates</span>
-                    <h2>Latest News</h2>
+                    <span data-i18n="newsLabel">Updates</span>
+                    <h2 data-i18n="newsTitle">Latest News</h2>
                 </div>
                 <div class="slider-controls">
                     <button class="control-btn" onclick="slide('news', -1)">&#10094;</button>
@@ -201,24 +214,24 @@
             <div class="slider-wrapper">
                 <div id="news-track" class="slider-track">
                     <div class="edu-card">
-                        <h3>South Bandung Floods Affect Thousands of Residents and Disrupt Transportation</h3>
-                        <p>Severe flooding in South Bandung, triggered by three consecutive days of heavy rainfall, affected 34,497 residents, inundated hundreds of homes, displaced hundreds of people, and disrupted major road access across several districts.</p>
-                        <a href="https://jabarprov.go.id/berita/banjir-bandung-selatan-ratusan-rumah-terdampak-dan-akses-jalan-terputus-23760" class="card-link">Read More →</a>
+                        <h3 data-i18n="news1Title">South Bandung Floods Affect Thousands of Residents and Disrupt Transportation</h3>
+                        <p data-i18n="news1Desc">Severe flooding in South Bandung, triggered by three consecutive days of heavy rainfall, affected 34,497 residents, inundated hundreds of homes, displaced hundreds of people, and disrupted major road access across several districts.</p>
+                        <a href="https://jabarprov.go.id/berita/banjir-bandung-selatan-ratusan-rumah-terdampak-dan-akses-jalan-terputus-23760" class="card-link" data-i18n="readMore">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Rapid Emergency Response Deployed Following Landslide in West Bandung</h3>
-                        <p>Following a deadly landslide in Cisarua, West Bandung, triggered by intense rainfall, the Ministry of Public Works deployed emergency personnel, heavy equipment, and relief facilities to support rescue operations and assist 113 affected residents.</p>
-                        <a href="https://sahabat.pu.go.id/eppid/berita/detail/respons-cepat-bencana-longsor-di-cisarua-bandung-barat-kementerian-pu-kerahkan-alat-berat-dan-sarana" class="card-link">Read More →</a>
+                        <h3 data-i18n="news2Title">Rapid Emergency Response Deployed Following Landslide in West Bandung</h3>
+                        <p data-i18n="news2Desc">Following a deadly landslide in Cisarua, West Bandung, triggered by intense rainfall, the Ministry of Public Works deployed emergency personnel, heavy equipment, and relief facilities to support rescue operations and assist 113 affected residents.</p>
+                        <a href="https://sahabat.pu.go.id/eppid/berita/detail/respons-cepat-bencana-longsor-di-cisarua-bandung-barat-kementerian-pu-kerahkan-alat-berat-dan-sarana" class="card-link" data-i18n="readMore">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>ITB Expert Explains Mudflow Mechanism Behind West Bandung Landslide and Ongoing Risks</h3>
-                        <p>An ITB geologist explained that the West Bandung disaster was caused by a landslide-dammed river that later collapsed, triggering a destructive mudflow carrying sediment and debris downstream, with additional risks remaining due to potential upstream blockages.</p>
-                        <a href="https://itb.ac.id/berita/longsor-bandung-barat-pakar-itb-jelaskan-mekanisme-aliran-lumpur-dan-potensi-bahaya-susulannya/63243" class="card-link">Read More →</a>
+                        <h3 data-i18n="news3Title">ITB Expert Explains Mudflow Mechanism Behind West Bandung Landslide and Ongoing Risks</h3>
+                        <p data-i18n="news3Desc">An ITB geologist explained that the West Bandung disaster was caused by a landslide-dammed river that later collapsed, triggering a destructive mudflow carrying sediment and debris downstream, with additional risks remaining due to potential upstream blockages.</p>
+                        <a href="https://itb.ac.id/berita/longsor-bandung-barat-pakar-itb-jelaskan-mekanisme-aliran-lumpur-dan-potensi-bahaya-susulannya/63243" class="card-link" data-i18n="readMore">Read More →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Flooding in Bandung Affects 600 Residents</h3>
-                        <p>Heavy rainfall caused the Cikapundung River to overflow in central Bandung, affecting 600 residents and inundating 600 homes, while emergency response teams provided evacuation support and temporary flood protection measures.</p>
-                        <a href="https://www.bnpb.go.id/berita/banjir-genangi-bandung-600-jiwa-terdampak" class="card-link">Read More →</a>
+                        <h3 data-i18n="news4Title">Flooding in Bandung Affects 600 Residents</h3>
+                        <p data-i18n="news4Desc">Heavy rainfall caused the Cikapundung River to overflow in central Bandung, affecting 600 residents and inundating 600 homes, while emergency response teams provided evacuation support and temporary flood protection measures.</p>
+                        <a href="https://www.bnpb.go.id/berita/banjir-genangi-bandung-600-jiwa-terdampak" class="card-link" data-i18n="readMore">Read More →</a>
                     </div>
                 </div>
             </div>
@@ -233,8 +246,8 @@
         <div class="container">
             <div class="section-top">
                 <div class="section-title">
-                    <span>Research</span>
-                    <h2>Academic Journals</h2>
+                    <span data-i18n="journalLabel">Research</span>
+                    <h2 data-i18n="journalTitle">Academic Journals</h2>
                 </div>
                 <div class="slider-controls">
                     <button class="control-btn" onclick="slide('journal', -1)">&#10094;</button>
@@ -245,19 +258,19 @@
             <div class="slider-wrapper">
                 <div id="journal-track" class="slider-track">
                     <div class="edu-card">
-                        <h3>Remote Sensing Observation of Extreme Precipitation in Great Bandung</h3>
-                        <p>This study investigates the spatial and vertical structures of extreme precipitation and hail events in the Greater Bandung basin by utilizing a combination of X-band polarimetric Doppler weather radar and a low-cost rain scanner radar network to improve early warning systems.</p>
-                        <a href="https://drive.google.com/file/d/1rdK8jlN9HcZSNv6V3rIhLHIhG8ZKwacX/view?usp=drive_link" class="card-link">View Journal →</a>
+                        <h3 data-i18n="journal1Title">Remote Sensing Observation of Extreme Precipitation in Great Bandung</h3>
+                        <p data-i18n="journal1Desc">This study investigates the spatial and vertical structures of extreme precipitation and hail events in the Greater Bandung basin by utilizing a combination of X-band polarimetric Doppler weather radar and a low-cost rain scanner radar network to improve early warning systems.</p>
+                        <a href="https://drive.google.com/file/d/1rdK8jlN9HcZSNv6V3rIhLHIhG8ZKwacX/view?usp=drive_link" class="card-link" data-i18n="viewJournal">View Journal →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Land Subsidence in Bandung Basin and its Possible Caused Factors</h3>
-                        <p>This research identifies that excessive groundwater extraction is the primary driver of land subsidence in Bandung's industrial areas, with rates reaching up to 16.9 cm per year as measured by GPS and InSAR data.</p>
-                        <a href="https://drive.google.com/file/d/1odXOyUf87IJa53m5AR-3bAQLKYBrsAPH/view?usp=drive_link" class="card-link">View Journal →</a>
+                        <h3 data-i18n="journal2Title">Land Subsidence in Bandung Basin and its Possible Caused Factors</h3>
+                        <p data-i18n="journal2Desc">This research identifies that excessive groundwater extraction is the primary driver of land subsidence in Bandung's industrial areas, with rates reaching up to 16.9 cm per year as measured by GPS and InSAR data.</p>
+                        <a href="https://drive.google.com/file/d/1odXOyUf87IJa53m5AR-3bAQLKYBrsAPH/view?usp=drive_link" class="card-link" data-i18n="viewJournal">View Journal →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Slip Rate Estimation of the Lembang Fault West Java from Geodetic Observation</h3>
-                        <p>This geodetic study estimates that the Lembang Fault has a slip rate of 6 mm per year, characterized by a combination of shallow creeping and a deeper locked portion that poses a potential seismic risk.</p>
-                        <a href="https://drive.google.com/file/d/1352grpgQCSxbI6WAdd0Oj32H7GNjTs0a/view?usp=drive_link" class="card-link">View Journal →</a>
+                        <h3 data-i18n="journal3Title">Slip Rate Estimation of the Lembang Fault West Java from Geodetic Observation</h3>
+                        <p data-i18n="journal3Desc">This geodetic study estimates that the Lembang Fault has a slip rate of 6 mm per year, characterized by a combination of shallow creeping and a deeper locked portion that poses a potential seismic risk.</p>
+                        <a href="https://drive.google.com/file/d/1352grpgQCSxbI6WAdd0Oj32H7GNjTs0a/view?usp=drive_link" class="card-link" data-i18n="viewJournal">View Journal →</a>
                     </div>
                 </div>
             </div>
@@ -272,8 +285,8 @@
         <div class="container">
             <div class="section-top">
                 <div class="section-title">
-                    <span>Disaster Education</span>
-                    <h2>Videos</h2>
+                    <span data-i18n="videoLabel">Disaster Education</span>
+                    <h2 data-i18n="videoTitle">Videos</h2>
                 </div>
                 <div class="slider-controls">
                     <button class="control-btn" onclick="slide('video', -1)">&#10094;</button>
@@ -284,19 +297,19 @@
             <div class="slider-wrapper">
                 <div id="video-track" class="slider-track">
                     <div class="edu-card">
-                        <h3>Disaster Education - Earthquake</h3>
-                        <p>BNPB presents an educational video on earthquake preparedness, covering actions before, during, and after an event. This video aims to enhance public resilience and readiness in facing disasters.</p>
-                        <a href="https://youtu.be/8-ZZ3uzZkp0?si=Gaa0-_tRi5iK3c2B" target="_blank" class="card-link">Watch Video →</a>
+                        <h3 data-i18n="video1Title">Disaster Education - Earthquake</h3>
+                        <p data-i18n="video1Desc">BNPB presents an educational video on earthquake preparedness, covering actions before, during, and after an event. This video aims to enhance public resilience and readiness in facing disasters.</p>
+                        <a href="https://youtu.be/8-ZZ3uzZkp0?si=Gaa0-_tRi5iK3c2B" target="_blank" class="card-link" data-i18n="watchVideo">Watch Video →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Disaster Education - Flood</h3>
-                        <p>This video provides a comprehensive overview of flood preparedness, including the primary causes of flooding in Indonesia, as well as recommended actions to be taken before, during, and after a flood event. It aims to strengthen public awareness, preparedness, and resilience in mitigating flood risks and impacts.</p>
-                        <a href="https://youtu.be/sJsC6zQCfNI?si=vOW4b3NBz3vG9upP" target="_blank" class="card-link">Watch Video →</a>
+                        <h3 data-i18n="video2Title">Disaster Education - Flood</h3>
+                        <p data-i18n="video2Desc">This video provides a comprehensive overview of flood preparedness, including the primary causes of flooding in Indonesia, as well as recommended actions to be taken before, during, and after a flood event. It aims to strengthen public awareness, preparedness, and resilience in mitigating flood risks and impacts.</p>
+                        <a href="https://youtu.be/sJsC6zQCfNI?si=vOW4b3NBz3vG9upP" target="_blank" class="card-link" data-i18n="watchVideo">Watch Video →</a>
                     </div>
                     <div class="edu-card">
-                        <h3>Disaster Education - Landslide</h3>
-                        <p>This time, BNPB presents an educational video on landslide disasters. Landslides have occurred frequently in several regions of Indonesia, including Boyolali, Sigi, and Bengkulu in recent times.</p>
-                        <a href="https://youtu.be/UAPce7ywdeI?si=3luQG5a72kuR9RrM" target="_blank" class="card-link">Watch Video →</a>
+                        <h3 data-i18n="video3Title">Disaster Education - Landslide</h3>
+                        <p data-i18n="video3Desc">This time, BNPB presents an educational video on landslide disasters. Landslides have occurred frequently in several regions of Indonesia, including Boyolali, Sigi, and Bengkulu in recent times.</p>
+                        <a href="https://youtu.be/UAPce7ywdeI?si=3luQG5a72kuR9RrM" target="_blank" class="card-link" data-i18n="watchVideo">Watch Video →</a>
                     </div>
                 </div>
             </div>
@@ -304,7 +317,7 @@
     </section>
 
     <footer>
-        <p>© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
+        <p data-i18n="footer">© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.</p>
     </footer>
 
     <script>
@@ -328,30 +341,19 @@
             });
         });
 
-        const positions = {
-            news: 0,
-            journal: 0,
-            video: 0
-        };
+        const positions = { news: 0, journal: 0, video: 0 };
 
         function slide(section, direction) {
             const track = document.getElementById(`${section}-track`);
             const cards = track.children;
-            
             if (cards.length === 0) return; 
-
             const cardWidth = cards[0].offsetWidth + 32; 
-            
             const visibleCards = window.innerWidth > 1024 ? 3 : (window.innerWidth > 768 ? 2 : 1);
-            
             let maxIndex = cards.length - visibleCards;
             if (maxIndex < 0) maxIndex = 0;
-
             positions[section] += direction;
-
             if (positions[section] < 0) positions[section] = 0;
             if (positions[section] > maxIndex) positions[section] = maxIndex;
-
             track.style.transform = `translateX(-${positions[section] * cardWidth}px)`;
         }
 
@@ -374,6 +376,141 @@
                 }
             });
         });
+
+        /* ═══════════════════════════════════════════════════════════════════
+         * 🌐 SISTEM TERJEMAHAN — education.html
+         * ───────────────────────────────────────────────────────────────────
+         * ISI string kosong "" pada bagian  id: { ... }  di bawah ini.
+         * String kosong akan otomatis menampilkan teks Inggris sebagai fallback.
+         * ═══════════════════════════════════════════════════════════════════ */
+        const TRANSLATIONS = {
+
+            id: {
+                // ── Navbar ───────────────────────────────────────────────
+                navHome:        "Beranda",    // ← "Home"
+                navGuide:       "Panduan",    // ← "Guide"
+                navMaps:        "Peta",       // ← "Maps"
+                navEducation:   "Pendidikan", // ← "Education"
+                navTeam:        "Tim",        // ← "Team"
+
+                // ── Header Halaman ───────────────────────────────────────
+                pageTitle:      "Pusat Edukasi",    // ← "Resource Center"
+                pageDesc:       "Jelajahi koleksi kami yang dirancang...",    // ← "Explore our curated collection..."
+
+                // ── Section: Berita ──────────────────────────────────────
+                newsLabel:      "Berita",    // ← "Updates"
+                newsTitle:      "Berita Terbaru",    // ← "Latest News"
+
+                news1Title:     "Banjir di Bandung Selatan Mempengaruhi Ribuan Orang",    // ← "South Bandung Floods Affect Thousands..."
+                news1Desc:      "Banjir parah di Bandung Selatan...",    // ← "Severe flooding in South Bandung..."
+
+                news2Title:     "",    // ← "Rapid Emergency Response Deployed..."
+                news2Desc:      "",    // ← "Following a deadly landslide in Cisarua..."
+
+                news3Title:     "",    // ← "ITB Expert Explains Mudflow Mechanism..."
+                news3Desc:      "",    // ← "An ITB geologist explained..."
+
+                news4Title:     "",    // ← "Flooding in Bandung Affects 600 Residents"
+                news4Desc:      "",    // ← "Heavy rainfall caused the Cikapundung River..."
+
+                readMore:       "",    // ← "Read More →"
+
+                // ── Section: Jurnal ──────────────────────────────────────
+                journalLabel:   "",    // ← "Research"
+                journalTitle:   "",    // ← "Academic Journals"
+
+                journal1Title:  "",    // ← "Remote Sensing Observation of Extreme Precipitation..."
+                journal1Desc:   "",    // ← "This study investigates the spatial and vertical structures..."
+
+                journal2Title:  "",    // ← "Land Subsidence in Bandung Basin..."
+                journal2Desc:   "",    // ← "This research identifies that excessive groundwater extraction..."
+
+                journal3Title:  "",    // ← "Slip Rate Estimation of the Lembang Fault..."
+                journal3Desc:   "",    // ← "This geodetic study estimates that the Lembang Fault..."
+
+                viewJournal:    "",    // ← "View Journal →"
+
+                // ── Section: Video ───────────────────────────────────────
+                videoLabel:     "",    // ← "Disaster Education"
+                videoTitle:     "",    // ← "Videos"
+
+                video1Title:    "",    // ← "Disaster Education - Earthquake"
+                video1Desc:     "",    // ← "BNPB presents an educational video on earthquake preparedness..."
+
+                video2Title:    "",    // ← "Disaster Education - Flood"
+                video2Desc:     "",    // ← "This video provides a comprehensive overview of flood preparedness..."
+
+                video3Title:    "",    // ← "Disaster Education - Landslide"
+                video3Desc:     "",    // ← "This time, BNPB presents an educational video on landslide disasters..."
+
+                watchVideo:     "",    // ← "Watch Video →"
+
+                // ── Footer ──────────────────────────────────────────────
+                footer:         "",    // ← "© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung."
+            },
+
+            // ── JANGAN UBAH BAGIAN INI ──────────────────────────────────
+            en: {
+                navHome:        "Home",
+                navGuide:       "Guide",
+                navMaps:        "Maps",
+                navEducation:   "Education",
+                navTeam:        "Team",
+                pageTitle:      "Resource Center",
+                pageDesc:       "Explore our curated collection of news, research papers, and video tutorials to deepen your understanding of disaster risk management.",
+                newsLabel:      "Updates",
+                newsTitle:      "Latest News",
+                news1Title:     "South Bandung Floods Affect Thousands of Residents and Disrupt Transportation",
+                news1Desc:      "Severe flooding in South Bandung, triggered by three consecutive days of heavy rainfall, affected 34,497 residents, inundated hundreds of homes, displaced hundreds of people, and disrupted major road access across several districts.",
+                news2Title:     "Rapid Emergency Response Deployed Following Landslide in West Bandung",
+                news2Desc:      "Following a deadly landslide in Cisarua, West Bandung, triggered by intense rainfall, the Ministry of Public Works deployed emergency personnel, heavy equipment, and relief facilities to support rescue operations and assist 113 affected residents.",
+                news3Title:     "ITB Expert Explains Mudflow Mechanism Behind West Bandung Landslide and Ongoing Risks",
+                news3Desc:      "An ITB geologist explained that the West Bandung disaster was caused by a landslide-dammed river that later collapsed, triggering a destructive mudflow carrying sediment and debris downstream, with additional risks remaining due to potential upstream blockages.",
+                news4Title:     "Flooding in Bandung Affects 600 Residents",
+                news4Desc:      "Heavy rainfall caused the Cikapundung River to overflow in central Bandung, affecting 600 residents and inundating 600 homes, while emergency response teams provided evacuation support and temporary flood protection measures.",
+                readMore:       "Read More →",
+                journalLabel:   "Research",
+                journalTitle:   "Academic Journals",
+                journal1Title:  "Remote Sensing Observation of Extreme Precipitation in Great Bandung",
+                journal1Desc:   "This study investigates the spatial and vertical structures of extreme precipitation and hail events in the Greater Bandung basin by utilizing a combination of X-band polarimetric Doppler weather radar and a low-cost rain scanner radar network to improve early warning systems.",
+                journal2Title:  "Land Subsidence in Bandung Basin and its Possible Caused Factors",
+                journal2Desc:   "This research identifies that excessive groundwater extraction is the primary driver of land subsidence in Bandung's industrial areas, with rates reaching up to 16.9 cm per year as measured by GPS and InSAR data.",
+                journal3Title:  "Slip Rate Estimation of the Lembang Fault West Java from Geodetic Observation",
+                journal3Desc:   "This geodetic study estimates that the Lembang Fault has a slip rate of 6 mm per year, characterized by a combination of shallow creeping and a deeper locked portion that poses a potential seismic risk.",
+                viewJournal:    "View Journal →",
+                videoLabel:     "Disaster Education",
+                videoTitle:     "Videos",
+                video1Title:    "Disaster Education - Earthquake",
+                video1Desc:     "BNPB presents an educational video on earthquake preparedness, covering actions before, during, and after an event. This video aims to enhance public resilience and readiness in facing disasters.",
+                video2Title:    "Disaster Education - Flood",
+                video2Desc:     "This video provides a comprehensive overview of flood preparedness, including the primary causes of flooding in Indonesia, as well as recommended actions to be taken before, during, and after a flood event. It aims to strengthen public awareness, preparedness, and resilience in mitigating flood risks and impacts.",
+                video3Title:    "Disaster Education - Landslide",
+                video3Desc:     "This time, BNPB presents an educational video on landslide disasters. Landslides have occurred frequently in several regions of Indonesia, including Boyolali, Sigi, and Bengkulu in recent times.",
+                watchVideo:     "Watch Video →",
+                footer:         "© 2026 Team Pariksa. High-Precision Disaster Risk Mapping Bandung.",
+            }
+        };
+
+        /* ── Engine Terjemahan (jangan diubah) ── */
+        function applyLang(lang) {
+            const t  = TRANSLATIONS[lang];
+            const en = TRANSLATIONS['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key  = el.getAttribute('data-i18n');
+                const text = (t[key] && t[key] !== '') ? t[key] : en[key];
+                if (text === undefined) return;
+                el.hasAttribute('data-i18n-html') ? (el.innerHTML = text) : (el.textContent = text);
+            });
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('lang-active'));
+            const active = document.getElementById('btn-' + lang);
+            if (active) active.classList.add('lang-active');
+            document.documentElement.lang = (lang === 'id') ? 'id' : 'en';
+        }
+        function setLang(lang) {
+            localStorage.setItem('pariksa-lang', lang);
+            applyLang(lang);
+        }
+        (function() { applyLang(localStorage.getItem('pariksa-lang') || 'id'); })();
     </script>
 </body>
 </html>
