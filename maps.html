@@ -1453,7 +1453,11 @@ map.on('click', async function(e) {
         feature_count: 1,
         exceptions:    'application/json',
     });
-    if (selectedClassFilter !== 'all') p.set('CQL_FILTER', 'indeks=' + selectedClassFilter);
+    if (!selectedClassFilters.has('all') && selectedClassFilters.size > 0) {
+        const vals = [...selectedClassFilters];
+        const cql  = vals.length === 1 ? `indeks=${vals[0]}` : `indeks IN (${vals.join(',')})`;
+        p.set('CQL_FILTER', cql);
+    }
 
     try {
         const resp = await fetch(GEOSERVER.url + '?' + p.toString());
