@@ -830,6 +830,7 @@
                 <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',  this)" data-i18n="filterMed">🟡 Moderate</button>
                 <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',  this)" data-i18n="filterHigh">🔴 High</button>
             </div>
+            <div style="margin-top:0.45rem;font-size:0.68rem;color:var(--text-secondary);text-align:right;opacity:0.7;" data-i18n="filterHint">Pilih hingga 2 kelas sekaligus</div>
         </div>
 
         <!-- ── Render Button ── -->
@@ -1019,7 +1020,7 @@ let currentWmsLayer      = null;
 let currentBgLayer       = null;
 let currentBoundaryLayer = null;
 let toastTimer           = null;
-let selectedClassFilter  = 'all';
+let selectedClassFilters = new Set(['all']); // multi-select: 'all' | Set of '1','2','3'
 let selectedHazardId     = 'earthquake'; // untuk GetFeatureInfo indeks logic
 
 /* ============================================================
@@ -1136,12 +1137,57 @@ function loadWmsLayer(layerName, cqlFilter) {
     });
 }
 
-/* Class filter */
+/* Class filter — multi-select (max 2) */
 function setClassFilter(value, el) {
-    selectedClassFilter = value;
-    document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
-    const classMap = { all: 'f-active-all', '1': 'f-active-low', '2': 'f-active-med', '3': 'f-active-high' };
-    el.classList.add(classMap[value]);
+    if (value === 'all') {
+        // Reset ke All
+        selectedClassFilters = new Set(['all']);
+        document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+        document.getElementById('filter-all').classList.add('f-active-all');
+        return;
+    }
+
+    // Klik salah satu kelas spesifik
+    if (selectedClassFilters.has('all')) {
+        // Pertama kali klik kelas: hapus 'all'
+        selectedClassFilters.clear();
+        selectedClassFilters.delete('all');
+        document.getElementById('filter-all').className = 'filter-btn';
+    }
+
+    if (selectedClassFilters.has(value)) {
+        // Toggle off
+        selectedClassFilters.delete(value);
+        if (selectedClassFilters.size === 0) {
+            // Jika semua dikosongkan, kembali ke All
+            selectedClassFilters.add('all');
+            document.getElementById('filter-all').classList.add('f-active-all');
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                if (b.id !== 'filter-all') b.className = 'filter-btn';
+            });
+            return;
+        }
+    } else {
+        if (selectedClassFilters.size >= 2) {
+            // Sudah 2 terpilih — ganti yang paling awal (FIFO)
+            const first = selectedClassFilters.values().next().value;
+            selectedClassFilters.delete(first);
+            const classMap = { '1': 'filter-low', '2': 'filter-medium', '3': 'filter-high' };
+            const oldBtn = document.getElementById(classMap[first]);
+            if (oldBtn) oldBtn.className = 'filter-btn';
+        }
+        selectedClassFilters.add(value);
+    }
+
+    // Update visual semua tombol kelas
+    const classMap = { '1': ['filter-low', 'f-active-low'], '2': ['filter-medium', 'f-active-med'], '3': ['filter-high', 'f-active-high'] };
+    ['1','2','3'].forEach(v => {
+        const [btnId, activeClass] = classMap[v];
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.className = 'filter-btn';
+        if (selectedClassFilters.has(v)) btn.classList.add(activeClass);
+    });
 }
 
 /* ============================================================
@@ -1196,8 +1242,14 @@ function renderMap() {
     }
 
     // Indeks filter — jika kelas tertentu dipilih
-    if (selectedClassFilter !== 'all') {
-        filters.push(`indeks=${selectedClassFilter}`);
+    if (!selectedClassFilters.has('all') && selectedClassFilters.size > 0) {
+        const vals = [...selectedClassFilters];
+        if (vals.length === 1) {
+            filters.push(`indeks=${vals[0]}`);
+        } else {
+            // 2 kelas: pakai IN
+            filters.push(`indeks IN (${vals.join(',')})`);
+        }
     }
 
     const cqlFilter = filters.length > 0 ? filters.join(' AND ') : null;
@@ -1571,6 +1623,7 @@ const TRANSLATIONS = {
         filterLow:         "🟢 Rendah",
         filterMed:         "🟡 Sedang",
         filterHigh:        "🔴 Tinggi",
+        filterHint:        "Pilih hingga 2 kelas sekaligus",
 
         renderBtn:         "Tampilkan Peta",
 
@@ -1620,6 +1673,7 @@ const TRANSLATIONS = {
         filterLow:         "🟢 Low",
         filterMed:         "🟡 Moderate",
         filterHigh:        "🔴 High",
+        filterHint:        "Select up to 2 classes at once",
         renderBtn:         "Render Map",
         legendTitle:       "Risk Classification Legend",
         legendHigh:        "High Risk (0 - 0.333)",
