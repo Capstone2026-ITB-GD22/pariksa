@@ -755,44 +755,44 @@
         <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">1</span>
-                District (Kecamatan)
+                <span data-i18n="stepDistrict">District (Kecamatan)</span>
             </div>
             <div class="kec-search-wrap">
                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" id="kecamatan-search" placeholder="Search district...">
+                <input type="text" id="kecamatan-search" data-i18n-placeholder="searchPlaceholder" placeholder="Search district...">
             </div>
             <div id="kec-all-chip" class="kec-all-chip" onclick="selectAllBandung(this)">
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
-                All Bandung City
+                <span data-i18n="allBandung">All Bandung City</span>
             </div>
             <div class="kec-grid" id="kec-grid"></div>
-            <div class="kec-status" id="kec-status">30 districts available</div>
+            <div class="kec-status" id="kec-status" data-i18n="districtCount">30 districts available</div>
         </div>
 
         <!-- ── STEP 2: Hazard Type ── -->
         <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">2</span>
-                Hazard Type
+                <span data-i18n="stepHazard">Hazard Type</span>
             </div>
             <div class="hazard-grid">
                 <label>
                     <input type="radio" name="hazard" value="earthquake" class="hazard-radio" checked>
-                    <div class="hazard-card-label"><span class="hazard-name">Earthquake</span></div>
+                    <div class="hazard-card-label"><span class="hazard-name" data-i18n="hazardEq">Earthquake</span></div>
                 </label>
                 <label>
                     <input type="radio" name="hazard" value="flood" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Flood</span></div>
+                    <div class="hazard-card-label"><span class="hazard-name" data-i18n="hazardFlood">Flood</span></div>
                 </label>
                 <label>
                     <input type="radio" name="hazard" value="landslide" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Landslide</span></div>
+                    <div class="hazard-card-label"><span class="hazard-name" data-i18n="hazardLs">Landslide</span></div>
                 </label>
                 <label>
                     <input type="radio" name="hazard" value="multihazard" class="hazard-radio">
-                    <div class="hazard-card-label"><span class="hazard-name">Multi-Hazard</span></div>
+                    <div class="hazard-card-label"><span class="hazard-name" data-i18n="hazardMh">Multi-Hazard</span></div>
                 </label>
             </div>
         </div>
@@ -801,13 +801,13 @@
         <div class="panel-section">
             <div class="step-label">
                 <span class="step-badge">3</span>
-                Risk Class Filter
+                <span data-i18n="stepFilter">Risk Class Filter</span>
             </div>
             <div class="filter-grid">
-                <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all', this)">All Classes</button>
-                <button class="filter-btn"              id="filter-low"    onclick="setClassFilter('1',  this)">🟢 Low</button>
-                <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',  this)">🟡 Moderate</button>
-                <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',  this)">🔴 High</button>
+                <button class="filter-btn f-active-all" id="filter-all"    onclick="setClassFilter('all', this)" data-i18n="filterAll">All Classes</button>
+                <button class="filter-btn"              id="filter-low"    onclick="setClassFilter('1',  this)" data-i18n="filterLow">🟢 Low</button>
+                <button class="filter-btn"              id="filter-medium" onclick="setClassFilter('2',  this)" data-i18n="filterMed">🟡 Moderate</button>
+                <button class="filter-btn"              id="filter-high"   onclick="setClassFilter('3',  this)" data-i18n="filterHigh">🔴 High</button>
             </div>
         </div>
 
@@ -820,17 +820,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Render Map
+                <span data-i18n="renderBtn">Render Map</span>
             </button>
         </div>
 
         <!-- ── Sidebar Legend ── -->
         <div class="sidebar-legend">
-            <div class="legend-heading">Risk Classification Legend</div>
+            <div class="legend-heading" data-i18n="legendTitle">Risk Classification Legend</div>
             <div class="legend-list">
-                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-high);"></div><span>High Risk (0 - 0.333)</span></div>
-                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-moderate);"></div><span>Moderate Risk (0.334-0.666)</span></div>
-                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-low);"></div><span>Low Risk (0.667 - 1)</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-high);"></div><span data-i18n="legendHigh">High Risk (0 - 0.333)</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-moderate);"></div><span data-i18n="legendMod">Moderate Risk (0.334-0.666)</span></div>
+                <div class="legend-row"><div class="legend-swatch" style="background:var(--c-low);"></div><span data-i18n="legendLow">Low Risk (0.667 - 1)</span></div>
             </div>
         </div>
 
@@ -847,17 +847,17 @@
         </div>
 
         <div class="map-info-card" id="map-info-card">
-            <div class="info-pulse"><span class="pulse-dot"></span>Active Layer</div>
+            <div class="info-pulse"><span class="pulse-dot"></span><span data-i18n="activeLayer">Active Layer</span></div>
             <h4 id="info-title">—</h4>
             <p  id="info-desc">—</p>
         </div>
 
         <div class="map-legend-overlay">
-            <div class="overlay-legend-title" id="overlay-title">Risk Classification</div>
+            <div class="overlay-legend-title" id="overlay-title" data-i18n="overlayTitle">Risk Classification</div>
             <div class="overlay-rows">
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-high);"></div><span>High</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-moderate);"></div><span>Moderate</span></div>
-                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-low);"></div><span>Low</span></div>
+                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-high);"></div><span data-i18n="riskHigh">High</span></div>
+                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-moderate);"></div><span data-i18n="riskMod">Moderate</span></div>
+                <div class="overlay-row"><div class="overlay-swatch" style="background:var(--c-low);"></div><span data-i18n="riskLow">Low</span></div>
             </div>
         </div>
 
@@ -873,10 +873,10 @@
                 <div class="fi-header-left">
                     <div class="fi-badge">
                         <div class="fi-badge-dot"></div>
-                        Feature Info
+                        <span data-i18n="featureInfo">Feature Info</span>
                     </div>
                     <h3 class="fi-title" id="fiTitle">—</h3>
-                    <div class="fi-subtitle" id="fiSubtitle">Click a parcel to inspect attributes</div>
+                    <div class="fi-subtitle" id="fiSubtitle" data-i18n="fiSubtitle">Click a parcel to inspect attributes</div>
                 </div>
                 <button class="fi-close" id="fiClose" title="Close">
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -887,7 +887,7 @@
             <div class="fi-body" id="fiBody">
                 <div class="fi-empty">
                     <div class="fi-empty-icon">🗺️</div>
-                    <span>Click any parcel on the map<br>to view its attributes</span>
+                    <span data-i18n="fiEmpty">Click any parcel on the map<br>to view its attributes</span>
                 </div>
             </div>
             <div class="fi-coord" id="fiCoord" style="display:none">
@@ -907,7 +907,7 @@
     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
-    <span id="toggleLabel">Open Controls</span>
+    <span id="toggleLabel" data-i18n="openControls">Open Controls</span>
 </button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1512,6 +1512,127 @@ document.querySelectorAll('a[href]').forEach(function(link) {
         }
     });
 });
+
+/* ═══════════════════════════════════════════════════════════════════
+ * 🌐 SISTEM TERJEMAHAN — maps.html
+ * ═══════════════════════════════════════════════════════════════════ */
+const TRANSLATIONS = {
+
+    id: {
+        // ── Navbar ─────────────────────────────────────────────────
+        navHome:           "Beranda",
+        navGuide:          "Panduan",
+        navMaps:           "Peta",
+        navEducation:      "Edukasi",
+        navTeam:           "Tim",
+
+        // ── Sidebar Steps ─────────────────────────────────────────
+        stepDistrict:      "Kecamatan",
+        searchPlaceholder: "Cari kecamatan...",
+        allBandung:        "Seluruh Kota Bandung",
+        districtCount:     "30 kecamatan tersedia",
+
+        stepHazard:        "Jenis Bahaya",
+        hazardEq:          "Gempa Bumi",
+        hazardFlood:       "Banjir",
+        hazardLs:          "Tanah Longsor",
+        hazardMh:          "Multi-Bahaya",
+
+        stepFilter:        "Filter Kelas Risiko",
+        filterAll:         "Semua Kelas",
+        filterLow:         "🟢 Rendah",
+        filterMed:         "🟡 Sedang",
+        filterHigh:        "🔴 Tinggi",
+
+        renderBtn:         "Tampilkan Peta",
+
+        // ── Sidebar Legend ────────────────────────────────────────
+        legendTitle:       "Legenda Klasifikasi Risiko",
+        legendHigh:        "Risiko Tinggi (0 - 0.333)",
+        legendMod:         "Risiko Sedang (0.334-0.666)",
+        legendLow:         "Risiko Rendah (0.667 - 1)",
+
+        // ── Map Info Card (Active Layer) ──────────────────────────
+        activeLayer:       "Layer Aktif",
+
+        // ── Map Overlay Legend ────────────────────────────────────
+        overlayTitle:      "Klasifikasi Risiko",
+        riskHigh:          "Tinggi",
+        riskMod:           "Sedang",
+        riskLow:           "Rendah",
+
+        // ── Feature Info Drawer ───────────────────────────────────
+        featureInfo:       "Info Fitur",
+        fiSubtitle:        "Klik persil untuk melihat atributnya",
+        fiEmpty:           "Klik persil mana saja di peta<br>untuk melihat atributnya",
+
+        // ── Mobile Controls ───────────────────────────────────────
+        openControls:      "Buka Kontrol",
+    },
+
+    // ── JANGAN UBAH BAGIAN INI ─────────────────────────────────────
+    en: {
+        navHome:           "Home",
+        navGuide:          "Guide",
+        navMaps:           "Maps",
+        navEducation:      "Education",
+        navTeam:           "Team",
+        stepDistrict:      "District (Kecamatan)",
+        searchPlaceholder: "Search district...",
+        allBandung:        "All Bandung City",
+        districtCount:     "30 districts available",
+        stepHazard:        "Hazard Type",
+        hazardEq:          "Earthquake",
+        hazardFlood:       "Flood",
+        hazardLs:          "Landslide",
+        hazardMh:          "Multi-Hazard",
+        stepFilter:        "Risk Class Filter",
+        filterAll:         "All Classes",
+        filterLow:         "🟢 Low",
+        filterMed:         "🟡 Moderate",
+        filterHigh:        "🔴 High",
+        renderBtn:         "Render Map",
+        legendTitle:       "Risk Classification Legend",
+        legendHigh:        "High Risk (0 - 0.333)",
+        legendMod:         "Moderate Risk (0.334-0.666)",
+        legendLow:         "Low Risk (0.667 - 1)",
+        activeLayer:       "Active Layer",
+        overlayTitle:      "Risk Classification",
+        riskHigh:          "High",
+        riskMod:           "Moderate",
+        riskLow:           "Low",
+        featureInfo:       "Feature Info",
+        fiSubtitle:        "Click a parcel to inspect attributes",
+        fiEmpty:           "Click any parcel on the map<br>to view its attributes",
+        openControls:      "Open Controls",
+    }
+};
+
+/* ── Engine Terjemahan (jangan diubah) ── */
+function applyLang(lang) {
+    const t  = TRANSLATIONS[lang];
+    const en = TRANSLATIONS['en'];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key  = el.getAttribute('data-i18n');
+        const text = (t[key] && t[key] !== '') ? t[key] : en[key];
+        if (text === undefined) return;
+        el.hasAttribute('data-i18n-html') ? (el.innerHTML = text) : (el.textContent = text);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key  = el.getAttribute('data-i18n-placeholder');
+        const text = (t[key] && t[key] !== '') ? t[key] : en[key];
+        if (text !== undefined) el.placeholder = text;
+    });
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('lang-active'));
+    const active = document.getElementById('btn-' + lang);
+    if (active) active.classList.add('lang-active');
+    document.documentElement.lang = (lang === 'id') ? 'id' : 'en';
+}
+function setLang(lang) {
+    localStorage.setItem('pariksa-lang', lang);
+    applyLang(lang);
+}
+(function() { applyLang(localStorage.getItem('pariksa-lang') || 'id'); })();
 </script>
 </body>
 </html>
