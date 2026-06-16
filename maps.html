@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +67,7 @@
         }
         .logo-img { height: 40px; width: auto; }
         .logo-wrapper span { color: var(--primary-red); }
-        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a {
             font-weight: 600; font-size: 0.95rem; color: #FFFFFF;
@@ -88,6 +88,21 @@
         .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex; align-items: center; gap: 2px;
+            background: rgba(255,255,255,0.08); border-radius: 20px; padding: 3px;
+            flex-shrink: 0;
+        }
+        .lang-btn {
+            padding: 3px 10px; border-radius: 16px; border: none;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s ease; background: transparent;
+            color: rgba(255,255,255,0.55); font-family: var(--font-main); letter-spacing: 0.5px;
+        }
+        .lang-btn.lang-active { background: var(--primary-red); color: #fff !important; }
+        .lang-btn:hover:not(.lang-active) { color: rgba(255,255,255,0.9); }
 
         /* ================================================================
            LAYOUT
@@ -720,12 +735,18 @@
         </a>
         <div class="nav-right">
             <ul class="nav-links" id="navLinks">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="guide.html">Guide</a></li>
-                <li><a href="maps.html" class="active">Maps</a></li>
-                <li><a href="education.html">Education</a></li>
-                <li><a href="team.html">Team</a></li>
+                <li><a href="index.html"    data-i18n="navHome">Home</a></li>
+                <li><a href="guide.html"    data-i18n="navGuide">Guide</a></li>
+                <li><a href="maps.html" class="active" data-i18n="navMaps">Maps</a></li>
+                <li><a href="education.html" data-i18n="navEducation">Education</a></li>
+                <li><a href="team.html"     data-i18n="navTeam">Team</a></li>
             </ul>
+
+            <div class="lang-toggle">
+                <button class="lang-btn" id="btn-id" onclick="setLang('id')">ID</button>
+                <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+            </div>
+
             <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
             </div>
@@ -1471,7 +1492,11 @@ function toggleMobilePanel() {
     panelOpen = !panelOpen;
     sidebar.classList.toggle('mobile-open', panelOpen);
     panelToggleBtn.classList.toggle('panel-open', panelOpen);
-    toggleLabel.textContent = panelOpen ? 'Close Controls' : 'Open Controls';
+    const lang = localStorage.getItem('pariksa-lang') || 'id';
+    const t  = typeof TRANSLATIONS !== 'undefined' ? TRANSLATIONS[lang] : null;
+    const en = typeof TRANSLATIONS !== 'undefined' ? TRANSLATIONS['en'] : null;
+    const get = (key) => (t && t[key]) ? t[key] : (en ? en[key] : key);
+    toggleLabel.textContent = panelOpen ? get('closeControls') : get('openControls');
 }
 
 /* Close panel when Render Map button is tapped on mobile */
@@ -1480,7 +1505,10 @@ document.querySelector('.btn-render').addEventListener('click', () => {
         panelOpen = false;
         sidebar.classList.remove('mobile-open');
         panelToggleBtn.classList.remove('panel-open');
-        toggleLabel.textContent = 'Open Controls';
+        const lang = localStorage.getItem('pariksa-lang') || 'id';
+        const t  = typeof TRANSLATIONS !== 'undefined' ? TRANSLATIONS[lang] : null;
+        const en = typeof TRANSLATIONS !== 'undefined' ? TRANSLATIONS['en'] : null;
+        toggleLabel.textContent = (t && t['openControls']) ? t['openControls'] : (en ? en['openControls'] : 'Open Controls');
     }
 });
 
@@ -1568,6 +1596,7 @@ const TRANSLATIONS = {
 
         // ── Mobile Controls ───────────────────────────────────────
         openControls:      "Buka Kontrol",
+        closeControls:     "Tutup Kontrol",
     },
 
     // ── JANGAN UBAH BAGIAN INI ─────────────────────────────────────
@@ -1605,6 +1634,7 @@ const TRANSLATIONS = {
         fiSubtitle:        "Click a parcel to inspect attributes",
         fiEmpty:           "Click any parcel on the map<br>to view its attributes",
         openControls:      "Open Controls",
+        closeControls:     "Close Controls",
     }
 };
 
